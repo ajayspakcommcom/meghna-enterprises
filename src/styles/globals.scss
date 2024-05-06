@@ -1,0 +1,54 @@
+html,
+body {
+    width: 100%;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+}
+
+
+.login-form-wrapper {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .error {
+        margin-bottom: 15px;
+    }
+
+    img {
+        display: block;
+        margin: auto;
+    }
+
+    .form {
+
+        padding: 20px 0 0 0;
+
+        .css-md26zr-MuiInputBase-root-MuiOutlinedInput-root {
+            margin-bottom: 15px;
+        }
+
+        .css-17vbkzs-MuiFormControl-root-MuiTextField-root {
+            margin-top: 0;
+        }
+
+        button {
+            width: 100%;
+            height: 56px;
+        }
+    }
+}
+
+header {
+    .css-1t6c9ts {
+        display: flex;
+        justify-content: end;
+    }
+
+    .css-2uchni {
+        display: none;
+    }
+}
