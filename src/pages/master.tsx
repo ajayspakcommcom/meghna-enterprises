@@ -47,10 +47,10 @@ export default function Index() {
               <tbody>
                 <tr>
                   <td>
-                    <Button type='submit' variant="contained" onClick={() => goToPage('/seller')}>Seller</Button>
+                    <Button type='submit' variant="contained" onClick={() => goToPage('/seller')} className="sellter-btn">Seller</Button>
                   </td>
                   <td>
-                    <Button type='submit' variant="contained" onClick={() => goToPage('/buyer')}>Buyer</Button>
+                    <Button type='submit' variant="contained" onClick={() => goToPage('/buyer')} className="buyer-btn">Buyer</Button>
                   </td>
                 </tr>
                 <tr>
