@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, Button, Typography } from '@mui/material';
+import { Card, CardContent, Button, Typography, Container } from '@mui/material';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -56,29 +56,31 @@ export default function Index() {
     <>
       <Header />
 
-      <div className="header-content">
-        <div>
-          <Typography variant="h5" component="article">Seller List</Typography>
+      <Container maxWidth="xl">
+        <div className="header-content">
+          <div>
+            <Typography variant="h5" component="article">Seller List</Typography>
+          </div>
+          <div className="btn-wrapper">
+            <Button variant="contained" color="success" onClick={() => goToPage('/seller/create')}>Create</Button>
+            <Button variant="outlined" onClick={() => goToPage('/master')}>Back</Button>
+          </div>
         </div>
-        <div className="btn-wrapper">
-          <Button variant="contained" color="success" onClick={() => goToPage('/seller/create')}>Create</Button>
-          <Button variant="outlined" onClick={() => goToPage('/master')}>Back</Button>
+
+        <div className="list-wrapper">
+          <DataGrid
+            rows={rowData}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
+            }}
+            pageSizeOptions={[5, 10]}
+          />
         </div>
-      </div>
+      </Container>
 
-      <div className="list-wrapper">
-        <DataGrid
-          rows={rowData}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
-          pageSizeOptions={[5, 10]}
-
-        />
-      </div>
 
     </>
   );

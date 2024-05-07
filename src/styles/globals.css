@@ -108,8 +108,9 @@ header .css-2uchni {
 }
 
 .buyer-seller-form-wrapper {
-    display: flex;
-    justify-content: center;
+    max-width: 800px;
+    margin: auto;
+    margin-top: 30px;
 }
 
 .buyer-seller-form-wrapper .css-1ri6ub7-MuiPaper-root-MuiCard-root {
@@ -118,7 +119,7 @@ header .css-2uchni {
 }
 
 .buyer-seller-form-wrapper form {
-    width: 700px;
+    width: 100%;
 }
 
 .buyer-seller-form-wrapper form .buyer-seller-forms-wrapper {

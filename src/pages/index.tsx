@@ -111,7 +111,7 @@ export default function Index() {
                 error={formik.touched.password && Boolean(formik.errors.password)}
                 helperText={formik.touched.password && formik.errors.password}
               />
-              <Button type='submit' variant="contained">{loading ? "Login.." : "Login"}</Button>
+              <Button type='submit' variant="contained">{loading ? "Login..." : "Login"}</Button>
             </form>
 
 

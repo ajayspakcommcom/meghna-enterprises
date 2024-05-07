@@ -19,9 +19,9 @@ interface ApiResponse<T> {
     data: T[];
 }
 
-export const createSeller = async (sellerData: Seller): Promise<Seller> => {
+export const createSeller = async (sellerData: any): Promise<any> => {
     try {
-        const response = await apiClient.post<Seller>('/seller', sellerData);
+        const response = await apiClient.post<Seller>('/seller', { ...sellerData, type: 'CREATE' });
         return response.data;
     } catch (err: unknown) {
         throw err;
