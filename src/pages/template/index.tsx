@@ -62,7 +62,7 @@ export default function Index() {
             <Typography variant="h5" component="article">Template List</Typography>
           </div>
           <div className="btn-wrapper">
-            <Button variant="contained" color="success" onClick={() => goToPage('/seller/create')}>Create</Button>
+            <Button variant="contained" color="success" onClick={() => goToPage('/template/create')}>Create</Button>
             <Button variant="outlined" onClick={() => goToPage('/master')}>Back</Button>
           </div>
         </div>

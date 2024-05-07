@@ -143,33 +143,85 @@ header .css-2uchni {
     margin-top: 30px;
 }
 
+.full-width-template {
+    max-width: 1440px;
+}
+
 .buyer-seller-form-wrapper .css-1ri6ub7-MuiPaper-root-MuiCard-root {
     overflow: auto;
     max-width: none;
 }
 
-.buyer-seller-form-wrapper form {
+.buyer-seller-form-wrapper form,
+.template-form-wrapper form {
     width: 100%;
 }
 
-.buyer-seller-form-wrapper form .buyer-seller-forms-wrapper {
+.buyer-seller-form-wrapper form .buyer-seller-forms-wrapper,
+.buyer-seller-form-wrapper form .template-form-wrapper {
     display: flex;
     width: 100%;
 }
 
-.buyer-seller-form-wrapper form .buyer-seller-forms-wrapper>div {
+.buyer-seller-form-wrapper form .buyer-seller-forms-wrapper>div,
+.buyer-seller-form-wrapper form .template-form-wrapper>div {
     width: 50%;
 }
 
-.buyer-seller-form-wrapper form .buyer-seller-forms-wrapper>div:first-child {
+.buyer-seller-form-wrapper form .template-form-wrapper>div {
+    width: calc(50% - 46px);
+}
+
+.buyer-seller-form-wrapper form .template-form-wrapper>button {
+    margin-left: 15px;
+}
+
+.buyer-seller-form-wrapper form .buyer-seller-forms-wrapper>div:first-child,
+.buyer-seller-form-wrapper form .template-form-wrapper>div:first-child {
     padding-right: 7px;
 }
 
-.buyer-seller-form-wrapper form .buyer-seller-forms-wrapper>div:last-child {
+.buyer-seller-form-wrapper form .buyer-seller-forms-wrapper>div:last-child,
+.buyer-seller-form-wrapper form .template-form-wrapper>div:last-child {
     padding-left: 7px;
 }
 
-.buyer-seller-form-wrapper form button {
+.buyer-seller-form-wrapper form button,
+.template-form-wrapper form button {
     height: 56px;
     margin-top: 10px;
+}
+
+.buyer-seller-form-wrapper form .template-form-wrapper {
+    align-self: center;
+}
+
+.buyer-seller-form-wrapper form .template-form-wrapper {
+    padding: 7px 0;
+    border: 2px solid #cfcfcf;
+    padding: 15px 15px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    margin-top: 15px;
+    background: rgba(207, 207, 207, 0.2);
+}
+
+.template-name-txt {
+    margin-bottom: 0;
+}
+
+.buyer-seller-form-wrapper .template-form-wrapper .css-17vbkzs-MuiFormControl-root-MuiTextField-root {
+    margin: 0 0;
+}
+
+.buyer-seller-form-wrapper .template-form-wrapper button {
+    margin-top: 0 !important;
+}
+
+.template-add-btn-wrapper>div:first-child {
+    width: calc(50% - 60px) !important;
+}
+
+.template-add-btn-wrapper>div:last-child {
+    width: calc(50% + 60px) !important;
 }

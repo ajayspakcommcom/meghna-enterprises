@@ -2,23 +2,51 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, Button, Typography, TextField, Container } from '@mui/material';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
-import Seller from "../../../models/Seller";
-import { useFormik } from "formik";
-import ErrorMessage from "../../../components/error-message";
-import sellerSchema from "@/validation/sellerSchema";
-import { createSeller } from "@/services/seller";
+
 
 const Header = dynamic(() => import('../../../components/header/index'));
 
+interface Field {
+  property: string;
+  value: string;
+}
 
 
 export default function Index() {
 
   const router = useRouter();
 
-  const [authData, setAuthData] = useState({ username: "", password: "" });
-  const [loading, setLoading] = useState<boolean>(false);
-  const [errors, setError] = useState<any>();
+  const [fields, setFields] = useState<Field[]>([]);
+  const [submittedValues, setSubmittedValues] = useState<Field[]>([]);
+
+  const handleAddField = () => {
+    setFields([...fields, { property: '', value: '' }]);
+  };
+
+  const handleRemoveField = (index: number) => {
+    const updatedFields = [...fields];
+    updatedFields.splice(index, 1);
+    setFields(updatedFields);
+  };
+
+  const handleInputChange = (index: number, type: keyof Field, value: string) => {
+    const updatedFields = [...fields];
+    updatedFields[index][type] = value;
+    setFields(updatedFields);
+  };
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    setSubmittedValues(fields);
+
+    const transformedData: { [key: string]: string } = fields.reduce((acc: any, obj: any) => {
+      acc[obj.property.trim()] = obj.value.trim();
+      return acc;
+    }, {});
+
+    console.log('transformedData', transformedData);
+
+  };
 
 
   useEffect(() => {
@@ -34,53 +62,14 @@ export default function Index() {
     router.push(`${url}`);
   };
 
-  const initialValues: Seller = {
-    name: '',
-    address: '',
-    telephone_no: '',
-    mobile_no: '',
-    fax: '',
-    pan: '',
-    gstin: '',
-    state_code: '',
-    email: ''
-  };
 
-  const handleSubmit = async (seller: Seller) => {
-
-    setLoading(true);
-
-    try {
-      const response = await createSeller(seller);
-      console.log('response', response);
-      setLoading(false);
-      formik.resetForm();
-    } catch (error: any) {
-      setLoading(false);
-      console.error('Error saving:', error);
-      setError(error);
-    }
-
-  };
-
-  const handleReset = () => {
-    formik.setValues(initialValues);
-    formik.setErrors({});
-  };
-
-  const formik = useFormik({
-    initialValues,
-    validationSchema: sellerSchema,
-    onSubmit: handleSubmit,
-    onReset: handleReset
-  });
 
   return (
     <>
       <Header />
 
       <Container maxWidth="xl">
-        <div className='buyer-seller-form-wrapper'>
+        <div className='buyer-seller-form-wrapper full-width-template'>
 
           <div>
             <div className="header-content">
@@ -88,7 +77,7 @@ export default function Index() {
                 <Typography variant="h5" component="article">Create Template</Typography>
               </div>
               <div className="btn-wrapper">
-                <Button variant="outlined" onClick={() => goToPage('/seller')}>Back</Button>
+                <Button variant="outlined" onClick={() => goToPage('/template')}>Back</Button>
               </div>
             </div>
           </div>
@@ -96,157 +85,75 @@ export default function Index() {
           <div>
             <Card>
               <CardContent>
-                <form onSubmit={formik.handleSubmit} onReset={formik.handleReset} className='form'>
-
-                  {errors && <div className="error"><ErrorMessage message={errors} /></div>}
-
-                  <div className="buyer-seller-forms-wrapper">
-                    <div>
-                      <TextField
-                        type="text"
-                        label="Name"
-                        name="name"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.name}
-                        onChange={formik.handleChange}
-                        error={formik.touched.name && Boolean(formik.errors.name)}
-                        helperText={formik.touched.name && formik.errors.name}
-                      />
-                    </div>
-                    <div>
-
-                      <TextField
-                        type="text"
-                        label="Email"
-                        name="email"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.email}
-                        onChange={formik.handleChange}
-                        error={formik.touched.email && Boolean(formik.errors.email)}
-                        helperText={formik.touched.email && formik.errors.email}
-                      />
-                    </div>
-                  </div>
-
-
-                  <div className="buyer-seller-forms-wrapper">
-                    <div>
-                      <TextField
-                        type="text"
-                        label="Telephone No"
-                        name="telephone_no"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.telephone_no}
-                        onChange={formik.handleChange}
-                        error={formik.touched.telephone_no && Boolean(formik.errors.telephone_no)}
-                        helperText={formik.touched.telephone_no && formik.errors.telephone_no}
-                      />
-                    </div>
-                    <div>
-                      <TextField
-                        type="text"
-                        label="Mobile No"
-                        name="mobile_no"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.mobile_no}
-                        onChange={formik.handleChange}
-                        error={formik.touched.mobile_no && Boolean(formik.errors.mobile_no)}
-                        helperText={formik.touched.mobile_no && formik.errors.mobile_no}
-                      />
-                    </div>
-                  </div>
-
-
-                  <div className="buyer-seller-forms-wrapper">
-                    <div>
-                      <TextField
-                        type="text"
-                        label="Fax"
-                        name="fax"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.fax}
-                        onChange={formik.handleChange}
-                        error={formik.touched.fax && Boolean(formik.errors.fax)}
-                        helperText={formik.touched.fax && formik.errors.fax}
-                      />
-                    </div>
-                    <div>
-                      <TextField
-                        type="text"
-                        label="Pan"
-                        name="pan"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.pan}
-                        onChange={formik.handleChange}
-                        error={formik.touched.pan && Boolean(formik.errors.pan)}
-                        helperText={formik.touched.pan && formik.errors.pan}
-                      />
-                    </div>
-                  </div>
-
-
-
-                  <div className="buyer-seller-forms-wrapper">
-                    <div>
-                      <TextField
-                        type="text"
-                        label="gstin"
-                        name="gstin"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.gstin}
-                        onChange={formik.handleChange}
-                        error={formik.touched.gstin && Boolean(formik.errors.gstin)}
-                        helperText={formik.touched.gstin && formik.errors.gstin}
-                      />
-                    </div>
-                    <div>
-                      <TextField
-                        type="text"
-                        label="State Code"
-                        name="state_code"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.state_code}
-                        onChange={formik.handleChange}
-                        error={formik.touched.state_code && Boolean(formik.errors.state_code)}
-                        helperText={formik.touched.state_code && formik.errors.state_code}
-                      />
-                    </div>
-                  </div>
+                <form className='form' onSubmit={handleSubmit}>
 
                   <TextField
                     type="text"
-                    label="Address"
-                    name="address"
+                    label="Name"
+                    name="name"
                     variant="outlined"
                     fullWidth
                     margin="normal"
-                    multiline
-                    rows={3}
-                    value={formik.values.address}
-                    onChange={formik.handleChange}
-                    error={formik.touched.address && Boolean(formik.errors.address)}
-                    helperText={formik.touched.address && formik.errors.address}
+                    className="template-name-txt"
                   />
 
+                  {fields.map((field, index) => (
+                    <div className="template-form-wrapper" key={index}>
+                      <div>
+                        <TextField
+                          type="text"
+                          label="Label"
+                          name="email"
+                          variant="outlined"
+                          fullWidth
+                          margin="normal"
+                          value={field.property}
+                          placeholder="Property"
+                          onChange={(e) => handleInputChange(index, 'property', e.target.value)}
+                        />
 
-                  <Button type='submit' variant="contained" fullWidth>{loading ? "Submit..." : "Submit"}</Button>
+                      </div>
+
+                      <div>
+                        <TextField
+                          type="text"
+                          label="Value"
+                          name="address"
+                          variant="outlined"
+                          fullWidth
+                          margin="normal"
+                          multiline
+                          rows={1}
+                          value={field.value}
+                          placeholder="Value"
+                          onChange={(e) => handleInputChange(index, 'value', e.target.value)}
+                        />
+                      </div>
+
+
+                      <Button type='button' variant="contained" color="error" onClick={() => handleRemoveField(index)}>Remove</Button>
+
+                    </div>
+                  ))}
+
+                  <div className="buyer-seller-forms-wrapper template-add-btn-wrapper">
+                    <div></div>
+                    <div>
+                      <Button type='button' variant="contained" color="success" fullWidth onClick={handleAddField}>Add Label</Button>
+                    </div>
+                  </div>
+                  <Button type='submit' variant="contained" fullWidth>Submit</Button>
                 </form>
+
+                <div>
+                  <ul>
+                    {submittedValues.map((field, index) => (
+                      <li key={index}>
+                        <Typography variant="body1"><b>{field.property}:</b> {field.value}</Typography>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
 
               </CardContent>
