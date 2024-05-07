@@ -113,3 +113,41 @@ header {
         }
     }
 }
+
+.buyer-seller-form-wrapper {
+    display: flex;
+    justify-content: center;
+
+    .css-1ri6ub7-MuiPaper-root-MuiCard-root {
+        overflow: auto;
+        max-width: none;
+    }
+
+    form {
+        width: 700px;
+
+        .buyer-seller-forms-wrapper {
+            display: flex;
+            width: 100%;
+
+            &>div {
+                width: 50%;
+
+                &:first-child {
+                    padding-right: 7px;
+                }
+
+                &:last-child {
+                    padding-left: 7px;
+                }
+            }
+        }
+
+        button {
+            height: 56px;
+            margin-top: 10px;
+        }
+    }
+
+
+}

@@ -87,7 +87,7 @@ const Header: React.FC<HeaderProps> = ({ message }) => {
             <AppBar position="static">
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
-                        <Typography variant="h6" noWrap component="a" href="javascript:void(0)" onClick={() => gotoHome()}>
+                        <Typography variant="h6" noWrap component="a" onClick={() => gotoHome()}>
                             <Image src={require('../../public/images/logo.png')} alt="Description of the image" className="responsive-img center" />
                         </Typography>
 
