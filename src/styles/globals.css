@@ -1,0 +1,144 @@
+html,
+body {
+    width: 100%;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+}
+
+.login-form-wrapper {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-form-wrapper .error {
+    margin-bottom: 15px;
+}
+
+.login-form-wrapper img {
+    display: block;
+    margin: auto;
+}
+
+.login-form-wrapper .form {
+    padding: 20px 0 0 0;
+}
+
+.login-form-wrapper .form .css-md26zr-MuiInputBase-root-MuiOutlinedInput-root {
+    margin-bottom: 15px;
+}
+
+.login-form-wrapper .form .css-17vbkzs-MuiFormControl-root-MuiTextField-root {
+    margin-top: 0;
+}
+
+.login-form-wrapper .form button {
+    width: 100%;
+    height: 56px;
+}
+
+header .css-1t6c9ts {
+    display: flex;
+    justify-content: end;
+}
+
+header .css-2uchni {
+    display: none;
+}
+
+.dashboard-wrapper,
+.master-wrapper {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dashboard-wrapper .css-46bh2p-MuiCardContent-root:last-child,
+.master-wrapper .css-46bh2p-MuiCardContent-root:last-child {
+    padding-bottom: 16px;
+}
+
+.dashboard-wrapper .css-bhp9pd-MuiPaper-root-MuiCard-root,
+.master-wrapper .css-bhp9pd-MuiPaper-root-MuiCard-root {
+    width: 500px;
+}
+
+.dashboard-wrapper .css-bhp9pd-MuiPaper-root-MuiCard-root table,
+.master-wrapper .css-bhp9pd-MuiPaper-root-MuiCard-root table {
+    width: 100%;
+}
+
+.dashboard-wrapper .css-bhp9pd-MuiPaper-root-MuiCard-root table>tr:first-child td,
+.master-wrapper .css-bhp9pd-MuiPaper-root-MuiCard-root table>tr:first-child td {
+    width: 50%;
+}
+
+.dashboard-wrapper .css-bhp9pd-MuiPaper-root-MuiCard-root table td,
+.master-wrapper .css-bhp9pd-MuiPaper-root-MuiCard-root table td {
+    padding: 7px 7px;
+}
+
+.dashboard-wrapper .css-bhp9pd-MuiPaper-root-MuiCard-root table button,
+.master-wrapper .css-bhp9pd-MuiPaper-root-MuiCard-root table button {
+    width: 100%;
+    height: 150px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 15px;
+}
+
+.header-content .btn-wrapper {
+    display: flex;
+}
+
+.header-content .btn-wrapper button {
+    width: 100px;
+}
+
+.header-content .btn-wrapper button:first-child {
+    margin-right: 15px;
+}
+
+.buyer-seller-form-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.buyer-seller-form-wrapper .css-1ri6ub7-MuiPaper-root-MuiCard-root {
+    overflow: auto;
+    max-width: none;
+}
+
+.buyer-seller-form-wrapper form {
+    width: 700px;
+}
+
+.buyer-seller-form-wrapper form .buyer-seller-forms-wrapper {
+    display: flex;
+    width: 100%;
+}
+
+.buyer-seller-form-wrapper form .buyer-seller-forms-wrapper>div {
+    width: 50%;
+}
+
+.buyer-seller-form-wrapper form .buyer-seller-forms-wrapper>div:first-child {
+    padding-right: 7px;
+}
+
+.buyer-seller-form-wrapper form .buyer-seller-forms-wrapper>div:last-child {
+    padding-left: 7px;
+}
+
+.buyer-seller-form-wrapper form button {
+    height: 56px;
+    margin-top: 10px;
+}
