@@ -20,7 +20,7 @@ interface HeaderProps {
     message?: string;
 }
 
-const pages = ['Admin', 'Logout'];
+const pages = ['Master', 'Contract', 'Billing', 'Logout'];
 
 const Header: React.FC<HeaderProps> = ({ message }) => {
 
@@ -37,12 +37,40 @@ const Header: React.FC<HeaderProps> = ({ message }) => {
 
     const handleCloseNavMenu = (page: string) => {
 
-        if (page.toLowerCase().trim() === 'logout') {
-            console.log('Clicked page:', page);
-            localStorage.removeItem("token");
-            localStorage.removeItem("userData");
-            router.push('/');
+        // if (page.toLowerCase().trim() === 'logout') {
+        //     console.log('Clicked page:', page);
+        //     localStorage.removeItem("token");
+        //     localStorage.removeItem("userData");
+        //     router.push('/');
+        // }
+
+        const normalizedPage = page.toLowerCase().trim();
+
+        switch (normalizedPage) {
+            case 'logout':
+                console.log('Clicked page:', page);
+                localStorage.removeItem("token");
+                localStorage.removeItem("userData");
+                router.push('/');
+                break;
+            case 'master':
+                console.log('Navigating to Master page');
+                router.push('/master');  // Adjust the route as necessary
+                break;
+            case 'contract':
+                console.log('Navigating to Contract page');
+                router.push('/contract');  // Adjust the route as necessary
+                break;
+            case 'billing':
+                console.log('Navigating to Billing page');
+                router.push('/billing');  // Adjust the route as necessary
+                break;
+            default:
+                // Optionally handle any cases not covered
+                break;
         }
+
+
     };
 
     const handleCloseUserMenu = () => {
@@ -59,7 +87,7 @@ const Header: React.FC<HeaderProps> = ({ message }) => {
             <AppBar position="static">
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
-                        <Typography variant="h6" noWrap component="a" href="#app-bar-with-responsive-menu" onClick={() => gotoHome()}>
+                        <Typography variant="h6" noWrap component="a" href="javascript:void(0)" onClick={() => gotoHome()}>
                             <Image src={require('../../public/images/logo.png')} alt="Description of the image" className="responsive-img center" />
                         </Typography>
 

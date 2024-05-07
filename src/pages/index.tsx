@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import TextField from '@mui/material/TextField';
 import Image from "next/image";
 import { Card, CardContent, Button } from '@mui/material';
-import { useSearchParams } from "next/navigation";
 import User from "../../models/User";
 import { useFormik } from "formik";
 import loginSchema from "@/validation/loginSchema";

@@ -33,13 +33,13 @@ export default function Index() {
   }, []);
 
   const goToPage = (url: string) => {
-    router.push(url);
+    router.push(`${url}`);
   };
 
   return (
     <>
       <Header />
-      <div className='dashboard-wrapper'>
+      <div className='master-wrapper'>
         <Card>
           <CardContent>
 
@@ -47,15 +47,15 @@ export default function Index() {
               <tbody>
                 <tr>
                   <td>
-                    <Button type='submit' variant="contained" onClick={() => goToPage('/master')}>Master</Button>
+                    <Button type='submit' variant="contained" onClick={() => goToPage('/seller')}>Seller</Button>
                   </td>
                   <td>
-                    <Button type='submit' variant="contained" onClick={() => goToPage('/contract')}>Contract</Button>
+                    <Button type='submit' variant="contained" onClick={() => goToPage('/contract')}>Buyer</Button>
                   </td>
                 </tr>
                 <tr>
                   <td colSpan={2}>
-                    <Button type='submit' variant="contained">Billing</Button>
+                    <Button type='submit' variant="contained">Template</Button>
                   </td>
                 </tr>
               </tbody>
