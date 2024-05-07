@@ -50,7 +50,7 @@ export default function Index() {
                     <Button type='submit' variant="contained" onClick={() => goToPage('/seller')}>Seller</Button>
                   </td>
                   <td>
-                    <Button type='submit' variant="contained" onClick={() => goToPage('/contract')}>Buyer</Button>
+                    <Button type='submit' variant="contained" onClick={() => goToPage('/buyer')}>Buyer</Button>
                   </td>
                 </tr>
                 <tr>
