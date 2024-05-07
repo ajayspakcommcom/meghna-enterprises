@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 
 const Header = dynamic(() => import('../../../components/header/index'));
 
+
 interface Field {
   property: string;
   value: string;
@@ -61,7 +62,6 @@ export default function Index() {
   const goToPage = (url: string) => {
     router.push(`${url}`);
   };
-
 
 
   return (
@@ -154,6 +154,8 @@ export default function Index() {
                     ))}
                   </ul>
                 </div>
+
+                <hr />
 
 
               </CardContent>
