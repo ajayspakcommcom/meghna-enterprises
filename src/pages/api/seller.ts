@@ -38,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       case 'CREATE':
         try {
 
-          const user = await Seller.create({
+          const seller = await Seller.create({
             name: req.body.name,
             address: req.body.address,
             telephone_no: req.body.telephone_no,
@@ -62,10 +62,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           const dataList = await Seller.find({}).exec();
           res.status(200).json({ data: dataList });
         } catch (error: any) {
-
-          if (error instanceof MongooseError) {
-            return res.status(500).json({ error: 'Database Error', errorDetail: error });
-          }
           res.status(500).json({ error: 'Internal Server Error' });
         }
         break;

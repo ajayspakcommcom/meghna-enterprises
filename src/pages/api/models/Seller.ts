@@ -50,10 +50,8 @@ const sellerSchema = new mongoose.Schema({
         type: Date,
         default: null
     }
-}, {
-    timestamps: { createdAt: 'createdDate', updatedAt: 'updatedDate' }
 });
 
-export const Seller = mongoose.models.User || mongoose.model('Seller', sellerSchema);
+export const Seller = mongoose.models.Seller || mongoose.model('Seller', sellerSchema);
 
 

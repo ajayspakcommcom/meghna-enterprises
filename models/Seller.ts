@@ -1,5 +1,6 @@
 
 export default interface Seller {
+    _id?: string;
     name?: string | null;
     address?: string | null;
     telephone_no?: string | null;
