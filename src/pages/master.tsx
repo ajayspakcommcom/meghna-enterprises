@@ -55,7 +55,7 @@ export default function Index() {
                 </tr>
                 <tr>
                   <td colSpan={2}>
-                    <Button type='submit' variant="contained">Template</Button>
+                    <Button type='submit' variant="contained" onClick={() => goToPage('/template')}>Template</Button>
                   </td>
                 </tr>
               </tbody>

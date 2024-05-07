@@ -245,7 +245,7 @@ export default function Index() {
                   />
 
 
-                  <Button type='submit' variant="contained" fullWidth>{loading ? "Login..." : "Login"}</Button>
+                  <Button type='submit' variant="contained" fullWidth>{loading ? "Submit..." : "Submit"}</Button>
                 </form>
 
 

@@ -85,7 +85,7 @@ export default function Index() {
           <div>
             <div className="header-content">
               <div>
-                <Typography variant="h5" component="article">Create Seller</Typography>
+                <Typography variant="h5" component="article">Create Template</Typography>
               </div>
               <div className="btn-wrapper">
                 <Button variant="outlined" onClick={() => goToPage('/seller')}>Back</Button>
