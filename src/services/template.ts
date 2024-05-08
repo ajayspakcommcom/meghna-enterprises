@@ -36,9 +36,9 @@ export const getTemplateIdName = async (): Promise<ApiResponse<Template>> => {
     }
 };
 
-export const getTemplate = async (id: string): Promise<Template> => {
+export const getTemplate = async (id: string): Promise<ApiResponse<Template>> => {
     try {
-        const response = await apiClient.post<Template>('/template', { id: id, type: 'DETAIL' });
+        const response = await apiClient.post<ApiResponse<Template>>('/template', { id: id, type: 'DETAIL' });
         return response.data;
     } catch (err: unknown) {
         throw err;

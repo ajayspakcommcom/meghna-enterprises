@@ -9,14 +9,14 @@ import ErrorMessage from "../../../components/error-message";
 import contractSchema from "@/validation/contractSchema";
 import { getSellerIdName } from "@/services/seller";
 import { getBuyerIdName } from "@/services/buyer";
-import { getTemplateIdName } from "@/services/template";
+import { getTemplate, getTemplateIdName } from "@/services/template";
 
 
 const Header = dynamic(() => import('../../../components/header/index'));
 
 interface selectedAutoField {
   label: string;
-  year: number;
+  _id: string;
 }
 
 export default function Index() {
@@ -49,7 +49,18 @@ export default function Index() {
     setSelectedBuyer(value);
   };
 
-  const handleTemplateChange = (event: React.ChangeEvent<{}>, value: selectedAutoField | null) => {
+  const handleTemplateChange = async (event: React.ChangeEvent<{}>, value: selectedAutoField | null) => {
+    console.log('selected', value);
+
+    try {
+      const templateId = value?._id ?? '';
+      const response = await getTemplate(templateId);
+      console.log('res : ', response);
+    } catch (error) {
+      console.log('Error : ', error);
+    }
+
+
     setSelectedTemplate(value);
   };
 
@@ -61,7 +72,7 @@ export default function Index() {
       router.push('/');
     }
 
-    const fetSellerIdName = async () => {
+    const fetchSellerIdName = async () => {
       try {
         const response = await getSellerIdName();
         const formattedData = response.data.map((seller: any) => {
@@ -75,7 +86,7 @@ export default function Index() {
       }
     };
 
-    const fetBuyerIdName = async () => {
+    const fetchBuyerIdName = async () => {
       try {
         const response = await getBuyerIdName();
         const formattedData = response.data.map((buyer: any) => {
@@ -89,7 +100,7 @@ export default function Index() {
       }
     };
 
-    const fetTemplateIdName = async () => {
+    const fetchTemplateIdName = async () => {
       try {
         const response = await getTemplateIdName();
         const formattedData = response.data.map((buyer: any) => {
@@ -103,10 +114,9 @@ export default function Index() {
       }
     };
 
-
-    fetSellerIdName();
-    fetBuyerIdName();
-    fetTemplateIdName();
+    fetchSellerIdName();
+    fetchBuyerIdName();
+    fetchTemplateIdName();
 
   }, []);
 
