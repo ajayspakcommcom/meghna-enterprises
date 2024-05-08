@@ -33,6 +33,7 @@
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/jsonwebtoken": "^9.0.6",
+    "@types/mongoose-auto-increment": "^5.0.38",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
