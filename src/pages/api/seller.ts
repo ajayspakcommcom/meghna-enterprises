@@ -78,6 +78,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }
         break;
 
+      case 'ID-NAME':
+        try {
+          const dataList = await Seller.findById(req.body.id).select('_id name').exec();
+          if (!dataList) {
+            return res.status(404).json({ error: 'Seller not found' });
+          }
+          res.status(200).json({ data: dataList });
+        } catch (error) {
+          res.status(500).json({ error: 'Internal Server Error' });
+        }
+        break;
+
     }
 
   } else {

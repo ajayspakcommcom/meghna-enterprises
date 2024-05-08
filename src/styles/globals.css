@@ -238,3 +238,7 @@ header .css-2uchni {
 .contract-form-wrapper .css-17vbkzs-MuiFormControl-root-MuiTextField-root {
     margin-top: 0;
 }
+
+.contract-form-wrapper {
+    margin-bottom: 7px;
+}
