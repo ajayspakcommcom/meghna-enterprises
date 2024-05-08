@@ -41,6 +41,8 @@ export default function Index() {
   const [buyerList, setBuyerList] = useState<any[]>([]);
   const [templateList, setTemplateList] = useState<any[]>([]);
 
+
+
   const handleSellerChange = (event: React.ChangeEvent<{}>, value: selectedAutoField | null) => {
     setSelectedSeller(value);
   };
@@ -59,8 +61,6 @@ export default function Index() {
     } catch (error) {
       console.log('Error : ', error);
     }
-
-
     setSelectedTemplate(value);
   };
 
