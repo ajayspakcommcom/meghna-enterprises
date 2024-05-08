@@ -28,9 +28,9 @@ export const createBuyer = async (sellerData: any): Promise<any> => {
     }
 };
 
-export const getBuyerIdName = async (): Promise<Buyer> => {
+export const getBuyerIdName = async (): Promise<ApiResponse<Buyer>> => {
     try {
-        const response = await apiClient.post<Buyer>('/buyer', { type: 'ID-NAME' });
+        const response = await apiClient.post<ApiResponse<Buyer>>('/buyer', { type: 'ID-NAME' });
         return response.data;
     } catch (err: unknown) {
         throw err;

@@ -7,6 +7,9 @@ import Contract from "../../../models/Contract";
 import { useFormik } from "formik";
 import ErrorMessage from "../../../components/error-message";
 import contractSchema from "@/validation/contractSchema";
+import { getSellerIdName } from "@/services/seller";
+import { getBuyerIdName } from "@/services/buyer";
+import { getTemplateIdName } from "@/services/template";
 
 
 const Header = dynamic(() => import('../../../components/header/index'));
@@ -34,6 +37,10 @@ export default function Index() {
   const [selectedBuyer, setSelectedBuyer] = useState<selectedAutoField | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<selectedAutoField | null>(null);
 
+  const [sellerList, setSellerList] = useState<any[]>([]);
+  const [buyerList, setBuyerList] = useState<any[]>([]);
+  const [templateList, setTemplateList] = useState<any[]>([]);
+
   const handleSellerChange = (event: React.ChangeEvent<{}>, value: selectedAutoField | null) => {
     setSelectedSeller(value);
   };
@@ -47,13 +54,59 @@ export default function Index() {
   };
 
 
-
   useEffect(() => {
 
     const token = localStorage.getItem("token");
     if (!token) {
       router.push('/');
     }
+
+    const fetSellerIdName = async () => {
+      try {
+        const response = await getSellerIdName();
+        const formattedData = response.data.map((seller: any) => {
+          const output = { ...seller, label: seller.name }
+          delete output.name;
+          return output;
+        });
+        setSellerList(formattedData);
+      } catch (error) {
+        console.error('Error fetching seller data:', error);
+      }
+    };
+
+    const fetBuyerIdName = async () => {
+      try {
+        const response = await getBuyerIdName();
+        const formattedData = response.data.map((buyer: any) => {
+          const output = { ...buyer, label: buyer.name }
+          delete output.name;
+          return output;
+        });
+        setBuyerList(formattedData);
+      } catch (error) {
+        console.error('Error fetching buyer data:', error);
+      }
+    };
+
+    const fetTemplateIdName = async () => {
+      try {
+        const response = await getTemplateIdName();
+        const formattedData = response.data.map((buyer: any) => {
+          const output = { ...buyer, label: buyer.name }
+          delete output.name;
+          return output;
+        });
+        setTemplateList(formattedData);
+      } catch (error) {
+        console.error('Error fetching template data:', error);
+      }
+    };
+
+
+    fetSellerIdName();
+    fetBuyerIdName();
+    fetTemplateIdName();
 
   }, []);
 
@@ -142,7 +195,7 @@ export default function Index() {
                     <div>
                       <Autocomplete
                         disablePortal
-                        options={top100Films}
+                        options={sellerList}
                         renderInput={(params) => <TextField {...params} label="Seller" required />}
                         onChange={handleSellerChange}
                       />
@@ -153,7 +206,7 @@ export default function Index() {
                     <div>
                       <Autocomplete
                         disablePortal
-                        options={top100Films}
+                        options={buyerList}
                         renderInput={(params) => <TextField {...params} label="Buyer" required />}
                         onChange={handleBuyerChange}
                       />
@@ -161,7 +214,7 @@ export default function Index() {
                     <div>
                       <Autocomplete
                         disablePortal
-                        options={top100Films}
+                        options={templateList}
                         renderInput={(params) => <TextField {...params} label="Template" required />}
                         onChange={handleTemplateChange}
                       />
