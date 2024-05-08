@@ -1,25 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, Button, Typography, Container } from '@mui/material';
+import { Button, Typography, Container } from '@mui/material';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { getAllTemplates } from "@/services/template";
-import { format } from 'date-fns';
+import { getAllContracts } from "@/services/contract";
 import { customDateFormatter } from '../../services/common';
 
 const Header = dynamic(() => import('../../../components/header/index'));
 
 
-
-
 export default function Index() {
 
   const columns: GridColDef[] = [
-    { field: 'name', headerName: 'Name', width: 200 },
+    { field: 'contract_no', headerName: 'Contract No', width: 100 },
+    { field: 'buyer_id', headerName: 'Buyer', width: 200 },
+    { field: 'seller_id', headerName: 'Seller', width: 200 },
+    { field: 'quantity', headerName: 'Quantity', width: 100 },
+    { field: 'price', headerName: 'Price', width: 80 },
+    {
+      field: 'assessment_year',
+      headerName: 'Financial Year',
+      width: 120,
+      valueGetter: (value, row) => `${customDateFormatter(row.assessment_year)}`,
+    },
     {
       field: 'createdDate',
       headerName: 'Created Date',
-      width: 200,
+      width: 120,
       valueGetter: (value, row) => `${customDateFormatter(row.createdDate)}`,
     },
     {
@@ -62,8 +69,8 @@ export default function Index() {
 
     const fetchData = async () => {
       try {
-        const response = await getAllTemplates();
-        const formattedData = response.data.map((seller: any) => ({ ...seller, id: seller._id, _id: undefined }));
+        const response = await getAllContracts();
+        const formattedData = response.data.map((contract: any) => ({ ...contract, id: contract._id, _id: undefined }));
         console.log(formattedData);
         setRowData(formattedData);
       } catch (error) {

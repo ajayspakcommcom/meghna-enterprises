@@ -30,7 +30,7 @@ export const createBuyer = async (sellerData: any): Promise<any> => {
 
 export const getBuyer = async (id: string): Promise<Buyer> => {
     try {
-        const response = await apiClient.get<Buyer>(`/buyer/${id}`);
+        const response = await apiClient.post<Buyer>('/buyer', { id: id, type: 'DETAIL' });
         return response.data;
     } catch (err: unknown) {
         throw err;

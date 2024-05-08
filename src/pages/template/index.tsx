@@ -63,7 +63,7 @@ export default function Index() {
     const fetchData = async () => {
       try {
         const response = await getAllTemplates();
-        const formattedData = response.data.map((seller: any) => ({ ...seller, id: seller._id, _id: undefined }));
+        const formattedData = response.data.map((template: any) => ({ ...template, id: template._id, _id: undefined }));
         console.log(formattedData);
         setRowData(formattedData);
       } catch (error) {

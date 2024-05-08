@@ -70,6 +70,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           res.status(500).json({ error: 'Internal Server Error' });
         }
         break;
+
+      case 'DETAIL':
+        try {
+          const dataList = await Template.findById(req.body.id).exec();
+          if (!dataList) {
+            return res.status(404).json({ error: 'Template not found' });
+          }
+          res.status(200).json({ data: dataList });
+        } catch (error) {
+          res.status(500).json({ error: 'Internal Server Error' });
+        }
+        break;
     }
 
   } else {
