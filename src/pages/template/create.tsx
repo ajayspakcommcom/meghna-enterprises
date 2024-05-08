@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { createTemplate } from "@/services/template";
 import ErrorMessage from "../../../components/error-message";
+import SuccessMessage from "../../../components/success-message";
 
 
 
@@ -26,6 +27,7 @@ export default function Index() {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setError] = useState<any>();
+  const [success, setSuccess] = useState<any>();
 
   const handleAddField = () => {
     setFields([...fields, { property: '', value: '' }]);
@@ -64,21 +66,24 @@ export default function Index() {
       name: name.trim()
     };
 
-    console.log('Final Object:', finalObject);
-
     try {
       const response = await createTemplate(finalObject);
-      console.log('response', response);
       setLoading(false);
+      setSuccess('Template created successfully');
+
+      setTimeout(() => {
+        setSuccess(null)
+      }, 2000);
 
     } catch (error: any) {
-
-      console.error('Error saving:', error);
-      console.error('Error saving:', error.response.data.error);
 
       setLoading(false);
       console.error('Error saving:', error);
       setError(error.response.data.errorDetail);
+
+      setTimeout(() => {
+        setError(null)
+      }, 2000);
 
     }
 
@@ -122,6 +127,7 @@ export default function Index() {
               <CardContent>
 
                 {errors && <div className="error"><ErrorMessage message={errors} /></div>}
+                {success && <div className="success"><SuccessMessage message={success} /></div>}
 
                 <form className='form' onSubmit={handleSubmit}>
 
@@ -184,7 +190,7 @@ export default function Index() {
                   <Button type='submit' variant="contained" fullWidth>{loading ? "Submit..." : "Submit"}</Button>
                 </form>
 
-                <div>
+                {/* <div>
                   <ul>
                     {submittedValues.map((field, index) => (
                       <li key={index}>
@@ -194,7 +200,7 @@ export default function Index() {
                   </ul>
                 </div>
 
-                <hr />
+                <hr /> */}
 
 
               </CardContent>

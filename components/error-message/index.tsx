@@ -1,16 +1,15 @@
 import * as React from 'react';
 import Alert from '@mui/material/Alert';
-import CheckIcon from '@mui/icons-material';
 import { AlertTitle } from '@mui/material';
 
-interface ErrorMessageProps {
+interface SuccessMessageProps {
     message: string;
 }
 
-const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => (
+const SuccessMessage: React.FC<SuccessMessageProps> = ({ message }) => (
     <Alert severity="error">
         <AlertTitle>{message}</AlertTitle>
     </Alert>
 );
 
-export default React.memo(ErrorMessage);
+export default React.memo(SuccessMessage);
