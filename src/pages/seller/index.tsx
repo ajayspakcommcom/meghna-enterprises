@@ -7,22 +7,48 @@ import { getAllSellers } from "@/services/seller";
 
 const Header = dynamic(() => import('../../../components/header/index'));
 
-const columns: GridColDef[] = [
-  { field: 'name', headerName: 'Name', width: 200 },
-  { field: 'email', headerName: 'Email', width: 200 },
-  { field: 'telephone_no', headerName: 'Telephone No', width: 200 },
-  { field: 'mobile_no', headerName: 'Mobile No', width: 200 },
-  { field: 'fax', headerName: 'Fax', width: 200 },
-  { field: 'pan', headerName: 'Pan', width: 200 },
-  { field: 'gstin', headerName: 'GSTIN', width: 200 },
-  { field: 'state_code', headerName: 'State Code', width: 200 }
-];
+
 
 
 export default function Index() {
 
+  const columns: GridColDef[] = [
+    { field: 'name', headerName: 'Name', width: 200 },
+    { field: 'email', headerName: 'Email', width: 200 },
+    { field: 'telephone_no', headerName: 'Telephone No', width: 200 },
+    { field: 'mobile_no', headerName: 'Mobile No', width: 200 },
+    { field: 'fax', headerName: 'Fax', width: 200 },
+    { field: 'pan', headerName: 'Pan', width: 200 },
+    { field: 'gstin', headerName: 'GSTIN', width: 200 },
+    { field: 'state_code', headerName: 'State Code', width: 200 },
+    {
+      field: 'action',
+      headerName: 'Action',
+      width: 400,
+      renderCell: (params) => (
+        <div className="action-btn-wrapper">
+          <Button variant="contained" color="success" onClick={() => handleEdit(params.id)}>Edit</Button>
+          <Button variant="contained" color="inherit" onClick={() => handleDetail(params.id)}>Detail</Button>
+          <Button variant="contained" color="error" onClick={() => handleDelete(params.id)}>Delete</Button>
+        </div>
+      ),
+    }
+  ];
+
   const router = useRouter();
   const [rowData, setRowData] = useState<any[]>([]);
+
+  const handleEdit = (id: any) => {
+    console.log('Edit', id);
+  };
+
+  const handleDetail = (id: any) => {
+    console.log('Detail', id);
+  };
+
+  const handleDelete = (id: any) => {
+    console.log('Delete', id);
+  };
 
 
   useEffect(() => {

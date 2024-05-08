@@ -225,3 +225,12 @@ header .css-2uchni {
 .template-add-btn-wrapper>div:last-child {
     width: calc(50% + 60px) !important;
 }
+
+.action-btn-wrapper {
+    display: flex;
+    margin-top: 7px;
+}
+
+.action-btn-wrapper>button:nth-child(2) {
+    margin: 0 7px;
+}
