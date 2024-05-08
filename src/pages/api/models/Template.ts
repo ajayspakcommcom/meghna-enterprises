@@ -7,16 +7,11 @@ const templateSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    label: [{
-        key: {
-            type: String,
-            required: true
-        },
-        value: {
-            type: String,
-            required: true
-        }
-    }],
+    label: {
+        type: Map,
+        of: String,
+        required: true
+    },
     createdDate: {
         type: Date,
         default: Date.now

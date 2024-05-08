@@ -38,20 +38,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       case 'CREATE':
         try {
 
-          // json
           // {
-          //   "name": "Test Template",
-          //     "label": [
-          //       {
-          //         "key": "key1",
-          //         "value": "value1"
-          //       },
-          //       {
-          //         "key": "key2",
-          //         "value": "value2"
-          //       }
-          //     ],
-          //       "type": "CREATE"
+          //   "name": "Template1",
+          //     "label": {
+          //     "Commodity": "Soybean Commodity",
+          //       "Price": "25",
+          //         "Brokerage": "45",
+          //           "Other Terms and Condition": "As Usual"
+          //   },
+          //   "type": "CREATE"
           // }
 
           const template = await Template.create({

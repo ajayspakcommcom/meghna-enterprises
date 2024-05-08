@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, Button, Typography, TextField, Container } from '@mui/material';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
+import { createTemplate } from "@/services/template";
+import ErrorMessage from "../../../components/error-message";
+
 
 
 const Header = dynamic(() => import('../../../components/header/index'));
@@ -19,6 +22,10 @@ export default function Index() {
 
   const [fields, setFields] = useState<Field[]>([]);
   const [submittedValues, setSubmittedValues] = useState<Field[]>([]);
+  const [name, setName] = useState('');
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [errors, setError] = useState<any>();
 
   const handleAddField = () => {
     setFields([...fields, { property: '', value: '' }]);
@@ -36,7 +43,14 @@ export default function Index() {
     setFields(updatedFields);
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value);
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
+
+    setLoading(true);
+
     event.preventDefault();
     setSubmittedValues(fields);
 
@@ -45,7 +59,28 @@ export default function Index() {
       return acc;
     }, {});
 
-    console.log('transformedData', transformedData);
+    const finalObject = {
+      label: transformedData,
+      name: name.trim()
+    };
+
+    console.log('Final Object:', finalObject);
+
+    try {
+      const response = await createTemplate(finalObject);
+      console.log('response', response);
+      setLoading(false);
+
+    } catch (error: any) {
+
+      console.error('Error saving:', error);
+      console.error('Error saving:', error.response.data.error);
+
+      setLoading(false);
+      console.error('Error saving:', error);
+      setError(error.response.data.errorDetail);
+
+    }
 
   };
 
@@ -85,6 +120,9 @@ export default function Index() {
           <div>
             <Card>
               <CardContent>
+
+                {errors && <div className="error"><ErrorMessage message={errors} /></div>}
+
                 <form className='form' onSubmit={handleSubmit}>
 
                   <TextField
@@ -95,6 +133,7 @@ export default function Index() {
                     fullWidth
                     margin="normal"
                     className="template-name-txt"
+                    onChange={handleChange}
                   />
 
                   {fields.map((field, index) => (
@@ -142,7 +181,7 @@ export default function Index() {
                       <Button type='button' variant="contained" color="success" fullWidth onClick={handleAddField}>Add Label</Button>
                     </div>
                   </div>
-                  <Button type='submit' variant="contained" fullWidth>Submit</Button>
+                  <Button type='submit' variant="contained" fullWidth>{loading ? "Submit..." : "Submit"}</Button>
                 </form>
 
                 <div>
