@@ -1,80 +1,47 @@
 import React, { useState } from 'react';
+import { Autocomplete, TextField, Button } from '@mui/material';
 
-interface Field {
-    property: string;
-    value: string;
+interface Film {
+    label: string;
+    year: number;
 }
 
-const Index: React.FC = () => {
+const top100Films = [
+    { label: 'The Shawshank Redemption', year: 1994 },
+    { label: 'The Godfather', year: 1972 }
+];
 
-    const [fields, setFields] = useState<Field[]>([]);
-    const [submittedValues, setSubmittedValues] = useState<Field[]>([]);
+const MyComponent = () => {
+    const [selectedFilm, setSelectedFilm] = useState<Film | null>(null);
 
-    const handleAddField = () => {
-        setFields([...fields, { property: '', value: '' }]);
+    const handleAutocompleteChange = (event: React.ChangeEvent<{}>, value: Film | null) => {
+        setSelectedFilm(value);
     };
 
-    const handleRemoveField = (index: number) => {
-        const updatedFields = [...fields];
-        updatedFields.splice(index, 1);
-        setFields(updatedFields);
-    };
 
-    const handleInputChange = (index: number, type: keyof Field, value: string) => {
-        const updatedFields = [...fields];
-        updatedFields[index][type] = value;
-        setFields(updatedFields);
-    };
-
-    const handleSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
-        setSubmittedValues(fields);
-
-        const transformedData: { [key: string]: string } = fields.reduce((acc: any, obj: any) => {
-            acc[obj.property.trim()] = obj.value.trim();
-            return acc;
-        }, {});
+    const handleSubmit = () => {
+        if (selectedFilm) {
+            // Autocomplete is selected
+            console.log('Selected Film:', selectedFilm);
+        } else {
+            // Autocomplete is not selected
+            console.log('Please select a film.');
+        }
     };
 
     return (
-        <>
-            <div>
-                <button onClick={handleAddField}>Add Field</button>
-                <form onSubmit={handleSubmit}>
-                    {fields.map((field, index) => (
-                        <div key={index}>
-
-                            <input
-                                type="text"
-                                value={field.property}
-                                placeholder="Property"
-                                onChange={(e) => handleInputChange(index, 'property', e.target.value)}
-                            />
-
-                            <textarea
-                                value={field.value}
-                                placeholder="Value"
-                                onChange={(e) => handleInputChange(index, 'value', e.target.value)}
-                            />
-
-                            <button type="button" onClick={() => handleRemoveField(index)}>Remove</button>
-
-                        </div>
-                    ))}
-                    <button type="submit">Submit</button>
-                </form>
-                <div>
-                    <ul>
-                        {submittedValues.map((field, index) => (
-                            <li key={index}>
-                                {field.property}: {field.value}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </div>
-        </>
+        <div>
+            <Autocomplete
+                id="combo-box-demo"
+                options={top100Films}
+                getOptionLabel={(option) => option.label}
+                value={selectedFilm}
+                onChange={handleAutocompleteChange}
+                renderInput={(params) => <TextField {...params} label="Movie" />}
+            />
+            <Button onClick={handleSubmit}>Submit</Button>
+        </div>
     );
 };
 
-export default Index;
+export default MyComponent;

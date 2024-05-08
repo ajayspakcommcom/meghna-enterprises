@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import Buyer from "../../../models/Buyer";
 import { useFormik } from "formik";
 import ErrorMessage from "../../../components/error-message";
-import sellerSchema from "@/validation/sellerSchema";
+import buyerSchema from "@/validation/buyerSchema";
 import { createBuyer } from "@/services/buyer";
 
 const Header = dynamic(() => import('../../../components/header/index'));
@@ -70,7 +70,7 @@ export default function Index() {
 
   const formik = useFormik({
     initialValues,
-    validationSchema: sellerSchema,
+    validationSchema: buyerSchema,
     onSubmit: handleSubmit,
     onReset: handleReset
   });

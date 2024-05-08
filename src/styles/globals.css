@@ -234,3 +234,7 @@ header .css-2uchni {
 .action-btn-wrapper>button:nth-child(2) {
     margin: 0 7px;
 }
+
+.contract-form-wrapper .css-17vbkzs-MuiFormControl-root-MuiTextField-root {
+    margin-top: 0;
+}

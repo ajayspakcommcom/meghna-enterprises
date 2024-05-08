@@ -1,24 +1,51 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, Button, Typography, TextField, Container } from '@mui/material';
+import { Card, CardContent, Button, Typography, TextField, Container, Autocomplete, Select } from '@mui/material';
+import { Formik, Form, Field } from 'formik';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
-import Buyer from "../../../models/Buyer";
+import Contract from "../../../models/Contract";
 import { useFormik } from "formik";
 import ErrorMessage from "../../../components/error-message";
-import sellerSchema from "@/validation/sellerSchema";
-import { createBuyer } from "@/services/buyer";
+import contractSchema from "@/validation/contractSchema";
+
 
 const Header = dynamic(() => import('../../../components/header/index'));
 
-
+interface selectedAutoField {
+  label: string;
+  year: number;
+}
 
 export default function Index() {
+
+  const top100Films = [
+    { label: 'The Shawshank Redemption', year: 1994 },
+    { label: 'The Godfather', year: 1972 }
+  ];
+
 
   const router = useRouter();
 
   const [authData, setAuthData] = useState({ username: "", password: "" });
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setError] = useState<any>();
+
+  const [selectedSeller, setSelectedSeller] = useState<selectedAutoField | null>(null);
+  const [selectedBuyer, setSelectedBuyer] = useState<selectedAutoField | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<selectedAutoField | null>(null);
+
+  const handleSellerChange = (event: React.ChangeEvent<{}>, value: selectedAutoField | null) => {
+    setSelectedSeller(value);
+  };
+
+  const handleBuyerChange = (event: React.ChangeEvent<{}>, value: selectedAutoField | null) => {
+    setSelectedBuyer(value);
+  };
+
+  const handleTemplateChange = (event: React.ChangeEvent<{}>, value: selectedAutoField | null) => {
+    setSelectedTemplate(value);
+  };
+
 
 
   useEffect(() => {
@@ -34,32 +61,29 @@ export default function Index() {
     router.push(`${url}`);
   };
 
-  const initialValues: Buyer = {
-    name: '',
-    address: '',
-    telephone_no: '',
-    mobile_no: '',
-    fax: '',
-    pan: '',
-    gstin: '',
-    state_code: '',
-    email: ''
+  const initialValues: Contract = {
+    contract_no: ''
   };
 
-  const handleSubmit = async (buyer: Buyer) => {
+  const handleSubmit = async (contract: Contract) => {
 
-    setLoading(true);
 
-    try {
-      const response = await createBuyer(buyer);
-      console.log('response', response);
-      setLoading(false);
-      formik.resetForm();
-    } catch (error: any) {
-      setLoading(false);
-      console.error('Error saving:', error);
-      setError(error);
-    }
+    console.log('contract...', contract);
+    console.log('Selected Seller:', selectedSeller);
+    console.log('Selected Buyer:', selectedBuyer);
+    console.log('Selected Template', selectedTemplate);
+
+    //setLoading(true);
+    // try {
+    //   const response = await createBuyer(buyer);
+    //   console.log('response', response);
+    //   setLoading(false);
+    //   formik.resetForm();
+    // } catch (error: any) {
+    //   setLoading(false);
+    //   console.error('Error saving:', error);
+    //   setError(error);
+    // }
 
   };
 
@@ -70,7 +94,7 @@ export default function Index() {
 
   const formik = useFormik({
     initialValues,
-    validationSchema: sellerSchema,
+    validationSchema: contractSchema,
     onSubmit: handleSubmit,
     onReset: handleReset
   });
@@ -100,149 +124,49 @@ export default function Index() {
 
                   {errors && <div className="error"><ErrorMessage message={errors} /></div>}
 
-                  <div className="buyer-seller-forms-wrapper">
+                  <div className="buyer-seller-forms-wrapper contract-form-wrapper">
                     <div>
                       <TextField
                         type="text"
-                        label="Name"
-                        name="name"
+                        label="Contract no"
+                        name="contract_no"
                         variant="outlined"
                         fullWidth
                         margin="normal"
-                        value={formik.values.name}
+                        value={formik.values.contract_no}
                         onChange={formik.handleChange}
-                        error={formik.touched.name && Boolean(formik.errors.name)}
-                        helperText={formik.touched.name && formik.errors.name}
+                        error={formik.touched.contract_no && Boolean(formik.errors.contract_no)}
+                        helperText={formik.touched.contract_no && formik.errors.contract_no}
                       />
                     </div>
                     <div>
-
-                      <TextField
-                        type="text"
-                        label="Email"
-                        name="email"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.email}
-                        onChange={formik.handleChange}
-                        error={formik.touched.email && Boolean(formik.errors.email)}
-                        helperText={formik.touched.email && formik.errors.email}
+                      <Autocomplete
+                        disablePortal
+                        options={top100Films}
+                        renderInput={(params) => <TextField {...params} label="Seller" required />}
+                        onChange={handleSellerChange}
                       />
                     </div>
                   </div>
 
-
-                  <div className="buyer-seller-forms-wrapper">
+                  <div className="buyer-seller-forms-wrapper contract-form-wrapper">
                     <div>
-                      <TextField
-                        type="text"
-                        label="Telephone No"
-                        name="telephone_no"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.telephone_no}
-                        onChange={formik.handleChange}
-                        error={formik.touched.telephone_no && Boolean(formik.errors.telephone_no)}
-                        helperText={formik.touched.telephone_no && formik.errors.telephone_no}
+                      <Autocomplete
+                        disablePortal
+                        options={top100Films}
+                        renderInput={(params) => <TextField {...params} label="Buyer" required />}
+                        onChange={handleBuyerChange}
                       />
                     </div>
                     <div>
-                      <TextField
-                        type="text"
-                        label="Mobile No"
-                        name="mobile_no"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.mobile_no}
-                        onChange={formik.handleChange}
-                        error={formik.touched.mobile_no && Boolean(formik.errors.mobile_no)}
-                        helperText={formik.touched.mobile_no && formik.errors.mobile_no}
+                      <Autocomplete
+                        disablePortal
+                        options={top100Films}
+                        renderInput={(params) => <TextField {...params} label="Template" required />}
+                        onChange={handleTemplateChange}
                       />
                     </div>
                   </div>
-
-
-                  <div className="buyer-seller-forms-wrapper">
-                    <div>
-                      <TextField
-                        type="text"
-                        label="Fax"
-                        name="fax"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.fax}
-                        onChange={formik.handleChange}
-                        error={formik.touched.fax && Boolean(formik.errors.fax)}
-                        helperText={formik.touched.fax && formik.errors.fax}
-                      />
-                    </div>
-                    <div>
-                      <TextField
-                        type="text"
-                        label="Pan"
-                        name="pan"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.pan}
-                        onChange={formik.handleChange}
-                        error={formik.touched.pan && Boolean(formik.errors.pan)}
-                        helperText={formik.touched.pan && formik.errors.pan}
-                      />
-                    </div>
-                  </div>
-
-
-
-                  <div className="buyer-seller-forms-wrapper">
-                    <div>
-                      <TextField
-                        type="text"
-                        label="gstin"
-                        name="gstin"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.gstin}
-                        onChange={formik.handleChange}
-                        error={formik.touched.gstin && Boolean(formik.errors.gstin)}
-                        helperText={formik.touched.gstin && formik.errors.gstin}
-                      />
-                    </div>
-                    <div>
-                      <TextField
-                        type="text"
-                        label="State Code"
-                        name="state_code"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.state_code}
-                        onChange={formik.handleChange}
-                        error={formik.touched.state_code && Boolean(formik.errors.state_code)}
-                        helperText={formik.touched.state_code && formik.errors.state_code}
-                      />
-                    </div>
-                  </div>
-
-                  <TextField
-                    type="text"
-                    label="Address"
-                    name="address"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    multiline
-                    rows={3}
-                    value={formik.values.address}
-                    onChange={formik.handleChange}
-                    error={formik.touched.address && Boolean(formik.errors.address)}
-                    helperText={formik.touched.address && formik.errors.address}
-                  />
 
 
                   <Button type='submit' variant="contained" fullWidth>{loading ? "Submit..." : "Submit"}</Button>
