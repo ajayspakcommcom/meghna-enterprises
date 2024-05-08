@@ -5,7 +5,7 @@ import './Seller';
 
 const contractSchema = new mongoose.Schema({
     contract_no: {
-        type: Number,
+        type: String,
         required: true
     },
     buyer_id: {
@@ -19,7 +19,8 @@ const contractSchema = new mongoose.Schema({
         required: true
     },
     template: {
-        type: String,
+        type: Map,
+        of: String,
         required: true
     },
     label: {
@@ -54,9 +55,8 @@ const contractSchema = new mongoose.Schema({
 });
 
 
-
-
-
 export const Contract = mongoose.models.Contract || mongoose.model('Contract', contractSchema);
+
+
 
 

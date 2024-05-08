@@ -35,26 +35,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       case 'CREATE':
         try {
 
-          //contract_no
-          //buyer_id
-          //seller_id
-          //template
-          //label
-          //quantity
-          //price
-          //assessment_year
-
-          console.clear();
-          console.log('req.body.type', req.body.type);
-          console.log('req.body.buyer_id', req.body.buyer_id);
-          console.log('req.body.seller_id', req.body.seller_id);
-          console.log('req.body.template', req.body.template);
-          console.log('req.body.label', req.body.label);
-          console.log('req.body.quantity', req.body.quantity);
-          console.log('req.body.price', req.body.price);
-          console.log('req.body.assessment_year', req.body.assessment_year);
-
           const contract = await Contract.create({
+            contract_no: req.body.contract_no,
             buyer_id: req.body.buyer_id,
             seller_id: req.body.seller_id,
             template: req.body.template,
@@ -66,6 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
           res.status(201).json({ message: 'Contract have been successfully created.' });
         } catch (error: any) {
+          console.clear();
           console.log('Error', error)
           res.status(500).json({ error: 'Internal Error', errorDetail: 'An unexpected error occurred' });
         }
