@@ -80,7 +80,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
       case 'ID-NAME':
         try {
-          const dataList = await Buyer.findById(req.body.id).select('_id name').exec();
+          const dataList = await Buyer.find().select('_id name').exec();
           if (!dataList) {
             return res.status(404).json({ error: 'Buyer not found' });
           }

@@ -28,6 +28,15 @@ export const createBuyer = async (sellerData: any): Promise<any> => {
     }
 };
 
+export const getBuyerIdName = async (): Promise<Buyer> => {
+    try {
+        const response = await apiClient.post<Buyer>('/buyer', { type: 'ID-NAME' });
+        return response.data;
+    } catch (err: unknown) {
+        throw err;
+    }
+};
+
 export const getBuyer = async (id: string): Promise<Buyer> => {
     try {
         const response = await apiClient.post<Buyer>('/buyer', { id: id, type: 'DETAIL' });

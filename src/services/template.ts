@@ -27,6 +27,15 @@ export const createTemplate = async (sellerData: any): Promise<any> => {
     }
 };
 
+export const getTemplateIdName = async (): Promise<Template> => {
+    try {
+        const response = await apiClient.post<Template>('/template', { type: 'ID-NAME' });
+        return response.data;
+    } catch (err: unknown) {
+        throw err;
+    }
+};
+
 export const getTemplate = async (id: string): Promise<Template> => {
     try {
         const response = await apiClient.post<Template>('/template', { id: id, type: 'DETAIL' });
