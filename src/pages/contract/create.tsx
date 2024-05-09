@@ -12,6 +12,7 @@ import { getBuyerIdName } from "@/services/buyer";
 import { getTemplate, getTemplateIdName } from "@/services/template";
 
 
+
 const Header = dynamic(() => import('../../../components/header/index'));
 
 interface selectedAutoField {
@@ -19,13 +20,17 @@ interface selectedAutoField {
   _id: string;
 }
 
+interface Field {
+  property: string;
+  value: string;
+}
+
+interface LabelField {
+  property: string;
+  value: string;
+}
+
 export default function Index() {
-
-  const top100Films = [
-    { label: 'The Shawshank Redemption', year: 1994 },
-    { label: 'The Godfather', year: 1972 }
-  ];
-
 
   const router = useRouter();
 
@@ -40,8 +45,24 @@ export default function Index() {
   const [sellerList, setSellerList] = useState<any[]>([]);
   const [buyerList, setBuyerList] = useState<any[]>([]);
   const [templateList, setTemplateList] = useState<any[]>([]);
+  const [fields, setFields] = useState<Field[]>([]);
+  const [labelFields, setLabelFields] = useState<LabelField[]>([]);
 
+  const handleAddLabelField = () => {
+    setLabelFields([...labelFields, { property: '', value: '' }]);
+  };
 
+  const handleRemoveField = (index: number) => {
+    const updatedLabelFields = [...labelFields];
+    updatedLabelFields.splice(index, 1);
+    setLabelFields(updatedLabelFields);
+  };
+
+  const handleLabelInputChange = (index: number, type: keyof Field, value: string) => {
+    const updatedLabelFields = [...labelFields];
+    updatedLabelFields[index][type] = value;
+    setLabelFields(updatedLabelFields);
+  };
 
   const handleSellerChange = (event: React.ChangeEvent<{}>, value: selectedAutoField | null) => {
     setSelectedSeller(value);
@@ -52,16 +73,24 @@ export default function Index() {
   };
 
   const handleTemplateChange = async (event: React.ChangeEvent<{}>, value: selectedAutoField | null) => {
-    console.log('selected', value);
-
+    setFields([]);
     try {
       const templateId = value?._id ?? '';
-      const response = await getTemplate(templateId);
-      console.log('res : ', response);
+      const response: any = await getTemplate(templateId);
+      console.log('res : ', response.data.label);
+      const label = response.data.label;
+      const newFields = Object.keys(label).map(key => ({ property: key, value: label[key] }));
+      setFields(prevFields => [...prevFields, ...newFields]);
     } catch (error) {
       console.log('Error : ', error);
     }
     setSelectedTemplate(value);
+  };
+
+  const handleInputChange = (index: number, type: keyof Field, value: string) => {
+    const updatedFields = [...fields];
+    updatedFields[index][type] = value;
+    setFields(updatedFields);
   };
 
 
@@ -231,6 +260,90 @@ export default function Index() {
                     </div>
                   </div>
 
+
+                  {fields.length > 0 && <div className="template-text-on-contract"><Typography variant="h6">Template</Typography></div>}
+
+                  {fields.map((field, index) => (
+                    <div className="template-form-wrapper contract-form-wrapper" key={index}>
+                      <div>
+                        <TextField
+                          type="text"
+                          label="Label"
+                          name="email"
+                          variant="outlined"
+                          fullWidth
+                          margin="normal"
+                          value={field.property}
+                          placeholder="Property"
+                          onChange={(e) => handleInputChange(index, 'property', e.target.value)}
+                        />
+
+                      </div>
+
+                      <div>
+                        <TextField
+                          type="text"
+                          label="Value"
+                          name="address"
+                          variant="outlined"
+                          fullWidth
+                          margin="normal"
+                          multiline
+                          rows={1}
+                          value={field.value}
+                          placeholder="Value"
+                          onChange={(e) => handleInputChange(index, 'value', e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  ))}
+
+                  {labelFields.length > 0 && <div className="template-text-on-contract"><Typography variant="h6">Heading</Typography></div>}
+
+                  {labelFields.map((field, index) => (
+                    <div className="template-form-wrapper contract-form-wrapper" key={index}>
+                      <div>
+                        <TextField
+                          type="text"
+                          label="Heading"
+                          name="property"
+                          variant="outlined"
+                          fullWidth
+                          margin="normal"
+                          value={field.property}
+                          placeholder="Property"
+                          onChange={(e) => handleLabelInputChange(index, 'property', e.target.value)}
+                        />
+
+                      </div>
+
+                      <div>
+                        <TextField
+                          type="text"
+                          label="Value"
+                          name="value"
+                          variant="outlined"
+                          fullWidth
+                          margin="normal"
+                          multiline
+                          rows={1}
+                          value={field.value}
+                          placeholder="Value"
+                          onChange={(e) => handleLabelInputChange(index, 'value', e.target.value)}
+                        />
+                      </div>
+
+                      <Button type='button' variant="contained" color="error" onClick={() => handleRemoveField(index)}>Remove</Button>
+
+                    </div>
+                  ))}
+
+                  <div className="template-form-wrapper contract-form-btn">
+                    <div></div>
+                    <div>
+                      <Button type='button' variant="contained" color="success" fullWidth onClick={handleAddLabelField}>Add Label</Button>
+                    </div>
+                  </div>
 
                   <Button type='submit' variant="contained" fullWidth>{loading ? "Submit..." : "Submit"}</Button>
                 </form>

@@ -150,6 +150,7 @@ export default function Index() {
     };
 
     const handleSubmit = async (contract: Contract) => {
+        console.log('fields', fields);
     };
 
     const handleReset = () => {

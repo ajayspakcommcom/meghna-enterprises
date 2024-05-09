@@ -242,3 +242,21 @@ header .css-2uchni {
 .contract-form-wrapper {
     margin-bottom: 7px;
 }
+
+.contract-form-wrapper>div {
+    width: 50% !important;
+}
+
+.template-text-on-contract h6 {
+    margin-bottom: -5px;
+}
+
+.contract-form-btn {
+    background: transparent !important;
+    border: 0 !important;
+    padding: 15px 0px !important;
+}
+
+.contract-form-btn>div {
+    width: 50% !important;
+}
