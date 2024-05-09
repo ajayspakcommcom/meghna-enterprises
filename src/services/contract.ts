@@ -18,9 +18,9 @@ interface ApiResponse<T> {
     data: T[];
 }
 
-export const createContract = async (sellerData: any): Promise<any> => {
+export const createContract = async (contractData: any): Promise<any> => {
     try {
-        const response = await apiClient.post<Contract>('/contract', { ...sellerData, type: 'CREATE' });
+        const response = await apiClient.post<Contract>('/contract', { ...contractData, type: 'CREATE' });
         return response.data;
     } catch (err: unknown) {
         throw err;

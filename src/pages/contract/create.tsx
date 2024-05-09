@@ -10,6 +10,7 @@ import contractSchema from "@/validation/contractSchema";
 import { getSellerIdName } from "@/services/seller";
 import { getBuyerIdName } from "@/services/buyer";
 import { getTemplate, getTemplateIdName } from "@/services/template";
+import { createContract } from "@/services/contract";
 
 
 
@@ -182,18 +183,17 @@ export default function Index() {
     };
 
     console.log('submittedData', submittedData);
-
-    //setLoading(true);
-    // try {
-    //   const response = await createBuyer(buyer);
-    //   console.log('response', response);
-    //   setLoading(false);
-    //   formik.resetForm();
-    // } catch (error: any) {
-    //   setLoading(false);
-    //   console.error('Error saving:', error);
-    //   setError(error);
-    // }
+    setLoading(true);
+    try {
+      const response = await createContract(submittedData);
+      console.log('response', response);
+      setLoading(false);
+      formik.resetForm();
+    } catch (error: any) {
+      setLoading(false);
+      console.error('Error saving:', error);
+      setError(error);
+    }
 
   };
 
