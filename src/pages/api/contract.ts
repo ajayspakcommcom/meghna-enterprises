@@ -56,7 +56,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         break;
       case 'LIST':
         try {
-          const dataList = await Contract.find({ isDeleted: false }).sort({ _id: -1 }).exec();
+          //const dataList = await Contract.find({ isDeleted: false }).sort({ _id: -1 }).exec();
+          const dataList = await Contract.find({ isDeleted: false })
+            .sort({ _id: -1 }).populate('buyer_id')
+            .populate('seller_id').exec();
+
+          console.clear();
+          console.log('dataList', dataList);
+
           res.status(200).json({ data: dataList });
         } catch (error: any) {
           res.status(500).json({ error: 'Internal Server Error' });

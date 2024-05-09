@@ -13,8 +13,19 @@ export default function Index() {
 
   const columns: GridColDef[] = [
     { field: 'contract_no', headerName: 'Contract No', width: 100 },
-    { field: 'buyer_id', headerName: 'Buyer', width: 200 },
-    { field: 'seller_id', headerName: 'Seller', width: 200 },
+    {
+      field: 'buyer_id',
+      headerName: 'Buyer',
+      width: 200,
+      valueGetter: (value, row) => `${row.buyer_id.name}`,
+    },
+    {
+      field: 'seller_id',
+      headerName: 'Seller',
+      width: 200,
+      valueGetter: (value, row) => `${row.seller_id.name}`,
+    },
+
     { field: 'quantity', headerName: 'Quantity', width: 100 },
     { field: 'price', headerName: 'Price', width: 80 },
     {

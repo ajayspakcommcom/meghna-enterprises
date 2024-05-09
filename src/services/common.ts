@@ -13,7 +13,7 @@ export const getUserData = (): { [key: string]: any } => {
 export const customDateFormatter = (params: any) => {
     const dateValue = moment(params.value);
     if (dateValue.isValid()) {
-        return dateValue.format('MM/DD/YYYY');
+        return dateValue.format('DD/MM/YYYY');
     } else {
         console.error('Invalid date value:', params.value);
         return 'Invalid date';
