@@ -154,16 +154,34 @@ export default function Index() {
   };
 
   const initialValues: Contract = {
-    contract_no: ''
+    contract_no: '',
+    quantity: '',
+    price: ''
   };
 
   const handleSubmit = async (contract: Contract) => {
 
+    const transformedFeildData: { [key: string]: string } = fields.reduce((acc: any, obj: any) => {
+      acc[obj.property.trim()] = obj.value.trim();
+      return acc;
+    }, {});
 
-    console.log('contract...', contract);
-    console.log('Selected Seller:', selectedSeller);
-    console.log('Selected Buyer:', selectedBuyer);
-    console.log('Selected Template', selectedTemplate);
+    const transformedLabelFeildData: { [key: string]: string } = labelFields.reduce((acc: any, obj: any) => {
+      acc[obj.property.trim()] = obj.value.trim();
+      return acc;
+    }, {});
+
+
+    const submittedData = {
+      ...contract,
+      buyer_id: selectedBuyer?._id,
+      seller_id: selectedSeller?._id,
+      template: transformedFeildData,
+      label: transformedLabelFeildData,
+      assessment_year: '24-25'
+    };
+
+    console.log('submittedData', submittedData);
 
     //setLoading(true);
     // try {
@@ -261,6 +279,8 @@ export default function Index() {
                   </div>
 
 
+
+
                   {fields.length > 0 && <div className="template-text-on-contract"><Typography variant="h6">Template</Typography></div>}
 
                   {fields.map((field, index) => (
@@ -297,6 +317,37 @@ export default function Index() {
                       </div>
                     </div>
                   ))}
+
+                  <div className="buyer-seller-forms-wrapper contract-form-wrapper">
+                    <div>
+                      <TextField
+                        type="text"
+                        label="Quantity"
+                        name="quantity"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        value={formik.values.quantity}
+                        onChange={formik.handleChange}
+                        error={formik.touched.quantity && Boolean(formik.errors.quantity)}
+                        helperText={formik.touched.quantity && formik.errors.quantity}
+                      />
+                    </div>
+                    <div>
+                      <TextField
+                        type="text"
+                        label="Price"
+                        name="price"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        value={formik.values.price}
+                        onChange={formik.handleChange}
+                        error={formik.touched.price && Boolean(formik.errors.price)}
+                        helperText={formik.touched.price && formik.errors.price}
+                      />
+                    </div>
+                  </div>
 
                   {labelFields.length > 0 && <div className="template-text-on-contract"><Typography variant="h6">Heading</Typography></div>}
 
