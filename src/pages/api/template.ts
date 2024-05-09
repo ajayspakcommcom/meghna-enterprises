@@ -64,7 +64,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         break;
       case 'LIST':
         try {
-          const dataList = await Template.find({}).exec();
+          const dataList = await Template.find({ isDeleted: false }).sort({ _id: -1 }).exec();
           res.status(200).json({ data: dataList });
         } catch (error: any) {
           res.status(500).json({ error: 'Internal Server Error' });

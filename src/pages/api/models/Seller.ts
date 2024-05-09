@@ -49,6 +49,10 @@ const sellerSchema = new mongoose.Schema({
     deletedDate: {
         type: Date,
         default: null
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
     }
 });
 
