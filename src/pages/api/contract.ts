@@ -69,7 +69,74 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           res.status(500).json({ error: 'Internal Server Error' });
         }
         break;
+
+      case 'UPDATE':
+        try {
+
+          const contractId = req.body.id;
+
+          const updatedData = {
+            contract_no: req.body.contract_no,
+            buyer_id: req.body.buyer_id,
+            seller_id: req.body.seller_id,
+            template: req.body.template,
+            label: req.body.label,
+            quantity: req.body.quantity,
+            price: req.body.price,
+            assessment_year: req.body.assessment_year,
+            updatedDate: Date.now(),
+          };
+
+          const updatedContract = await Contract.findByIdAndUpdate(contractId, updatedData, { new: true });
+
+          if (!updatedContract) {
+            return res.status(404).json({ error: 'Contract not found' });
+          }
+
+          res.status(200).json({ message: 'Contract updated successfully', data: updatedContract });
+
+        } catch (error: any) {
+          res.status(500).json({ error: `Internal Server Error ${error}` });
+        }
+        break;
+
+
+      case 'DETAIL':
+        try {
+          const dataList = await Contract.findById(req.body.id).populate('buyer_id')
+            .populate('seller_id').exec();
+          if (!dataList) {
+            return res.status(404).json({ error: 'Contract not found' });
+          }
+          res.status(200).json({ data: dataList });
+        } catch (error) {
+          res.status(500).json({ error: 'Internal Server Error' });
+        }
+        break;
+
+      case 'DELETE':
+        try {
+
+          const contractId = req.body.id;
+          const deletedContract = await Contract.findByIdAndUpdate(
+            contractId,
+            { $set: { isDeleted: true, deletedDate: Date.now() } },
+            { new: true }
+          );
+
+          if (!deletedContract) {
+            return res.status(404).json({ error: 'Contract not found' });
+          }
+
+          res.status(200).json({ message: 'Contract deleted successfully', data: deletedContract });
+
+        } catch (error) {
+          res.status(500).json({ error: 'Internal Server Error' });
+        }
+        break;
+
     }
+
 
   } else {
     res.status(405).json({ error: 'Method Not Allowed' });
