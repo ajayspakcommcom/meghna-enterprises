@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { getContract } from "@/services/contract";
+import { customDateFormatter } from "@/services/common";
 
 const Header = dynamic(() => import('../../../components/header/index'));
 
@@ -71,9 +72,9 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
           <div className="column">
             <ul className="detail-ul">
-              {Object.entries(detailData.buyer_id).filter(([key]) => key !== '_id' && key !== '__v').map(([key, value]) => (
+              {Object.entries(detailData.buyer_id).filter(([key]) => key !== '_id' && key !== '__v' && key !== 'isDeleted' && key !== 'updatedDate' && key !== 'deletedDate' && key !== 'createdDate').map(([key, value]) => (
                 <li key={key}>
-                  <Typography variant="body1" component="article"><b>{key}:</b> <span>{value as string}</span></Typography>
+                  <Typography variant="body1" component="article"><b>{key.charAt(0).toUpperCase() + key.slice(1)}:</b> <span>{value as string}</span></Typography>
                 </li>
               ))}
             </ul>
@@ -82,9 +83,9 @@ const Index: React.FC<compProps> = ({ detail }) => {
           <div className="column"><Typography variant="body1" component="article"><b>Seller</b></Typography></div>
           <div className="column">
             <ul className="detail-ul">
-              {Object.entries(detailData.seller_id).filter(([key]) => key !== '_id' && key !== '__v').map(([key, value]) => (
+              {Object.entries(detailData.seller_id).filter(([key]) => key !== '_id' && key !== '__v' && key !== 'isDeleted' && key !== 'updatedDate' && key !== 'deletedDate' && key !== 'createdDate').map(([key, value]) => (
                 <li key={key}>
-                  <Typography variant="body1" component="article"><b>{key}:</b> <span>{value as string}</span></Typography>
+                  <Typography variant="body1" component="article"><b>{key.charAt(0).toUpperCase() + key.slice(1)}:</b> <span>{value as string}</span></Typography>
                 </li>
               ))}
             </ul>
