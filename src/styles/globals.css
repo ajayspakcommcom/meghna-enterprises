@@ -260,3 +260,46 @@ header .css-2uchni {
 .contract-form-btn>div {
     width: 50% !important;
 }
+
+.detail-wrapper {
+    border: 1px solid rgba(224, 224, 224, 1);
+    box-sizing: border-box;
+    word-wrap: break-word;
+    border-radius: 4px;
+    display: grid;
+    grid-template-columns: 25% 75%;
+}
+
+.detail-wrapper .column {
+    box-sizing: border-box;
+    padding: 10px;
+    border-bottom: 1px solid rgba(224, 224, 224, 1);
+}
+
+.detail-wrapper .column:nth-child(even) {
+    border-left: 1px solid rgba(224, 224, 224, 1);
+}
+
+.detail-wrapper .column:nth-last-child(1),
+.detail-wrapper .column:nth-last-child(2) {
+    border-bottom: 0px solid rgba(224, 224, 224, 1);
+}
+
+.detail-wrapper b,
+.detail-wrapper span {
+    font-size: 14px;
+}
+
+.detail-ul {
+    padding: 0 0 0 15px;
+    margin: 0 0 0 0;
+}
+
+.detail-ul>li {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.detail-ul>li:last-child {
+    margin-bottom: 0;
+}

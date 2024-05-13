@@ -3,7 +3,7 @@ import { Button, Typography, Container } from '@mui/material';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { getSeller } from "@/services/seller";
+import { getBuyer } from "@/services/buyer";
 
 const Header = dynamic(() => import('../../../components/header/index'));
 
@@ -55,10 +55,10 @@ const Index: React.FC<compProps> = ({ detail }) => {
       <Container maxWidth="xl">
         <div className="header-content">
           <div>
-            <Typography variant="h5" component="article">Seller Detail</Typography>
+            <Typography variant="h5" component="article">Buyer List</Typography>
           </div>
           <div className="btn-wrapper">
-            <Button variant="outlined" onClick={() => goToPage('/seller')}>Back</Button>
+            <Button variant="outlined" onClick={() => goToPage('/buyer')}>Back</Button>
           </div>
         </div>
 
@@ -101,7 +101,7 @@ export default Index;
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
 
   const { id } = context.query;
-  const detail = await getSeller(id as string);
+  const detail = await getBuyer(id as string);
 
   return {
     props: {
