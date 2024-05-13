@@ -66,6 +66,37 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }
         break;
 
+      case 'UPDATE':
+        try {
+
+          const sellerId = req.body.id;
+
+          const updatedData = {
+            name: req.body.name,
+            address: req.body.address,
+            telephone_no: req.body.telephone_no,
+            mobile_no: req.body.mobile_no,
+            fax: req.body.fax,
+            pan: req.body.pan,
+            gstin: req.body.gstin,
+            state_code: req.body.state_code,
+            email: req.body.email,
+            updatedDate: Date.now(),
+          };
+
+          const updatedSeller = await Seller.findByIdAndUpdate(sellerId, updatedData, { new: true });
+
+          if (!updatedSeller) {
+            return res.status(404).json({ error: 'Seller not found' });
+          }
+
+          res.status(200).json({ message: 'Seller updated successfully', data: updatedSeller });
+
+        } catch (error: any) {
+          res.status(500).json({ error: `Internal Server Error ${error}` });
+        }
+        break;
+
       case 'DETAIL':
         try {
           const dataList = await Seller.findById(req.body.id).exec();
@@ -73,6 +104,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             return res.status(404).json({ error: 'Seller not found' });
           }
           res.status(200).json({ data: dataList });
+        } catch (error) {
+          res.status(500).json({ error: 'Internal Server Error' });
+        }
+        break;
+
+      case 'DELETE':
+        try {
+
+          const sellerId = req.body.id;
+          const deletedSeller = await Seller.findByIdAndUpdate(
+            sellerId,
+            { $set: { isDeleted: true, deletedDate: Date.now() } },
+            { new: true }
+          );
+
+          if (!deletedSeller) {
+            return res.status(404).json({ error: 'Seller not found' });
+          }
+
+          res.status(200).json({ message: 'Seller deleted successfully', data: deletedSeller });
+
         } catch (error) {
           res.status(500).json({ error: 'Internal Server Error' });
         }

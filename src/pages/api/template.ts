@@ -38,6 +38,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       case 'CREATE':
         try {
 
+          console.clear();
+          console.log('req.body.name', req.body.name);
+          console.log('req.body.label', req.body.label);
+
           const template = await Template.create({
             name: req.body.name,
             label: req.body.label,
@@ -71,6 +75,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }
         break;
 
+      case 'UPDATE':
+        try {
+
+          const templateId = req.body.id;
+
+          const updatedData = {
+            name: req.body.name,
+            label: req.body.label,
+            updatedDate: Date.now(),
+          };
+
+          const updatedTemplate = await Template.findByIdAndUpdate(templateId, updatedData, { new: true });
+
+          if (!updatedTemplate) {
+            return res.status(404).json({ error: 'Template not found' });
+          }
+
+          res.status(200).json({ message: 'Template updated successfully', data: updatedTemplate });
+
+        } catch (error: any) {
+          res.status(500).json({ error: `Internal Server Error ${error}` });
+        }
+        break;
+
       case 'DETAIL':
         try {
           const dataList = await Template.findById(req.body.id).exec();
@@ -78,6 +106,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             return res.status(404).json({ error: 'Template not found' });
           }
           res.status(200).json({ data: dataList });
+        } catch (error) {
+          res.status(500).json({ error: 'Internal Server Error' });
+        }
+        break;
+
+      case 'DELETE':
+        try {
+
+          const templateId = req.body.id;
+          const deletedTemplate = await Template.findByIdAndUpdate(
+            templateId,
+            { $set: { isDeleted: true, deletedDate: Date.now() } },
+            { new: true }
+          );
+
+          if (!deletedTemplate) {
+            return res.status(404).json({ error: 'Template not found' });
+          }
+
+          res.status(200).json({ message: 'Template deleted successfully', data: deletedTemplate });
+
         } catch (error) {
           res.status(500).json({ error: 'Internal Server Error' });
         }

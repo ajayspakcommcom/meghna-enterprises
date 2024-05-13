@@ -50,7 +50,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             email: req.body.email
           });
 
-
           res.status(201).json({ message: 'Buyer have been successfully created.' });
         } catch (error: any) {
           res.status(500).json({ error: 'Internal Error', errorDetail: 'An unexpected error occurred' });
@@ -66,6 +65,39 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }
         break;
 
+
+      case 'UPDATE':
+        try {
+
+          const buyerId = req.body.id;
+
+          const updatedData = {
+            name: req.body.name,
+            address: req.body.address,
+            telephone_no: req.body.telephone_no,
+            mobile_no: req.body.mobile_no,
+            fax: req.body.fax,
+            pan: req.body.pan,
+            gstin: req.body.gstin,
+            state_code: req.body.state_code,
+            email: req.body.email,
+            updatedDate: Date.now(),
+          };
+
+          const updatedBuyer = await Buyer.findByIdAndUpdate(buyerId, updatedData, { new: true });
+
+          if (!updatedBuyer) {
+            return res.status(404).json({ error: 'Buyer not found' });
+          }
+
+          res.status(200).json({ message: 'Buyer updated successfully', data: updatedBuyer });
+
+        } catch (error: any) {
+          res.status(500).json({ error: `Internal Server Error ${error}` });
+        }
+        break;
+
+
       case 'DETAIL':
         try {
           const dataList = await Buyer.findById(req.body.id).exec();
@@ -73,6 +105,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             return res.status(404).json({ error: 'Buyer not found' });
           }
           res.status(200).json({ data: dataList });
+        } catch (error) {
+          res.status(500).json({ error: 'Internal Server Error' });
+        }
+        break;
+
+      case 'DELETE':
+        try {
+
+          const buyerId = req.body.id;
+          const deletedBuyer = await Buyer.findByIdAndUpdate(
+            buyerId,
+            { $set: { isDeleted: true, deletedDate: Date.now() } },
+            { new: true }
+          );
+
+          if (!deletedBuyer) {
+            return res.status(404).json({ error: 'Buyer not found' });
+          }
+
+          res.status(200).json({ message: 'Buyer deleted successfully', data: deletedBuyer });
+
         } catch (error) {
           res.status(500).json({ error: 'Internal Server Error' });
         }
