@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { getAllSellers, deleteSeller } from "@/services/seller";
+import ConfirmationDialogue from '../../../components/confirmation-pop/index';
 
 const Header = dynamic(() => import('../../../components/header/index'));
 
@@ -37,6 +38,8 @@ export default function Index() {
 
   const router = useRouter();
   const [rowData, setRowData] = useState<any[]>([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
 
   const handleEdit = (id: any) => {
     console.log('Edit', id);
@@ -48,14 +51,16 @@ export default function Index() {
 
   const handleDelete = async (id: any) => {
 
-    try {
-      const response: any = await deleteSeller(id);
-      console.log('response', response)
-      setRowData((prevRowData) => prevRowData.filter((seller) => seller.id !== id));
+    setDialogOpen(true);
 
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
+    // try {
+    //   const response: any = await deleteSeller(id);
+    //   console.log('response', response)
+    //   setRowData((prevRowData) => prevRowData.filter((seller) => seller.id !== id));
+
+    // } catch (error) {
+    //   console.error('Error fetching data:', error);
+    // }
 
     console.log('Delete', id);
   };
@@ -88,6 +93,14 @@ export default function Index() {
     router.push(`${url}`);
   };
 
+  const handleAgree = () => {
+    setDialogOpen(false);
+  };
+
+  const handleDisagree = () => {
+    setDialogOpen(false);
+  };
+
   return (
     <>
       <Header />
@@ -116,6 +129,8 @@ export default function Index() {
           />
         </div>
       </Container>
+
+      <ConfirmationDialogue open={dialogOpen} onAgree={handleAgree} onDisagree={handleDisagree} />
 
 
     </>
