@@ -73,7 +73,6 @@ const Index: React.FC<compProps> = ({ detail }) => {
                 </li>
               ))}
             </ul>
-
           </div>
 
 

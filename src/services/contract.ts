@@ -29,7 +29,7 @@ export const createContract = async (contractData: any): Promise<any> => {
 
 export const getContract = async (id: string): Promise<Contract> => {
     try {
-        const response = await apiClient.get<Contract>(`/contract/${id}`);
+        const response = await apiClient.post<Contract>('/contract', { id: id, type: 'DETAIL' });
         return response.data;
     } catch (err: unknown) {
         throw err;

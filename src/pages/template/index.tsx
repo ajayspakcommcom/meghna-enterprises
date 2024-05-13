@@ -45,7 +45,6 @@ export default function Index() {
 
   const handleDetail = (id: any) => {
     router.push(`/template/${id}`);
-    console.log('Detail', id);
   };
 
   const handleDelete = (id: any) => {

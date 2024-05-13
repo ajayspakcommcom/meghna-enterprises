@@ -62,7 +62,7 @@ export default function Index() {
   };
 
   const handleDetail = (id: any) => {
-    console.log('Detail', id);
+    router.push(`/contract/${id}`);
   };
 
   const handleDelete = (id: any) => {
