@@ -3,7 +3,7 @@ import { Card, CardContent, Button, Typography, Container } from '@mui/material'
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { getAllSellers } from "@/services/seller";
+import { getAllSellers, deleteSeller } from "@/services/seller";
 
 const Header = dynamic(() => import('../../../components/header/index'));
 
@@ -46,7 +46,17 @@ export default function Index() {
     router.push(`/seller/${id}`);
   };
 
-  const handleDelete = (id: any) => {
+  const handleDelete = async (id: any) => {
+
+    try {
+      const response: any = await deleteSeller(id);
+      console.log('response', response)
+      setRowData((prevRowData) => prevRowData.filter((seller) => seller.id !== id));
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+
     console.log('Delete', id);
   };
 

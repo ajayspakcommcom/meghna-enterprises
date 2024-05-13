@@ -55,9 +55,10 @@ export const updateSeller = async (id: string, sellerData: Seller): Promise<Sell
     }
 };
 
-export const deleteSeller = async (id: string): Promise<void> => {
+export const deleteSeller = async (id: string): Promise<Seller> => {
     try {
-        await apiClient.delete(`/seller/${id}`);
+        const response = await apiClient.post<Seller>('/seller', { id: id, type: 'DELETE' });
+        return response.data;
     } catch (err: unknown) {
         throw err;
     }
