@@ -290,6 +290,11 @@ header .css-2uchni {
     border-bottom: 0px solid rgba(224, 224, 224, 1);
 }
 
+/* .contract-detail-wrapper .column:nth-last-child(1),
+.contract-detail-wrapper .column:nth-last-child(2) {
+    border-bottom: 1px solid rgba(224, 224, 224, 1);
+} */
+
 .detail-wrapper b,
 .detail-wrapper span {
     font-size: 14px;

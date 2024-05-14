@@ -63,7 +63,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
         </div>
 
 
-        <div className="detail-wrapper">
+        <div className="detail-wrapper contract-detail-wrapper">
 
           <div className="column"><Typography variant="body1" component="article"><b>Contract No</b></Typography></div>
           <div className="column"><Typography variant="body1" component="article"><span>{detailData.contract_no}</span></Typography></div>
@@ -100,27 +100,21 @@ const Index: React.FC<compProps> = ({ detail }) => {
           <div className="column"><Typography variant="body1" component="article"><b>Financial Year</b></Typography></div>
           <div className="column"><Typography variant="body1" component="article"><span>{detailData.assessment_year}</span></Typography></div>
 
-          <div className="column"><Typography variant="body1" component="article"><b>Template</b></Typography></div>
-          <div className="column">
-            <ul className="detail-ul">
-              {Object.entries(detailData.template).filter(([key]) => key !== '_id' && key !== '__v' && key !== 'isDeleted' && key !== 'updatedDate' && key !== 'deletedDate' && key !== 'createdDate').map(([key, value]) => (
-                <li key={key}>
-                  <Typography variant="body1" component="article"><b>{key.charAt(0).toUpperCase() + key.slice(1)}:</b> <span>{value as string}</span></Typography>
-                </li>
-              ))}
-            </ul>
-          </div>
 
-          <div className="column"><Typography variant="body1" component="article"><b>Heading</b></Typography></div>
-          <div className="column">
-            <ul className="detail-ul">
-              {Object.entries(detailData.label).filter(([key]) => key !== '_id' && key !== '__v' && key !== 'isDeleted' && key !== 'updatedDate' && key !== 'deletedDate' && key !== 'createdDate').map(([key, value]) => (
-                <li key={key}>
-                  <Typography variant="body1" component="article"><b>{key.charAt(0).toUpperCase() + key.slice(1)}:</b><span>{value as string}</span></Typography>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {Object.entries(detailData.template).filter(([key]) => key !== '_id' && key !== '__v' && key !== 'isDeleted' && key !== 'updatedDate' && key !== 'deletedDate' && key !== 'createdDate').map(([key, value]) => (
+            <>
+              <div className="column"><Typography variant="body1" component="article"><b>{key.charAt(0).toUpperCase() + key.slice(1)}</b></Typography></div>
+              <div className="column"><Typography variant="body1" component="article"><span>{value as string}</span></Typography></div>
+            </>
+          ))}
+
+
+          {Object.entries(detailData.label).filter(([key]) => key !== '_id' && key !== '__v' && key !== 'isDeleted' && key !== 'updatedDate' && key !== 'deletedDate' && key !== 'createdDate').map(([key, value]) => (
+            <React.Fragment key={key}>
+              <div className="column"><Typography variant="body1" component="article"><b>{key.charAt(0).toUpperCase() + key.slice(1)}</b></Typography></div>
+              <div className="column"><Typography variant="body1" component="article"><span>{value as string}</span></Typography></div>
+            </React.Fragment>
+          ))}
 
         </div>
 
