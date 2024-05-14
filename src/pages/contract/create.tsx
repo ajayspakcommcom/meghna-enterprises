@@ -196,17 +196,14 @@ export default function Index() {
       assessment_year: getCurrentFinancialYear()
     };
 
-    console.log('submittedData', submittedData);
     setLoading(true);
     try {
       const response = await createContract(submittedData);
-      console.log('response', response);
       setLoading(false);
       formik.resetForm();
       setIsSuccessDialogOpen(true);
     } catch (error: any) {
       setLoading(false);
-      console.error('Error saving:', error);
       setError(error);
     }
 
