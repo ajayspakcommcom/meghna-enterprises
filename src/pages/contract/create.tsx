@@ -11,6 +11,7 @@ import { getSellerIdName } from "@/services/seller";
 import { getBuyerIdName } from "@/services/buyer";
 import { getTemplate, getTemplateIdName } from "@/services/template";
 import { createContract } from "@/services/contract";
+import { getCurrentFinancialYear } from "@/services/common";
 
 
 
@@ -179,7 +180,7 @@ export default function Index() {
       seller_id: selectedSeller?._id,
       template: transformedFeildData,
       label: transformedLabelFeildData,
-      assessment_year: '24-25'
+      assessment_year: getCurrentFinancialYear()
     };
 
     console.log('submittedData', submittedData);
@@ -220,6 +221,7 @@ export default function Index() {
             <div className="header-content">
               <div>
                 <Typography variant="h5" component="article">Create Contract</Typography>
+                {JSON.stringify(getCurrentFinancialYear())}
               </div>
               <div className="btn-wrapper">
                 <Button variant="outlined" onClick={() => goToPage('/contract')}>Back</Button>

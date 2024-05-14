@@ -45,13 +45,15 @@ export const updateContract = async (id: string, sellerData: Contract): Promise<
     }
 };
 
-export const deleteContract = async (id: string): Promise<void> => {
+export const deleteContract = async (id: string): Promise<Contract> => {
     try {
-        await apiClient.delete(`/contract/${id}`);
+        const response = await apiClient.post<Contract>('/contract', { id: id, type: 'DELETE' });
+        return response.data;
     } catch (err: unknown) {
         throw err;
     }
 };
+
 
 export const getAllContracts = async (): Promise<ApiResponse<Contract>> => {
     try {
