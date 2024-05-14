@@ -33,7 +33,7 @@ export default function Index() {
       field: 'assessment_year',
       headerName: 'Financial Year',
       width: 120,
-      valueGetter: (value, row) => `${customDateFormatter(row.assessment_year)}`,
+      valueGetter: (value, row) => `${row.assessment_year}`,
     },
     {
       field: 'createdDate',

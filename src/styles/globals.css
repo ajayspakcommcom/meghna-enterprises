@@ -247,6 +247,11 @@ header .css-2uchni {
     width: 50% !important;
 }
 
+.contract-form-wrapper.template>div {
+    width: 100% !important;
+    padding: 0 !important;
+}
+
 .template-text-on-contract h6 {
     margin-bottom: -5px;
 }

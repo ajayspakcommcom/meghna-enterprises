@@ -135,6 +135,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }
         break;
 
+      case 'LAST':
+        try {
+          const dataList = await Contract.findOne({}).sort({ _id: -1 }).exec();
+          console.clear();
+          console.log('dataList', dataList);
+
+          res.status(200).json({ data: dataList });
+        } catch (error: any) {
+          res.status(500).json({ error: 'Internal Server Error' });
+        }
+        break;
+
     }
 
 

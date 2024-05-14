@@ -20,21 +20,7 @@ export const customDateFormatter = (params: any) => {
     }
 };
 
-// export const getCurrentFinancialYear = (): string => {
-//     const today = new Date();
-//     const currentMonth = today.getMonth(); // 0-indexed (January is 0, December is 11)
-//     const currentYear = today.getFullYear();
-
-//     // Financial year starts from April (month index 3)
-//     const financialYearStartMonth = 3;
-//     const financialYearStartYear = currentMonth >= financialYearStartMonth ? currentYear : currentYear - 1;
-
-//     const financialYearEndYear = financialYearStartYear + 1;
-
-//     return `${financialYearStartYear}-${financialYearEndYear.toString().substring(2)}`;
-// };
-
-export const getCurrentFinancialYear = (): string => {
+export const getCurrentFinancialYear = (isDashed: boolean = false): string => {
     const today = new Date();
     const currentMonth = today.getMonth(); // 0-indexed (January is 0, December is 11)
     const currentYear = today.getFullYear();
@@ -45,11 +31,46 @@ export const getCurrentFinancialYear = (): string => {
 
     const financialYearEndYear = financialYearStartYear + 1;
 
-    const formattedStart = `04/01/${financialYearStartYear}`;
-    const formattedEnd = `03/31/${financialYearEndYear}`;
+    let formattedStart, formattedEnd;
 
-    return `${formattedStart} - ${formattedEnd}`;
+    if (!isDashed) {
+        formattedStart = `01/04/${financialYearStartYear}`;
+        formattedEnd = `03/31/${financialYearEndYear}`;
+        return `${formattedStart} - ${formattedEnd}`;
+    } else {
+        formattedStart = `${financialYearStartYear}`;
+        formattedEnd = `${financialYearEndYear}`;
+        return `${formattedStart}-${formattedEnd}`;
+    }
+
 };
+
+export const incrementContractNo = (inputString: string, currentFinancialYear: string): string => {
+
+    if (!inputString) {
+        inputString = "S&F/L/0001/";
+    }
+
+    const regex = /\/(\d+)\//;
+    const match = inputString.match(regex);
+
+    if (match && match[1]) {
+        const numericPart: string = match[1];
+        const incrementedValue: number = parseInt(numericPart) + 1;
+        const numericLength: number = numericPart.length;
+        const incrementedString: string = String(incrementedValue).padStart(numericLength, '0');
+        const resultString: string = inputString.replace(regex, `/${incrementedString}/`);
+
+        // Replace the last part with the current financial year
+        const lastIndex = resultString.lastIndexOf('/');
+        const finalString = resultString.substring(0, lastIndex + 1) + currentFinancialYear;
+
+        return finalString;
+    } else {
+        throw new Error("Numeric portion not found in the input string.");
+    }
+}
+
 
 
 export const generateContractNumber = (): string => {

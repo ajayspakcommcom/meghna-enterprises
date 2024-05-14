@@ -10,12 +10,13 @@ import contractSchema from "@/validation/contractSchema";
 import { getSellerIdName } from "@/services/seller";
 import { getBuyerIdName } from "@/services/buyer";
 import { getTemplate, getTemplateIdName } from "@/services/template";
-import { createContract } from "@/services/contract";
-import { getCurrentFinancialYear } from "@/services/common";
+import { createContract, getLastContract } from "@/services/contract";
+import { getCurrentFinancialYear, incrementContractNo } from "@/services/common";
 
 
 
 const Header = dynamic(() => import('../../../components/header/index'));
+const SuccessConfirmationDialogue = dynamic(() => import('../../../components/success-confirmation/index'));
 
 interface selectedAutoField {
   label: string;
@@ -49,6 +50,8 @@ export default function Index() {
   const [templateList, setTemplateList] = useState<any[]>([]);
   const [fields, setFields] = useState<Field[]>([]);
   const [labelFields, setLabelFields] = useState<LabelField[]>([]);
+  const [contractNo, setContractNo] = useState<any>();
+  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
 
   const handleAddLabelField = () => {
     setLabelFields([...labelFields, { property: '', value: '' }]);
@@ -79,7 +82,6 @@ export default function Index() {
     try {
       const templateId = value?._id ?? '';
       const response: any = await getTemplate(templateId);
-      console.log('res : ', response.data.label);
       const label = response.data.label;
       const newFields = Object.keys(label).map(key => ({ property: key, value: label[key] }));
       setFields(prevFields => [...prevFields, ...newFields]);
@@ -102,6 +104,16 @@ export default function Index() {
     if (!token) {
       router.push('/');
     }
+
+
+    const fetchLastContract = async () => {
+      try {
+        const response: any = await getLastContract();
+        setContractNo(incrementContractNo(response.data.contract_no, getCurrentFinancialYear(true)))
+      } catch (error) {
+        console.error('Error fetching seller data:', error);
+      }
+    };
 
     const fetchSellerIdName = async () => {
       try {
@@ -145,6 +157,7 @@ export default function Index() {
       }
     };
 
+    fetchLastContract();
     fetchSellerIdName();
     fetchBuyerIdName();
     fetchTemplateIdName();
@@ -156,7 +169,6 @@ export default function Index() {
   };
 
   const initialValues: Contract = {
-    contract_no: '',
     quantity: '',
     price: ''
   };
@@ -176,6 +188,7 @@ export default function Index() {
 
     const submittedData = {
       ...contract,
+      contract_no: contractNo,
       buyer_id: selectedBuyer?._id,
       seller_id: selectedSeller?._id,
       template: transformedFeildData,
@@ -190,6 +203,7 @@ export default function Index() {
       console.log('response', response);
       setLoading(false);
       formik.resetForm();
+      setIsSuccessDialogOpen(true);
     } catch (error: any) {
       setLoading(false);
       console.error('Error saving:', error);
@@ -237,20 +251,6 @@ export default function Index() {
 
                   <div className="buyer-seller-forms-wrapper contract-form-wrapper">
                     <div>
-                      <TextField
-                        type="text"
-                        label="Contract no"
-                        name="contract_no"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.contract_no}
-                        onChange={formik.handleChange}
-                        error={formik.touched.contract_no && Boolean(formik.errors.contract_no)}
-                        helperText={formik.touched.contract_no && formik.errors.contract_no}
-                      />
-                    </div>
-                    <div>
                       <Autocomplete
                         disablePortal
                         options={sellerList}
@@ -258,9 +258,6 @@ export default function Index() {
                         onChange={handleSellerChange}
                       />
                     </div>
-                  </div>
-
-                  <div className="buyer-seller-forms-wrapper contract-form-wrapper">
                     <div>
                       <Autocomplete
                         disablePortal
@@ -269,6 +266,9 @@ export default function Index() {
                         onChange={handleBuyerChange}
                       />
                     </div>
+                  </div>
+
+                  <div className="buyer-seller-forms-wrapper contract-form-wrapper template">
                     <div>
                       <Autocomplete
                         disablePortal
@@ -280,10 +280,6 @@ export default function Index() {
                   </div>
 
 
-
-
-                  {fields.length > 0 && <div className="template-text-on-contract"><Typography variant="h6">Template</Typography></div>}
-
                   {fields.map((field, index) => (
                     <div className="template-form-wrapper contract-form-wrapper" key={index}>
                       <div>
@@ -294,6 +290,8 @@ export default function Index() {
                           variant="outlined"
                           fullWidth
                           margin="normal"
+                          multiline
+                          rows={3}
                           value={field.property}
                           placeholder="Property"
                           onChange={(e) => handleInputChange(index, 'property', e.target.value)}
@@ -310,7 +308,7 @@ export default function Index() {
                           fullWidth
                           margin="normal"
                           multiline
-                          rows={1}
+                          rows={3}
                           value={field.value}
                           placeholder="Value"
                           onChange={(e) => handleInputChange(index, 'value', e.target.value)}
@@ -349,8 +347,6 @@ export default function Index() {
                       />
                     </div>
                   </div>
-
-                  {labelFields.length > 0 && <div className="template-text-on-contract"><Typography variant="h6">Heading</Typography></div>}
 
                   {labelFields.map((field, index) => (
                     <div className="template-form-wrapper contract-form-wrapper" key={index}>
@@ -408,7 +404,7 @@ export default function Index() {
         </div>
       </Container>
 
-
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Contract Created Successfully" />
 
 
     </>
