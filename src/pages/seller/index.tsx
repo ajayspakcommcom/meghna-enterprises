@@ -39,6 +39,7 @@ export default function Index() {
   const router = useRouter();
   const [rowData, setRowData] = useState<any[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [itemId, setItemId] = useState();
 
 
   const handleEdit = (id: any) => {
@@ -50,19 +51,8 @@ export default function Index() {
   };
 
   const handleDelete = async (id: any) => {
-
     setDialogOpen(true);
-
-    // try {
-    //   const response: any = await deleteSeller(id);
-    //   console.log('response', response)
-    //   setRowData((prevRowData) => prevRowData.filter((seller) => seller.id !== id));
-
-    // } catch (error) {
-    //   console.error('Error fetching data:', error);
-    // }
-
-    console.log('Delete', id);
+    setItemId(id);
   };
 
 
@@ -93,7 +83,17 @@ export default function Index() {
     router.push(`${url}`);
   };
 
-  const handleAgree = () => {
+  const handleAgree = async () => {
+
+    try {
+      const response: any = await deleteSeller(itemId!);
+      console.log('response', response)
+      setRowData((prevRowData) => prevRowData.filter((seller) => seller.id !== itemId));
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+
     setDialogOpen(false);
   };
 
@@ -130,7 +130,7 @@ export default function Index() {
         </div>
       </Container>
 
-      <ConfirmationDialogue open={dialogOpen} onAgree={handleAgree} onDisagree={handleDisagree} />
+      <ConfirmationDialogue isOpen={dialogOpen} onAgree={handleAgree} onDisagree={handleDisagree} heading="Are you sure want to delete?" />
 
 
     </>

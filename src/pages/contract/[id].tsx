@@ -65,7 +65,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
         <div className="detail-wrapper">
 
-          <div className="column"><Typography variant="body1" component="article"><b>Name</b></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><b>Contract No</b></Typography></div>
           <div className="column"><Typography variant="body1" component="article"><span>{detailData.contract_no}</span></Typography></div>
 
           <div className="column"><Typography variant="body1" component="article"><b>Buyer</b></Typography></div>
