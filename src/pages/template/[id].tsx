@@ -64,7 +64,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
           <div className="column"><Typography variant="body1" component="article"><b>Name</b></Typography></div>
           <div className="column"><Typography variant="body1" component="article"><span>{detailData.name}</span></Typography></div>
 
-          <div className="column"><Typography variant="body1" component="article"><b>Label</b></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><b>Heading</b></Typography></div>
           <div className="column">
             <ul className="detail-ul">
               {Object.entries(detailData.label).map(([key, value]) => (

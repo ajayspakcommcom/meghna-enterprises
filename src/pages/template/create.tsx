@@ -6,9 +6,8 @@ import { createTemplate } from "@/services/template";
 import ErrorMessage from "../../../components/error-message";
 import SuccessMessage from "../../../components/success-message";
 
-
-
 const Header = dynamic(() => import('../../../components/header/index'));
+const SuccessConfirmationDialogue = dynamic(() => import('../../../components/success-confirmation/index'));
 
 
 interface Field {
@@ -28,6 +27,7 @@ export default function Index() {
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setError] = useState<any>();
   const [success, setSuccess] = useState<any>();
+  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
 
   const handleAddField = () => {
     setFields([...fields, { property: '', value: '' }]);
@@ -70,10 +70,10 @@ export default function Index() {
       const response = await createTemplate(finalObject);
       setLoading(false);
       setSuccess('Template created successfully');
-
       setTimeout(() => {
         setSuccess(null)
       }, 2000);
+      setIsSuccessDialogOpen(true);
 
     } catch (error: any) {
 
@@ -154,6 +154,8 @@ export default function Index() {
                           margin="normal"
                           value={field.property}
                           placeholder="Property"
+                          multiline
+                          rows={3}
                           onChange={(e) => handleInputChange(index, 'property', e.target.value)}
                         />
 
@@ -168,7 +170,7 @@ export default function Index() {
                           fullWidth
                           margin="normal"
                           multiline
-                          rows={1}
+                          rows={3}
                           value={field.value}
                           placeholder="Value"
                           onChange={(e) => handleInputChange(index, 'value', e.target.value)}
@@ -209,6 +211,8 @@ export default function Index() {
 
         </div>
       </Container>
+
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Template Created Successfully" />
 
 
 

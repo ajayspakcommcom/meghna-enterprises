@@ -221,7 +221,6 @@ export default function Index() {
             <div className="header-content">
               <div>
                 <Typography variant="h5" component="article">Create Contract</Typography>
-                {JSON.stringify(getCurrentFinancialYear())}
               </div>
               <div className="btn-wrapper">
                 <Button variant="outlined" onClick={() => goToPage('/contract')}>Back</Button>

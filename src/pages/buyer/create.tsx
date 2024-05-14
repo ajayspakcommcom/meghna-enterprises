@@ -9,6 +9,7 @@ import buyerSchema from "@/validation/buyerSchema";
 import { createBuyer } from "@/services/buyer";
 
 const Header = dynamic(() => import('../../../components/header/index'));
+const SuccessConfirmationDialogue = dynamic(() => import('../../../components/success-confirmation/index'));
 
 
 
@@ -19,6 +20,7 @@ export default function Index() {
   const [authData, setAuthData] = useState({ username: "", password: "" });
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setError] = useState<any>();
+  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
 
 
   useEffect(() => {
@@ -55,6 +57,7 @@ export default function Index() {
       console.log('response', response);
       setLoading(false);
       formik.resetForm();
+      setIsSuccessDialogOpen(true);
     } catch (error: any) {
       setLoading(false);
       console.error('Error saving:', error);
@@ -256,7 +259,7 @@ export default function Index() {
         </div>
       </Container>
 
-
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Buyer Created Successfully" />
 
 
     </>
