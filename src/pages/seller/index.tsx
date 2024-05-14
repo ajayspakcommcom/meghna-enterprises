@@ -4,11 +4,9 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { getAllSellers, deleteSeller } from "@/services/seller";
-import ConfirmationDialogue from '../../../components/confirmation-pop/index';
 
 const Header = dynamic(() => import('../../../components/header/index'));
-
-
+const ConfirmationDialogue = dynamic(() => import('../../../components/confirmation-pop/index'));
 
 
 export default function Index() {
@@ -28,7 +26,7 @@ export default function Index() {
       width: 400,
       renderCell: (params) => (
         <div className="action-btn-wrapper">
-          <Button variant="contained" color="success" onClick={() => handleEdit(params.id)}>Edit</Button>
+          {/* <Button variant="contained" color="success" onClick={() => handleEdit(params.id)}>Edit</Button> */}
           <Button variant="contained" color="inherit" onClick={() => handleDetail(params.id)}>Detail</Button>
           <Button variant="contained" color="error" onClick={() => handleDelete(params.id)}>Delete</Button>
         </div>

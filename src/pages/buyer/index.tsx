@@ -3,10 +3,10 @@ import { Button, Typography, Container } from '@mui/material';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { getAllBuyers } from "@/services/buyer";
+import { getAllBuyers, deleteBuyer } from "@/services/buyer";
 
 const Header = dynamic(() => import('../../../components/header/index'));
-
+const ConfirmationDialogue = dynamic(() => import('../../../components/confirmation-pop/index'));
 
 
 
@@ -27,7 +27,7 @@ export default function Index() {
       width: 400,
       renderCell: (params) => (
         <div className="action-btn-wrapper">
-          <Button variant="contained" color="success" onClick={() => handleEdit(params.id)}>Edit</Button>
+          {/* <Button variant="contained" color="success" onClick={() => handleEdit(params.id)}>Edit</Button> */}
           <Button variant="contained" color="inherit" onClick={() => handleDetail(params.id)}>Detail</Button>
           <Button variant="contained" color="error" onClick={() => handleDelete(params.id)}>Delete</Button>
         </div>
@@ -37,6 +37,8 @@ export default function Index() {
 
   const router = useRouter();
   const [rowData, setRowData] = useState<any[]>([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [itemId, setItemId] = useState();
 
   const handleEdit = (id: any) => {
     console.log('Edit', id);
@@ -46,8 +48,9 @@ export default function Index() {
     router.push(`/buyer/${id}`);
   };
 
-  const handleDelete = (id: any) => {
-    console.log('Delete', id);
+  const handleDelete = async (id: any) => {
+    setDialogOpen(true);
+    setItemId(id);
   };
 
 
@@ -76,6 +79,24 @@ export default function Index() {
 
   const goToPage = (url: string) => {
     router.push(`${url}`);
+  };
+
+  const handleAgree = async () => {
+
+    try {
+      const response: any = await deleteBuyer(itemId!);
+      console.log('response', response)
+      setRowData((prevRowData) => prevRowData.filter((buyer) => buyer.id !== itemId));
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+
+    setDialogOpen(false);
+  };
+
+  const handleDisagree = () => {
+    setDialogOpen(false);
   };
 
   return (
@@ -107,6 +128,7 @@ export default function Index() {
         </div>
       </Container>
 
+      <ConfirmationDialogue isOpen={dialogOpen} onAgree={handleAgree} onDisagree={handleDisagree} heading="Are you sure want to delete?" />
 
     </>
   );
