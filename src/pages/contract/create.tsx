@@ -391,6 +391,15 @@ export default function Index() {
                   </div>
 
                   <Button type='submit' variant="contained" fullWidth>{loading ? "Submit..." : "Submit"}</Button>
+
+                  {/* <div className="contract-btn-wrapper">
+                    <div>
+                      <Button type='button' variant="outlined" fullWidth>{'Preview'}</Button>
+                    </div>
+                    <div>
+                      <Button type='submit' variant="contained" fullWidth>{loading ? "Submit..." : "Submit"}</Button>
+                    </div>
+                  </div> */}
                 </form>
 
 

@@ -330,3 +330,21 @@ header .css-2uchni {
 .detail-ul>li:last-child {
     margin-bottom: 0;
 }
+
+.contract-btn-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contract-btn-wrapper>div {
+    width: 50%;
+}
+
+.contract-btn-wrapper>div:first-child {
+    padding-right: 7px;
+}
+
+.contract-btn-wrapper>div:last-child {
+    padding-left: 7px;
+}
