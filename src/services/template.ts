@@ -54,9 +54,10 @@ export const updateTemplate = async (id: string, sellerData: Template): Promise<
     }
 };
 
-export const deleteTemplate = async (id: string): Promise<void> => {
+export const deleteTemplate = async (id: string): Promise<Template> => {
     try {
-        await apiClient.delete(`/seller/${id}`);
+        const response = await apiClient.post<Template>('/template', { id: id, type: 'DELETE' });
+        return response.data;
     } catch (err: unknown) {
         throw err;
     }

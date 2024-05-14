@@ -3,13 +3,12 @@ import { Card, CardContent, Button, Typography, Container } from '@mui/material'
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { getAllTemplates } from "@/services/template";
+import { deleteTemplate, getAllTemplates } from "@/services/template";
 import { format } from 'date-fns';
 import { customDateFormatter } from '../../services/common';
 
 const Header = dynamic(() => import('../../../components/header/index'));
-
-
+const ConfirmationDialogue = dynamic(() => import('../../../components/confirmation-pop/index'));
 
 
 export default function Index() {
@@ -38,6 +37,8 @@ export default function Index() {
 
   const router = useRouter();
   const [rowData, setRowData] = useState<any[]>([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [itemId, setItemId] = useState();
 
   const handleEdit = (id: any) => {
     console.log('Edit', id);
@@ -47,10 +48,10 @@ export default function Index() {
     router.push(`/template/${id}`);
   };
 
-  const handleDelete = (id: any) => {
-    console.log('Delete', id);
+  const handleDelete = async (id: any) => {
+    setDialogOpen(true);
+    setItemId(id);
   };
-
 
   useEffect(() => {
 
@@ -77,6 +78,23 @@ export default function Index() {
 
   const goToPage = (url: string) => {
     router.push(`${url}`);
+  };
+
+  const handleAgree = async () => {
+
+    try {
+      const response: any = await deleteTemplate(itemId!);
+      setRowData((prevRowData) => prevRowData.filter((template) => template.id !== itemId));
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+
+    setDialogOpen(false);
+  };
+
+  const handleDisagree = () => {
+    setDialogOpen(false);
   };
 
   return (
@@ -107,6 +125,8 @@ export default function Index() {
           />
         </div>
       </Container>
+
+      <ConfirmationDialogue isOpen={dialogOpen} onAgree={handleAgree} onDisagree={handleDisagree} heading="Are you sure want to delete?" />
 
 
     </>

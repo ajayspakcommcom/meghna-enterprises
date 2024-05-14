@@ -85,7 +85,6 @@ export default function Index() {
 
     try {
       const response: any = await deleteBuyer(itemId!);
-      console.log('response', response)
       setRowData((prevRowData) => prevRowData.filter((buyer) => buyer.id !== itemId));
 
     } catch (error) {
