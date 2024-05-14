@@ -42,6 +42,7 @@ header .css-hip9hq-MuiPaper-root-MuiAppBar-root {
 .login-form-wrapper .form button {
     width: 100% !important;
     height: 56px !important;
+    background: #000;
 }
 
 header .css-1t6c9ts {
