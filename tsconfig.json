@@ -1,3 +1,38 @@
+// {
+//   "compilerOptions": {
+//     "lib": [
+//       "dom",
+//       "dom.iterable",
+//       "esnext"
+//     ],
+//     "allowJs": true,
+//     "skipLibCheck": true,
+//     "strict": true,
+//     "noEmit": true,
+//     "esModuleInterop": true,
+//     "module": "esnext",
+//     "moduleResolution": "bundler",
+//     "resolveJsonModule": true,
+//     "isolatedModules": true,
+//     "jsx": "preserve",
+//     "incremental": true,
+//     "paths": {
+//       "@/*": [
+//         "./src/*"
+//       ]
+//     }
+//   },
+//   "include": [
+//     "next-env.d.ts",
+//     "**/*.ts",
+//     "**/*.tsx",
+//     "context/Provider/LoginContextProvider.js",
+//     "context/Login/LoginContext.js"
+//   ],
+//   "exclude": [
+//     "node_modules"
+//   ]
+// }
 {
   "compilerOptions": {
     "lib": [
@@ -11,7 +46,7 @@
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node", // Use "node" instead of "bundler"
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -26,8 +61,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "context/Provider/LoginContextProvider.js",
-    "context/Login/LoginContext.js"
+    "context/**/*.js" // Include JavaScript files in the context folder
   ],
   "exclude": [
     "node_modules"
