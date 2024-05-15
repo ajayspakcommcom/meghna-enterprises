@@ -41,7 +41,7 @@ export default function Index() {
   const [itemId, setItemId] = useState();
 
   const handleEdit = (id: any) => {
-    console.log('Edit', id);
+    router.push(`/template/edit/${id}`);
   };
 
   const handleDetail = (id: any) => {
