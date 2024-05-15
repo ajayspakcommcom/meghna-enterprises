@@ -46,9 +46,10 @@ export const getSeller = async (id: string): Promise<Seller> => {
     }
 };
 
-export const updateSeller = async (id: string, sellerData: Seller): Promise<Seller> => {
+
+export const updateSeller = async (sellerData: any): Promise<Seller> => {
     try {
-        const response = await apiClient.put<Seller>(`/seller/${id}`, sellerData);
+        const response = await apiClient.post<Seller>(`/seller`, { type: 'UPDATE', ...sellerData });
         return response.data;
     } catch (err: unknown) {
         throw err;

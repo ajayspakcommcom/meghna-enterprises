@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, Button, Typography, TextField, Container } from '@mui/material';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
-import Buyer from "../../../../models/Buyer";
+import Seller from "../../../../models/Seller";
 import { useFormik } from "formik";
 import ErrorMessage from "../../../../components/error-message";
 import buyerSchema from "@/validation/buyerSchema";
 import { createBuyer, getBuyer, updateBuyer } from "@/services/buyer";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { getSeller, updateSeller } from "@/services/seller";
 
 const Header = dynamic(() => import('../../../../components/header/index'));
 const SuccessConfirmationDialogue = dynamic(() => import('../../../../components/success-confirmation/index'));
@@ -59,7 +60,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
     router.push(`${url}`);
   };
 
-  const initialValues: Buyer = {
+  const initialValues: Seller = {
     name: detailData.name,
     address: detailData.address,
     telephone_no: detailData.telephone_no,
@@ -71,16 +72,16 @@ const Index: React.FC<compProps> = ({ detail }) => {
     email: detailData.email
   };
 
-  const handleSubmit = async (buyer: Buyer) => {
+  const handleSubmit = async (seller: Seller) => {
 
-    console.log('Buyer', buyer);
+    console.log('Buyer', seller);
     console.log('detailData', detailData);
-    const data = { ...buyer, id: detailData._id! };
+    const data = { ...seller, id: detailData._id! };
 
     setLoading(true);
 
     try {
-      const response = await updateBuyer(data);
+      const response = await updateSeller(data);
       console.log('response', response);
       setLoading(false);
       formik.resetForm();
@@ -116,10 +117,10 @@ const Index: React.FC<compProps> = ({ detail }) => {
           <div>
             <div className="header-content">
               <div>
-                <Typography variant="h5" component="article">Edit Buyer</Typography>
+                <Typography variant="h5" component="article">Edit Seller</Typography>
               </div>
               <div className="btn-wrapper">
-                <Button variant="outlined" onClick={() => goToPage('/buyer')}>Back</Button>
+                <Button variant="outlined" onClick={() => goToPage('/seller')}>Back</Button>
               </div>
             </div>
           </div>
@@ -287,7 +288,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
         </div>
       </Container>
 
-      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Buyer Updated Successfully" />
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Seller Updated Successfully" />
 
     </>
   );
@@ -298,7 +299,7 @@ export default Index;
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
 
   const { id } = context.query;
-  const detail = await getBuyer(id as string);
+  const detail = await getSeller(id as string);
 
   return {
     props: {
