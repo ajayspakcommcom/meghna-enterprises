@@ -1,5 +1,5 @@
 
-export default interface Seller {
+export default interface Buyer {
     _id?: string;
     name?: string | null;
     address?: string | null;

@@ -90,7 +90,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             return res.status(404).json({ error: 'Buyer not found' });
           }
 
-          res.status(200).json({ message: 'Buyer updated successfully', data: updatedBuyer });
+          res.status(200).json({ message: 'Buyer updated successfully' });
 
         } catch (error: any) {
           res.status(500).json({ error: `Internal Server Error ${error}` });

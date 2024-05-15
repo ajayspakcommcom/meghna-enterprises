@@ -27,7 +27,7 @@ export default function Index() {
       width: 400,
       renderCell: (params) => (
         <div className="action-btn-wrapper">
-          {/* <Button variant="contained" color="success" onClick={() => handleEdit(params.id)}>Edit</Button> */}
+          <Button variant="contained" color="success" onClick={() => handleEdit(params.id)}>Edit</Button>
           <Button variant="contained" color="inherit" onClick={() => handleDetail(params.id)}>Detail</Button>
           <Button variant="contained" color="error" onClick={() => handleDelete(params.id)}>Delete</Button>
         </div>
@@ -41,7 +41,7 @@ export default function Index() {
   const [itemId, setItemId] = useState();
 
   const handleEdit = (id: any) => {
-    console.log('Edit', id);
+    router.push(`/buyer/edit/${id}`);
   };
 
   const handleDetail = (id: any) => {

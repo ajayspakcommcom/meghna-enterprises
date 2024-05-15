@@ -19,9 +19,9 @@ interface ApiResponse<T> {
     data: T[];
 }
 
-export const createBuyer = async (sellerData: any): Promise<any> => {
+export const createBuyer = async (buyerData: any): Promise<any> => {
     try {
-        const response = await apiClient.post<Buyer>('/buyer', { ...sellerData, type: 'CREATE' });
+        const response = await apiClient.post<Buyer>('/buyer', { ...buyerData, type: 'CREATE' });
         return response.data;
     } catch (err: unknown) {
         throw err;
@@ -46,9 +46,9 @@ export const getBuyer = async (id: string): Promise<Buyer> => {
     }
 };
 
-export const updateBuyer = async (id: string, sellerData: Buyer): Promise<Buyer> => {
+export const updateBuyer = async (buyerData: any): Promise<Buyer> => {
     try {
-        const response = await apiClient.put<Buyer>(`/buyer/${id}`, sellerData);
+        const response = await apiClient.post<Buyer>(`/buyer`, { type: 'UPDATE', ...buyerData });
         return response.data;
     } catch (err: unknown) {
         throw err;
