@@ -13,7 +13,7 @@ const ConfirmationDialogue = dynamic(() => import('../../../components/confirmat
 export default function Index() {
 
   const columns: GridColDef[] = [
-    { field: 'contract_no', headerName: 'Contract No', width: 100 },
+    { field: 'contract_no', headerName: 'Contract No', width: 200 },
     {
       field: 'buyer_id',
       headerName: 'Buyer',
