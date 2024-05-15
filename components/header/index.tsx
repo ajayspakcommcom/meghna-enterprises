@@ -20,7 +20,7 @@ interface HeaderProps {
     message?: string;
 }
 
-const pages = ['Master', 'Contract', 'Billing', 'Logout'];
+const pages = ['Home', 'Master', 'Contract', 'Billing', 'Logout'];
 
 const Header: React.FC<HeaderProps> = ({ message }) => {
 
@@ -65,6 +65,10 @@ const Header: React.FC<HeaderProps> = ({ message }) => {
                 console.log('Navigating to Billing page');
                 router.push('/billing');  // Adjust the route as necessary
                 break;
+            case 'home':
+                console.log('Navigating to Home page');
+                router.push('/dashboard');  // Adjust the route as necessary
+                break;
             default:
                 // Optionally handle any cases not covered
                 break;
@@ -88,7 +92,7 @@ const Header: React.FC<HeaderProps> = ({ message }) => {
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
                         <Typography variant="h6" noWrap component="a" onClick={() => gotoHome()}>
-                            <Image src={require('../../public/images/logo.png')} alt="Description of the image" className="responsive-img center" />
+                            <Image src={require('../../public/images/logo.svg')} alt="Description of the image" className="responsive-img center" />
                         </Typography>
 
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>

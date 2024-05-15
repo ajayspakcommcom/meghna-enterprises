@@ -12,6 +12,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    background: rgba(217, 217, 217, 0.5);
 }
 
 .header header {
@@ -61,6 +62,7 @@ header .css-2uchni {
     display: flex;
     justify-content: center;
     align-items: center;
+    background: rgba(217, 217, 217, 0.5);
 }
 
 .dashboard-wrapper .css-46bh2p-MuiCardContent-root:last-child,
