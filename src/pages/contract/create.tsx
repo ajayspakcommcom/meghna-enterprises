@@ -17,6 +17,7 @@ import { getCurrentFinancialYear, incrementContractNo } from "@/services/common"
 
 const Header = dynamic(() => import('../../../components/header/index'));
 const SuccessConfirmationDialogue = dynamic(() => import('../../../components/success-confirmation/index'));
+const ContractPreviewDialogue = dynamic(() => import('../../../components/contract-preview/index'));
 
 interface selectedAutoField {
   label: string;
@@ -52,6 +53,8 @@ export default function Index() {
   const [labelFields, setLabelFields] = useState<LabelField[]>([]);
   const [contractNo, setContractNo] = useState<any>();
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
+  const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
+  const [previewContent, setPreviewContent] = useState<any>();
 
   const handleAddLabelField = () => {
     setLabelFields([...labelFields, { property: '', value: '' }]);
@@ -221,6 +224,27 @@ export default function Index() {
     onReset: handleReset
   });
 
+  const previewHandler = () => {
+
+    setIsPreviewDialogOpen(true);
+
+    let previewData = {
+      selectedSeller: selectedSeller,
+      selectedBuyer: selectedBuyer,
+      selectedTemplate: selectedTemplate,
+      labelFields: labelFields,
+      fields: fields,
+      formikValues: formik.values
+    };
+
+    setPreviewContent(previewData);
+
+  };
+
+  const previewClickHandler = (val: boolean) => {
+    setIsPreviewDialogOpen(val)
+  };
+
   return (
     <>
       <Header />
@@ -359,7 +383,6 @@ export default function Index() {
                           placeholder="Property"
                           onChange={(e) => handleLabelInputChange(index, 'property', e.target.value)}
                         />
-
                       </div>
 
                       <div>
@@ -384,7 +407,11 @@ export default function Index() {
                   ))}
 
                   <div className="template-form-wrapper contract-form-btn">
-                    <div></div>
+                    <div>
+                      <div>
+                        <Button type='button' variant="outlined" fullWidth onClick={() => previewHandler()}>Preview</Button>
+                      </div>
+                    </div>
                     <div>
                       <Button type='button' variant="contained" color="success" fullWidth onClick={handleAddLabelField}>Add Heading</Button>
                     </div>
@@ -411,6 +438,9 @@ export default function Index() {
       </Container>
 
       <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Contract Created Successfully" />
+      <ContractPreviewDialogue isOpen={isPreviewDialogOpen} heading="Contract Preview" contentData={previewContent} onClick={previewClickHandler} />
+
+
 
 
     </>

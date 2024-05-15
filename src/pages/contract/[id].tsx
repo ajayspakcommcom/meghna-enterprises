@@ -47,6 +47,11 @@ const Index: React.FC<compProps> = ({ detail }) => {
     router.push(`${url}`);
   };
 
+  const previewHandler = () => {
+    console.log('Preview Handler');
+    console.log('Data', detailData);
+  };
+
 
   return (
     <>
@@ -102,10 +107,10 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
 
           {Object.entries(detailData.template).filter(([key]) => key !== '_id' && key !== '__v' && key !== 'isDeleted' && key !== 'updatedDate' && key !== 'deletedDate' && key !== 'createdDate').map(([key, value]) => (
-            <>
+            <React.Fragment key={key}>
               <div className="column"><Typography variant="body1" component="article"><b>{key.charAt(0).toUpperCase() + key.slice(1)}</b></Typography></div>
               <div className="column"><Typography variant="body1" component="article"><span>{value as string}</span></Typography></div>
-            </>
+            </React.Fragment>
           ))}
 
 
@@ -117,6 +122,8 @@ const Index: React.FC<compProps> = ({ detail }) => {
           ))}
 
         </div>
+
+
 
       </Container>
 
