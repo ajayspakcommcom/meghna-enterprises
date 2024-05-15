@@ -83,7 +83,7 @@ const Header: React.FC<HeaderProps> = ({ message }) => {
 
 
     return (
-        <header>
+        <header className='header'>
             <AppBar position="static">
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
@@ -102,9 +102,6 @@ const Header: React.FC<HeaderProps> = ({ message }) => {
                                 </Button>
                             ))}
                         </Box>
-
-
-
                     </Toolbar>
                 </Container>
             </AppBar>

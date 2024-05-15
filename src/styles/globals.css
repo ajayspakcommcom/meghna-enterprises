@@ -14,8 +14,8 @@ body {
     align-items: center;
 }
 
-header .css-hip9hq-MuiPaper-root-MuiAppBar-root {
-    background-color: #000;
+.header header {
+    background-color: #000 !important;
 }
 
 .login-form-wrapper .error {
@@ -94,6 +94,19 @@ header .css-2uchni {
 .contract-btn,
 .sellter-btn,
 .buyer-btn {
+    width: 100%;
+    height: 150px;
+    background-color: #000;
+}
+
+.p-l-15 {
+    padding-left: 15px !important;
+}
+
+.master-btn:hover,
+.contract-btn:hover,
+.sellter-btn:hover,
+.buyer-btn:hover {
     width: 100%;
     height: 150px;
     background-color: #000;
