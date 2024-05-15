@@ -8,6 +8,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Image from "next/image";
 import { Typography } from "@mui/material";
 import { customDateFormatter } from "@/services/common";
+import { getBuyer } from "@/services/buyer";
+import { getSeller } from "@/services/seller";
 
 interface ContractPreviewProps {
     isOpen: boolean;
@@ -20,9 +22,32 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
 
     const [open, setOpen] = React.useState(false);
 
+    const [buyerData, setBuyerData] = React.useState<any>();
+    const [sellerData, setSellerData] = React.useState<any>();
+
     useEffect(() => {
 
         console.log('contentData', contentData);
+
+        const fetchBuyerData = async () => {
+            const resp: any = await getBuyer(contentData.selectedBuyer._id as string);
+            setBuyerData(resp.data);
+        };
+
+        const fetchSellerData = async () => {
+            const resp: any = await getSeller(contentData.selectedSeller._id as string);
+            setSellerData(resp.data);
+        };
+
+        if (contentData) {
+            if (contentData.selectedBuyer !== null && contentData.selectedBuyer !== undefined) {
+                fetchBuyerData();
+                fetchSellerData();
+            }
+
+        }
+
+
 
         setOpen(isOpen);
     }, [isOpen]);
@@ -85,30 +110,54 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
 
                             <div className="detail-wrapper contract-detail-wrapper">
 
-                                <div className="column"><Typography variant="body1" component="article"><b>Seller</b></Typography></div>
-                                <div className="column"><Typography variant="body1" component="article"><span>{contentData.selectedSeller._id}</span></Typography></div>
+                                {
+                                    sellerData &&
+                                    <>
+                                        <div className="column"><Typography variant="body1" component="article"><b>Seller</b></Typography></div>
+                                        <div className="column">
+                                            <Typography variant="body2" component="article">
+                                                <b>{sellerData.name}</b> <br />
+                                                {sellerData.address}   <br />
+                                                PAN : {sellerData.pan} <br />
+                                                GSTIN : {sellerData.gstin} <br />
+                                            </Typography>
+                                        </div>
+                                    </>
+                                }
 
-                                <div className="column"><Typography variant="body1" component="article"><b>Buyer</b></Typography></div>
-                                <div className="column"><Typography variant="body1" component="article"><span>{contentData.selectedBuyer._id}</span></Typography></div>
+                                {
+                                    buyerData &&
+                                    <>
+                                        <div className="column"><Typography variant="body1" component="article"><b>Buyer</b></Typography></div>
+                                        <div className="column"><Typography variant="body2" component="article">
+                                            <b>{buyerData.name}</b> <br />
+                                            {buyerData.address} <br />
+                                            PAN : {buyerData.pan} <br />
+                                            GSTIN : {buyerData.gstin}
+                                        </Typography></div>
+                                    </>
+                                }
+
+
 
 
                                 {Object.entries(contentData.selectedTemplate).filter(([key]) => key !== '_id' && key !== '__v' && key !== 'isDeleted' && key !== 'updatedDate' && key !== 'deletedDate' && key !== 'createdDate').map(([key, value]) => (
                                     <React.Fragment key={key}>
                                         <div className="column"><Typography variant="body1" component="article"><b>{key.charAt(0).toUpperCase() + key.slice(1)}</b></Typography></div>
-                                        <div className="column"><Typography variant="body1" component="article"><span>{value as string}</span></Typography></div>
+                                        <div className="column"><Typography variant="body2" component="article"><span>{value as string}</span></Typography></div>
                                     </React.Fragment>
                                 ))}
 
                                 <div className="column"><Typography variant="body1" component="article"><b>Quantity</b></Typography></div>
-                                <div className="column"><Typography variant="body1" component="article"><span>{contentData.formikValues.quantity}</span></Typography></div>
+                                <div className="column"><Typography variant="body2" component="article"><span>{contentData.formikValues.quantity}</span></Typography></div>
 
                                 <div className="column"><Typography variant="body1" component="article"><b>Price</b></Typography></div>
-                                <div className="column"><Typography variant="body1" component="article"><span>{contentData.formikValues.price}</span></Typography></div>
+                                <div className="column"><Typography variant="body2" component="article"><span>{contentData.formikValues.price}</span></Typography></div>
 
                                 {Object.entries(contentData.labelFields).filter(([key]) => key !== '_id' && key !== '__v' && key !== 'isDeleted' && key !== 'updatedDate' && key !== 'deletedDate' && key !== 'createdDate').map(([key, value]) => (
                                     <React.Fragment key={key}>
                                         <div className="column"><Typography variant="body1" component="article"><b>{key.charAt(0).toUpperCase() + key.slice(1)}</b></Typography></div>
-                                        <div className="column"><Typography variant="body1" component="article"><span>{value as string}</span></Typography></div>
+                                        <div className="column"><Typography variant="body2" component="article"><span>{value as string}</span></Typography></div>
                                     </React.Fragment>
                                 ))}
 
@@ -138,6 +187,12 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
                                 <div>
                                     <Typography variant="body2"><b>FOR BUYER</b></Typography>
                                 </div>
+                            </div>
+
+                            <div className="footer-seed-feed">
+                                <Typography variant="body2">
+                                    <b>(AS BROKER)</b>
+                                </Typography>
                             </div>
 
                         </div>
