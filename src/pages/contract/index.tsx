@@ -32,7 +32,7 @@ export default function Index() {
     {
       field: 'assessment_year',
       headerName: 'Financial Year',
-      width: 120,
+      width: 200,
       valueGetter: (value, row) => `${row.assessment_year}`,
     },
     {
