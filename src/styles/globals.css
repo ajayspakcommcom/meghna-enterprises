@@ -385,7 +385,7 @@ header .css-2uchni {
 }
 
 .preview-dialogue .preview-wrapper .header {
-    background-color: rgba(217, 217, 217, 0.3);
+    background-color: #000;
     display: flex;
     justify-content: center;
     align-items: center;

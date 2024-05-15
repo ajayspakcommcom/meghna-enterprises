@@ -77,7 +77,7 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
                     <DialogContent>
                         <div className="preview-wrapper">
                             <div className="header">
-                                <Image src={require('../../public/images/logo.png')} alt="Description of the image" className="responsive-img center" />
+                                <Image src={require('../../public/images/logo.svg')} alt="Description of the image" className="responsive-img center" />
                             </div>
                             <div className="address">
                                 <Typography variant="body2">B-3 GIRIRAJ CO OP H S LTD, 6 MAMLATDAR WADI RAOD NO. 6 MALAD (WEST), MUMBAI - 400 064.</Typography>
@@ -203,7 +203,7 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
                 }
 
                 <DialogActions>
-                    <Button onClick={handleClose}>Ok</Button>
+                    <Button onClick={handleClose} variant="outlined">Ok</Button>
                 </DialogActions>
             </Dialog>
         </React.Fragment>
