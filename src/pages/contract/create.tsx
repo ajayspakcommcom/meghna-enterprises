@@ -188,7 +188,6 @@ export default function Index() {
       return acc;
     }, {});
 
-
     const submittedData = {
       ...contract,
       contract_no: contractNo,
@@ -228,12 +227,23 @@ export default function Index() {
 
     setIsPreviewDialogOpen(true);
 
+    const transformedFeildData: { [key: string]: string } = fields.reduce((acc: any, obj: any) => {
+      acc[obj.property.trim()] = obj.value.trim();
+      return acc;
+    }, {});
+
+    const transformedLabelFeildData: { [key: string]: string } = labelFields.reduce((acc: any, obj: any) => {
+      acc[obj.property.trim()] = obj.value.trim();
+      return acc;
+    }, {});
+
+
     let previewData = {
+      contract_no: contractNo,
       selectedSeller: selectedSeller,
       selectedBuyer: selectedBuyer,
-      selectedTemplate: selectedTemplate,
-      labelFields: labelFields,
-      fields: fields,
+      selectedTemplate: transformedFeildData,
+      labelFields: transformedLabelFeildData,
       formikValues: formik.values
     };
 
