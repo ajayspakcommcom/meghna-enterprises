@@ -43,7 +43,9 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
                 {contentData &&
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                            {JSON.stringify(contentData)}
+                            <pre>
+                                {JSON.stringify(contentData)}
+                            </pre>
                         </DialogContentText>
                     </DialogContent>
                 }

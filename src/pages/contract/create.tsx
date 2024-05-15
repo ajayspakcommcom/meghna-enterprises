@@ -440,9 +440,6 @@ export default function Index() {
       <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Contract Created Successfully" />
       <ContractPreviewDialogue isOpen={isPreviewDialogOpen} heading="Contract Preview" contentData={previewContent} onClick={previewClickHandler} />
 
-
-
-
     </>
   );
 }
