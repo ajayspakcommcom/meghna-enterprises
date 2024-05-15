@@ -386,7 +386,7 @@ export default function Index() {
                   <div className="template-form-wrapper contract-form-btn">
                     <div></div>
                     <div>
-                      <Button type='button' variant="contained" color="success" fullWidth onClick={handleAddLabelField}>Add Label</Button>
+                      <Button type='button' variant="contained" color="success" fullWidth onClick={handleAddLabelField}>Add Heading</Button>
                     </div>
                   </div>
 
