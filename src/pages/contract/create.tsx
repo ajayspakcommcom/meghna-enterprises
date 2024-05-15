@@ -378,7 +378,7 @@ export default function Index() {
                         />
                       </div>
 
-                      <Button type='button' variant="contained" color="error" onClick={() => handleRemoveField(index)}>Remove</Button>
+                      <Button type='button' variant="contained" color="error" onClick={() => handleRemoveField(index)} className="remove-btn">Remove</Button>
 
                     </div>
                   ))}

@@ -187,6 +187,7 @@ header .css-2uchni {
     width: 100%;
 }
 
+
 .buyer-seller-form-wrapper form .buyer-seller-forms-wrapper,
 .buyer-seller-form-wrapper form .template-form-wrapper {
     display: flex;
@@ -360,4 +361,9 @@ header .css-2uchni {
 
 .contract-btn-wrapper>div:last-child {
     padding-left: 7px;
+}
+
+.template-form-wrapper .remove-btn {
+    position: relative;
+    top: 15px;
 }
