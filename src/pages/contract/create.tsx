@@ -326,6 +326,7 @@ export default function Index() {
                           value={field.property}
                           placeholder="Property"
                           onChange={(e) => handleInputChange(index, 'property', e.target.value)}
+                          disabled
                         />
 
                       </div>

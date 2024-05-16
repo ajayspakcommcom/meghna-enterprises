@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, Button, Typography, TextField, Container, Autocomplete } from '@mui/material';
+import { Card, CardContent, Button, Typography, TextField, Container } from '@mui/material';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { createTemplate } from "@/services/template";
 import ErrorMessage from "../../../components/error-message";
 import SuccessMessage from "../../../components/success-message";
-import { brokerageLiabilityText, brokerageText, commodityText, paymentText, periodOfDeliveryText, placeOfDeliveryText, termsConditionText } from "@/services/text-content";
 
 const Header = dynamic(() => import('../../../components/header/index'));
 const SuccessConfirmationDialogue = dynamic(() => import('../../../components/success-confirmation/index'));
@@ -17,26 +16,9 @@ interface Field {
 }
 
 
-interface selectedAutoField {
-  label: string;
-  _id: string;
-}
-
-const headings = [
-  { label: 'COMMODITY' },
-  { label: 'PLACE OF DELIVERY' },
-  { label: 'PERIOD OF DELIVERY' },
-  { label: 'PAYMENT' },
-  { label: 'TERMS & CONDITIONS' },
-  { label: "BROKERAGE LIABILITY" },
-  { label: 'BROKERAGE' }
-];
-
-
 export default function Index() {
 
   const router = useRouter();
-
 
   const [fields, setFields] = useState<Field[]>([]);
   const [submittedValues, setSubmittedValues] = useState<Field[]>([]);
@@ -46,46 +28,6 @@ export default function Index() {
   const [errors, setError] = useState<any>();
   const [success, setSuccess] = useState<any>();
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
-
-
-  const handleDropdownChange = (index: any, type: keyof Field, event: React.ChangeEvent<{}>) => {
-    const updatedFields = [...fields];
-    updatedFields[index][type] = (event.target as HTMLElement).textContent!;
-
-    let selectedProperty: string | null = (event.target as HTMLElement).textContent;
-    let inputFieldValue: string | null = '';
-
-    switch (selectedProperty?.trim().toLocaleLowerCase()) {
-      case "commodity":
-        inputFieldValue = commodityText;
-        break;
-      case "place of delivery":
-        inputFieldValue = placeOfDeliveryText;
-        break;
-      case "period of delivery":
-        inputFieldValue = periodOfDeliveryText;
-        break;
-      case "payment":
-        inputFieldValue = paymentText;
-        break;
-      case "terms & conditions":
-        inputFieldValue = termsConditionText;
-        break;
-      case "brokerage liability":
-        inputFieldValue = brokerageLiabilityText;
-        break;
-      case "brokerage":
-        inputFieldValue = brokerageText;
-        break;
-      default:
-        inputFieldValue = '';
-    }
-
-    updatedFields[index]['value'] = inputFieldValue;
-    setFields(updatedFields);
-
-  };
-
 
   const handleAddField = () => {
     setFields([...fields, { property: '', value: '' }]);
@@ -98,7 +40,6 @@ export default function Index() {
   };
 
   const handleInputChange = (index: number, type: keyof Field, value: string) => {
-
     const updatedFields = [...fields];
     updatedFields[index][type] = value;
     setFields(updatedFields);
@@ -125,8 +66,6 @@ export default function Index() {
       name: name.trim()
     };
 
-    console.log('finalObject', finalObject);
-
     try {
       const response = await createTemplate(finalObject);
       setLoading(false);
@@ -145,6 +84,7 @@ export default function Index() {
       setTimeout(() => {
         setError(null)
       }, 2000);
+
     }
 
   };
@@ -205,16 +145,19 @@ export default function Index() {
                   {fields.map((field, index) => (
                     <div className="template-form-wrapper" key={index}>
                       <div>
-
-
-                        <Autocomplete
-                          disablePortal
-                          options={headings}
-                          sx={{ width: 300 }}
-                          renderInput={(params) => <TextField {...params} label="Movie" />}
-                          onChange={(e) => handleDropdownChange(index, 'property', e)}
+                        <TextField
+                          type="text"
+                          label="Label"
+                          name="email"
+                          variant="outlined"
+                          fullWidth
+                          margin="normal"
+                          value={field.property}
+                          placeholder="Property"
+                          multiline
+                          rows={3}
+                          onChange={(e) => handleInputChange(index, 'property', e.target.value)}
                         />
-
 
                       </div>
 
@@ -248,6 +191,18 @@ export default function Index() {
                   </div>
                   <Button type='submit' variant="contained" fullWidth>{loading ? "Submit..." : "Submit"}</Button>
                 </form>
+
+                {/* <div>
+                  <ul>
+                    {submittedValues.map((field, index) => (
+                      <li key={index}>
+                        <Typography variant="body1"><b>{field.property}:</b> {field.value}</Typography>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <hr /> */}
 
 
               </CardContent>
