@@ -8,38 +8,52 @@ import path from 'path';
 
 
 
+
+
 const cors = Cors({
     // Only allow requests with GET, POST and OPTIONS
     methods: ['GET', 'OPTIONS'],
 });
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    // Only allow GET requests
+
     await connectToMongoDB();
     await runMiddleware(req, res, cors);
 
     if (req.method === 'POST') {
 
+
         const doc = new PDFDocument();
 
-        const filePath = path.join(process.cwd(), 'public/pdf', 'contract.pdf');
+        const filePath = path.join(process.cwd(), 'public', 'pdf', 'contract.pdf');
         const stream = fs.createWriteStream(filePath);
-
         doc.pipe(stream);
 
-        const textContent = `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book`;
+        doc.page.margins = { top: 15, bottom: 15, left: 15, right: 15 };
 
-        // doc.fontSize(30).fillColor('red').text('Hello, World!', 10, 15);
-        // doc.fontSize(14).fillColor('black').text(textContent, 10, 50);
-        // doc.fontSize(10).fillColor('brown').text('This is Done', 10, 200);
+        const pageWidth = doc.page.width - doc.page.margins.left - doc.page.margins.right;
 
-        const imagePath = path.join(process.cwd(), 'public/pdf', 'logo.svg');
-        doc.image(imagePath, {
-            fit: [250, 250],
-            align: 'center',
-            valign: 'center'
-        });
+        doc.rect(doc.page.margins.left, 15, pageWidth, 30).fill('#d9d9d9');
 
+        doc.fontSize(11).fillColor('#000').text('CONTRACT NO : ', 25, 25);
+        doc.fontSize(10).fillColor('#000').text('S&f/L/0001/24-25 : ', 120, 25);
+
+        doc.fontSize(11).fillColor('#000').text('DATE : ', 495, 25);
+        doc.fontSize(10).fillColor('#000').text('29/04/2024', 535, 25);
+
+        doc.fontSize(8).fillColor('#000').text('B-3 GIRIRAJ CO OP H S LTD, 6 MAMLATDAR WADI RAOD NO. 6 MALAD (WEST), MUMBAI - 400 064.', 120, 55);
+        doc.fontSize(8).fillColor('#000').text('PHONE NO: 022 2880 2452 | MOBILE NO: +91 99200 10200 / 99200 90200', 170, 70);
+        doc.fontSize(8).fillColor('#000').text('Email: | Pan No. AFRPC6408E', 250, 85);
+        doc.fontSize(8).fillColor('#000').text('GSTIN: 27AFRPC6408E1ZI', 252, 98);
+
+        doc.fontSize(10).fillColor('#000').text('SELLER : ', 25, 110);
+
+        // const rules2 = 'PHONE NO: 022 2880 2452 | MOBILE NO: +91 99200 10200 / 99200 90200';
+        // const textWidth2 = doc.widthOfString(rules2);
+        // const centerX2 = (doc.page.width - textWidth2) / 2;
+        // doc.fontSize(8).fillColor('#000').text(rules2, centerX2, 70);
+
+        // Finalize the PDF
         doc.end();
 
         res.status(201).json({ message: 'Pdf Generated created.' });
