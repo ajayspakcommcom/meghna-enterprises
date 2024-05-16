@@ -90,12 +90,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const brokerageText = `AS USUAL`;
         doc.fontSize(9).fillColor('#000').text(brokerageText, 150, 485);
 
-
-        // const rules2 = 'PHONE NO: 022 2880 2452 | MOBILE NO: +91 99200 10200 / 99200 90200';
-        // const textWidth2 = doc.widthOfString(rules2);
-        // const centerX2 = (doc.page.width - textWidth2) / 2;
-        // doc.fontSize(8).fillColor('#000').text(rules2, centerX2, 70);
-
         // Finalize the PDF
         doc.end();
 
