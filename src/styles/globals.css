@@ -434,3 +434,7 @@ header .css-2uchni {
     padding: 7px 15px;
     justify-content: space-between;
 }
+
+.template-dropdown {
+    width: 100%;
+}

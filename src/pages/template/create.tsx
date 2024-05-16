@@ -206,16 +206,14 @@ export default function Index() {
                     <div className="template-form-wrapper" key={index}>
                       <div>
 
-
                         <Autocomplete
                           disablePortal
                           options={headings}
                           sx={{ width: 300 }}
-                          renderInput={(params) => <TextField {...params} label="Movie" />}
+                          renderInput={(params) => <TextField {...params} label="Heading" />}
                           onChange={(e) => handleDropdownChange(index, 'property', e)}
+                          className="template-dropdown"
                         />
-
-
                       </div>
 
                       <div>
