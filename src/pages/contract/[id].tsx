@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Typography, Container } from '@mui/material';
+import { Button, Typography, Container, CircularProgress } from '@mui/material';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
@@ -9,6 +9,9 @@ import { customDateFormatter } from "@/services/common";
 const Header = dynamic(() => import('../../../components/header/index'));
 const SuccessConfirmationDialogue = dynamic(() => import('../../../components/success-confirmation/index'));
 const ContractPreviewDialogue = dynamic(() => import('../../../components/contract-preview/index'));
+const CircularProgressLoader = dynamic(() => import('../../../components/loader/index'));
+
+
 
 interface compProps {
   detail: { data: {} };
@@ -38,6 +41,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
   const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
   const [previewContent, setPreviewContent] = useState<any>();
+  const [isLoader, setIsLoader] = useState<boolean>(false);
 
   useEffect(() => {
 
@@ -58,22 +62,29 @@ const Index: React.FC<compProps> = ({ detail }) => {
   };
 
   const sendEmailHandler = async () => {
-    console.log('Preview Handler');
+
+    setIsLoader(true);
     console.log('Data', detailData);
 
     try {
       const response = await sendContractOnEmail(detailData);
       console.log('response', response);
       setIsSuccessDialogOpen(true);
+      setIsLoader(false);
     } catch (error: any) {
       console.log(error);
     }
   };
 
   const previewClickHandler = (val: boolean) => {
-    setIsPreviewDialogOpen(val)
+    setIsPreviewDialogOpen(true);
+    setPreviewContent(detailData);
   };
 
+  const onSuccessConfirmationHandler = (val: boolean) => {
+    console.log(val);
+    setIsSuccessDialogOpen(val);
+  };
 
 
 
@@ -151,8 +162,11 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
       </Container>
 
-      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Contract sent successfully" />
-      <ContractPreviewDialogue isOpen={isPreviewDialogOpen} heading="Contract Preview" contentData={previewContent} onClick={previewClickHandler} />
+      {/* <ContractPreviewDialogue isOpen={isPreviewDialogOpen} heading="Contract Preview" contentData={previewContent} onClick={previewClickHandler} /> */}
+
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Contract sent successfully" onClick={onSuccessConfirmationHandler} />
+      {isLoader && <CircularProgressLoader />}
+
 
     </>
   );

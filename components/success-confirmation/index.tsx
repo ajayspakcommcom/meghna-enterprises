@@ -9,9 +9,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 interface SuccessConfirmationDialogProps {
     isOpen: boolean;
     heading: string;
+    onClick?: (val: boolean) => void;
+
 }
 
-const Index: React.FC<SuccessConfirmationDialogProps> = ({ isOpen, heading }) => {
+const Index: React.FC<SuccessConfirmationDialogProps> = ({ isOpen, heading, onClick }) => {
 
     const [open, setOpen] = React.useState(false);
 
@@ -22,7 +24,9 @@ const Index: React.FC<SuccessConfirmationDialogProps> = ({ isOpen, heading }) =>
     }, [isOpen]);
 
     const handleClose = () => {
-        console
+        if (onClick) {
+            onClick(false);
+        }
         setOpen(false);
     };
 
