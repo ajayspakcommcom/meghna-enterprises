@@ -6,7 +6,7 @@ import PDFDocument from 'pdfkit';
 import fs from 'fs';
 import path from 'path';
 import { sendEmail } from './libs/emailService';
-import { customDateFormatter } from '@/services/common';
+import { customFormatDate } from '@/services/common';
 
 
 
@@ -53,7 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     doc.fontSize(11).fillColor('#000').text('CONTRACT NO : ', 25, 170);
                     doc.fontSize(10).fillColor('#000').text(`${req.body.contract_no}`, 120, 170);
                     doc.fontSize(11).fillColor('#000').text('DATE : ', 495, 170);
-                    doc.fontSize(10).fillColor('#000').text(`${customDateFormatter(req.body.createdDate)}`, 535, 170);
+                    doc.fontSize(10).fillColor('#000').text(`${customFormatDate(new Date(req.body.createdDate))}`, 535, 170);
 
 
                     doc.fontSize(10).fillColor('#000').text('SELLER', 25, 200);

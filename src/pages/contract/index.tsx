@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { deleteContract, getAllContracts } from "@/services/contract";
-import { customDateFormatter } from '../../services/common';
+import { customFormatDate } from '../../services/common';
 
 const Header = dynamic(() => import('../../../components/header/index'));
 const ConfirmationDialogue = dynamic(() => import('../../../components/confirmation-pop/index'));
@@ -39,7 +39,7 @@ export default function Index() {
       field: 'createdDate',
       headerName: 'Created Date',
       width: 120,
-      valueGetter: (value, row) => `${customDateFormatter(row.createdDate)}`,
+      valueGetter: (value, row) => `${customFormatDate(new Date(row.createdDate))}`,
     },
     {
       field: 'action',
@@ -86,7 +86,8 @@ export default function Index() {
       try {
         const response = await getAllContracts();
         const formattedData = response.data.map((contract: any) => ({ ...contract, id: contract._id, _id: undefined }));
-        console.log(formattedData);
+        console.clear();
+        console.log('Data', formattedData);
         setRowData(formattedData);
       } catch (error) {
         console.error('Error fetching data:', error);

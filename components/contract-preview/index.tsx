@@ -7,7 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Image from "next/image";
 import { Typography } from "@mui/material";
-import { customDateFormatter } from "@/services/common";
+import { customDateFormatter, customFormatDate } from "@/services/common";
 import { getBuyer } from "@/services/buyer";
 import { getSeller } from "@/services/seller";
 
@@ -93,7 +93,7 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
                                 </div>
                                 <div>
                                     <Typography variant="body2">
-                                        <b>DATE : </b> <b>{customDateFormatter(contentData.createdDate ? contentData.createdDate : new Date())}</b>
+                                        <b>DATE : </b> <b>{customFormatDate(contentData.createdDate ? new Date(contentData.createdDate) : new Date())}</b>
                                     </Typography>
                                 </div>
                             </div>

@@ -10,7 +10,7 @@ export const getUserData = (): { [key: string]: any } => {
     }
 };
 
-export const customDateFormatter = (params: any) => {
+export const customDateFormatter = (params: any): string => {
     const dateValue = moment(params.value);
     if (dateValue.isValid()) {
         return dateValue.format('DD/MM/YYYY');
@@ -18,6 +18,15 @@ export const customDateFormatter = (params: any) => {
         console.error('Invalid date value:', params.value);
         return 'Invalid date';
     }
+};
+
+export const customFormatDate = (date: Date): string => {
+
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year}`;
 };
 
 export const getCurrentFinancialYear = (isDashed: boolean = false): string => {
