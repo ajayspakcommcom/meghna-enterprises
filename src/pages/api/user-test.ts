@@ -33,18 +33,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const pageWidth = doc.page.width - doc.page.margins.left - doc.page.margins.right;
 
-        doc.rect(doc.page.margins.left, 15, pageWidth, 30).fill('#d9d9d9');
 
-        doc.fontSize(11).fillColor('#000').text('CONTRACT NO : ', 25, 25);
-        doc.fontSize(10).fillColor('#000').text('S&f/L/0001/24-25 : ', 120, 25);
 
-        doc.fontSize(11).fillColor('#000').text('DATE : ', 495, 25);
-        doc.fontSize(10).fillColor('#000').text('29/04/2024', 535, 25);
+        doc.fontSize(8).fillColor('#000').text('B-3 GIRIRAJ CO OP H S LTD, 6 MAMLATDAR WADI RAOD NO. 6 MALAD (WEST), MUMBAI - 400 064.', 120, 15);
+        doc.fontSize(8).fillColor('#000').text('PHONE NO: 022 2880 2452 | MOBILE NO: +91 99200 10200 / 99200 90200', 170, 30);
+        doc.fontSize(8).fillColor('#000').text('Email: | Pan No. AFRPC6408E', 250, 45);
+        doc.fontSize(8).fillColor('#000').text('GSTIN: 27AFRPC6408E1ZI', 252, 58);
 
-        doc.fontSize(8).fillColor('#000').text('B-3 GIRIRAJ CO OP H S LTD, 6 MAMLATDAR WADI RAOD NO. 6 MALAD (WEST), MUMBAI - 400 064.', 120, 55);
-        doc.fontSize(8).fillColor('#000').text('PHONE NO: 022 2880 2452 | MOBILE NO: +91 99200 10200 / 99200 90200', 170, 70);
-        doc.fontSize(8).fillColor('#000').text('Email: | Pan No. AFRPC6408E', 250, 85);
-        doc.fontSize(8).fillColor('#000').text('GSTIN: 27AFRPC6408E1ZI', 252, 98);
+        doc.rect(doc.page.margins.left, 75, pageWidth, 30).fill('#d9d9d9');
+        doc.fontSize(11).fillColor('#000').text('CONTRACT NO : ', 25, 85);
+        doc.fontSize(10).fillColor('#000').text('S&f/L/0001/24-25 : ', 120, 85);
+        doc.fontSize(11).fillColor('#000').text('DATE : ', 495, 85);
+        doc.fontSize(10).fillColor('#000').text('29/04/2024', 535, 85);
+
 
         doc.fontSize(10).fillColor('#000').text('SELLER', 25, 120);
         const sellerText = `M/S. LATUR SOLVENT EXT. PVT. LTD. PLOT NO. R7/1408, 'SHANTI HOUSE',  OPP. MARKET YARD GATE NO. 2, MANTHALE NAGAR, LATUR - 413 512. (MAHARASHRA) PAN: AKFPV8867P / GSTIN: 27AAACL9765G1Z5`;
@@ -89,6 +90,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         doc.fontSize(10).fillColor('#000').text('BROKERAGE LIABILITY', 25, 485);
         const brokerageText = `AS USUAL`;
         doc.fontSize(9).fillColor('#000').text(brokerageText, 150, 485);
+
+        doc.rect(doc.page.margins.left, 510, pageWidth, 20).stroke('#d9d9d9');
+        doc.fontSize(10).fillColor('#000').text('Subject to Mumbai Juridiction', 240, 515);
+
+        doc.fontSize(10).fillColor('#000').text('For SEEDS & FEEDS INDIA', 240, 550);
+
+        doc.fontSize(10).fillColor('#000').text('FOR SELLER', 25, 570);
+        doc.fontSize(10).fillColor('#000').text('FOR BUYER', 520, 570);
+        doc.fontSize(10).fillColor('#000').text('(AS BROKER)', 270, 590);
 
         // Finalize the PDF
         doc.end();
