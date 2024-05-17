@@ -93,7 +93,7 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
                                 </div>
                                 <div>
                                     <Typography variant="body2">
-                                        <b>DATE : </b> <b>{customDateFormatter(new Date())}</b>
+                                        <b>DATE : </b> <b>{customDateFormatter(contentData.createdDate ? contentData.createdDate : new Date())}</b>
                                     </Typography>
                                 </div>
                             </div>
@@ -137,20 +137,33 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
 
 
 
-                                {Object.entries(contentData.selectedTemplate).filter(([key]) => key !== '_id' && key !== '__v' && key !== 'isDeleted' && key !== 'updatedDate' && key !== 'deletedDate' && key !== 'createdDate').map(([key, value]) => (
+                                {contentData.selectedTemplate && Object.entries(contentData.selectedTemplate).filter(([key]) => key !== '_id' && key !== '__v' && key !== 'isDeleted' && key !== 'updatedDate' && key !== 'deletedDate' && key !== 'createdDate').map(([key, value]) => (
                                     <React.Fragment key={key}>
                                         <div className="column"><Typography variant="body1" component="article"><b>{key.charAt(0).toUpperCase() + key.slice(1)}</b></Typography></div>
                                         <div className="column"><Typography variant="body2" component="article"><span>{value as string}</span></Typography></div>
                                     </React.Fragment>
                                 ))}
 
-                                <div className="column"><Typography variant="body1" component="article"><b>Quantity</b></Typography></div>
-                                <div className="column"><Typography variant="body2" component="article"><span>{contentData.formikValues.quantity}</span></Typography></div>
+                                {
+                                    contentData.formikValues &&
+                                    <>
+                                        <div className="column"><Typography variant="body1" component="article"><b>Quantity</b></Typography></div>
+                                        <div className="column"><Typography variant="body2" component="article"><span>{contentData.formikValues.quantity}</span></Typography></div>
+                                    </>
+                                }
 
-                                <div className="column"><Typography variant="body1" component="article"><b>Price</b></Typography></div>
-                                <div className="column"><Typography variant="body2" component="article"><span>{contentData.formikValues.price}</span></Typography></div>
 
-                                {Object.entries(contentData.labelFields).filter(([key]) => key !== '_id' && key !== '__v' && key !== 'isDeleted' && key !== 'updatedDate' && key !== 'deletedDate' && key !== 'createdDate').map(([key, value]) => (
+                                {
+                                    contentData.formikValues &&
+                                    <>
+                                        <div className="column"><Typography variant="body1" component="article"><b>Price</b></Typography></div>
+                                        <div className="column"><Typography variant="body2" component="article"><span>{contentData.formikValues.price}</span></Typography></div>
+                                    </>
+                                }
+
+
+
+                                {contentData.labelFields && Object.entries(contentData.labelFields).filter(([key]) => key !== '_id' && key !== '__v' && key !== 'isDeleted' && key !== 'updatedDate' && key !== 'deletedDate' && key !== 'createdDate').map(([key, value]) => (
                                     <React.Fragment key={key}>
                                         <div className="column"><Typography variant="body1" component="article"><b>{key.charAt(0).toUpperCase() + key.slice(1)}</b></Typography></div>
                                         <div className="column"><Typography variant="body2" component="article"><span>{value as string}</span></Typography></div>

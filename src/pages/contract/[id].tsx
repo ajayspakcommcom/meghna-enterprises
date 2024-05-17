@@ -37,7 +37,7 @@ interface DetailData {
 const Index: React.FC<compProps> = ({ detail }) => {
 
   const router = useRouter();
-  const [detailData, setDetailData] = useState<DetailData>(detail.data as DetailData);
+  const [detailData, setDetailData] = useState<any>(detail.data as DetailData);
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
   const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
   const [previewContent, setPreviewContent] = useState<any>();
@@ -57,14 +57,34 @@ const Index: React.FC<compProps> = ({ detail }) => {
   };
 
   const previewHandler = () => {
-    console.log('Preview Handler');
-    console.log('Data', detailData);
+    setIsPreviewDialogOpen(true);
+
+    console.log('Preview Data', detailData);
+
+    const objectData: any = {
+      contract_no: detailData.contract_no,
+      createdDate: detailData.createdDate,
+      selectedSeller: { _id: detailData.seller_id._id as string, label: detailData.seller_id.name },
+      selectedBuyer: { _id: detailData.buyer_id._id as string, label: detailData.buyer_id.name },
+      selectedTemplate: { ...detailData.template },
+      labelFields: { ...detailData.labelFields },
+      formikValues: { quantity: detailData.price, price: detailData.quantity }
+    };
+
+
+
+
+
+    setPreviewContent(objectData);
+
+
+
   };
 
   const sendEmailHandler = async () => {
 
     setIsLoader(true);
-    console.log('Data', detailData);
+
 
     try {
       const response = await sendContractOnEmail(detailData);
@@ -76,16 +96,15 @@ const Index: React.FC<compProps> = ({ detail }) => {
     }
   };
 
-  const previewClickHandler = (val: boolean) => {
-    setIsPreviewDialogOpen(true);
-    setPreviewContent(detailData);
-  };
 
   const onSuccessConfirmationHandler = (val: boolean) => {
     console.log(val);
     setIsSuccessDialogOpen(val);
   };
 
+  const previewClickHandler = (val: boolean) => {
+    setIsPreviewDialogOpen(val)
+  };
 
 
   return (
@@ -162,8 +181,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
       </Container>
 
-      {/* <ContractPreviewDialogue isOpen={isPreviewDialogOpen} heading="Contract Preview" contentData={previewContent} onClick={previewClickHandler} /> */}
-
+      <ContractPreviewDialogue isOpen={isPreviewDialogOpen} heading="Contract Preview" contentData={previewContent} onClick={previewClickHandler} />
       <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Contract sent successfully" onClick={onSuccessConfirmationHandler} />
       {isLoader && <CircularProgressLoader />}
 
