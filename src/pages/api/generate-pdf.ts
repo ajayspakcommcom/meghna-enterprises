@@ -8,10 +8,6 @@ import path from 'path';
 import { sendEmail } from './libs/emailService';
 import { customFormatDate } from '@/services/common';
 
-
-
-
-
 const cors = Cors({
     // Only allow requests with GET, POST and OPTIONS
     methods: ['GET', 'OPTIONS'],
