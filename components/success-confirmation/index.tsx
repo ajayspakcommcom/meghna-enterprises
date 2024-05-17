@@ -22,6 +22,7 @@ const Index: React.FC<SuccessConfirmationDialogProps> = ({ isOpen, heading }) =>
     }, [isOpen]);
 
     const handleClose = () => {
+        console
         setOpen(false);
     };
 

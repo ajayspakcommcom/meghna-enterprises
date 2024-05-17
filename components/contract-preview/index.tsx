@@ -47,8 +47,6 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
 
         }
 
-
-
         setOpen(isOpen);
     }, [isOpen]);
 
@@ -75,6 +73,7 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
 
                 {contentData &&
                     <DialogContent>
+
                         <div className="preview-wrapper">
                             <div className="header">
                                 <Image src={require('../../public/images/logo.svg')} alt="Description of the image" className="responsive-img center" />
@@ -104,9 +103,6 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
                                     Under your instruction and order, we hereby confirm on behalf and risk of the under mentioned Seller and Buyer the following transaction with terms & conditions.
                                 </Typography>
                             </div>
-
-
-                            {/* Testing */}
 
                             <div className="detail-wrapper contract-detail-wrapper">
 
@@ -160,12 +156,7 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
                                         <div className="column"><Typography variant="body2" component="article"><span>{value as string}</span></Typography></div>
                                     </React.Fragment>
                                 ))}
-
-
-
                             </div>
-
-                            {/* Testing  */}
 
 
                             <div className="footer-subject">
@@ -197,8 +188,6 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
 
                         </div>
 
-
-                        {/* {JSON.stringify(contentData)} */}
                     </DialogContent>
                 }
 

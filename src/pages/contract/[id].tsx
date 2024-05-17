@@ -7,6 +7,8 @@ import { getContract, sendContractOnEmail } from "@/services/contract";
 import { customDateFormatter } from "@/services/common";
 
 const Header = dynamic(() => import('../../../components/header/index'));
+const SuccessConfirmationDialogue = dynamic(() => import('../../../components/success-confirmation/index'));
+const ContractPreviewDialogue = dynamic(() => import('../../../components/contract-preview/index'));
 
 interface compProps {
   detail: { data: {} };
@@ -33,6 +35,9 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
   const router = useRouter();
   const [detailData, setDetailData] = useState<DetailData>(detail.data as DetailData);
+  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
+  const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
+  const [previewContent, setPreviewContent] = useState<any>();
 
   useEffect(() => {
 
@@ -59,10 +64,14 @@ const Index: React.FC<compProps> = ({ detail }) => {
     try {
       const response = await sendContractOnEmail(detailData);
       console.log('response', response);
+      setIsSuccessDialogOpen(true);
     } catch (error: any) {
       console.log(error);
     }
+  };
 
+  const previewClickHandler = (val: boolean) => {
+    setIsPreviewDialogOpen(val)
   };
 
 
@@ -140,9 +149,10 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
         </div>
 
-
-
       </Container>
+
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Contract sent successfully" />
+      <ContractPreviewDialogue isOpen={isPreviewDialogOpen} heading="Contract Preview" contentData={previewContent} onClick={previewClickHandler} />
 
     </>
   );
