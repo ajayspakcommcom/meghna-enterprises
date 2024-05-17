@@ -76,29 +76,41 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     const priceText = `${req.body.price}`;
                     doc.fontSize(9).fillColor('#000').text(priceText, 150, 340);
 
-                    doc.fontSize(10).fillColor('#000').text('PLACE OF DELIVERY', 25, 360);
-                    const placeOfDeliveryText = `${req.body.template['PLACE OF DELIVERY']}`;
-                    doc.fontSize(9).fillColor('#000').text(placeOfDeliveryText, 150, 360);
+                    if (req.body.template['PLACE OF DELIVERY']) {
+                        doc.fontSize(10).fillColor('#000').text('PLACE OF DELIVERY', 25, 360);
+                        const placeOfDeliveryText = `${req.body.template['PLACE OF DELIVERY']}`;
+                        doc.fontSize(9).fillColor('#000').text(placeOfDeliveryText, 150, 360);
+                    }
 
-                    doc.fontSize(10).fillColor('#000').text('PERIOD OF DELIVERY', 25, 380);
-                    const periodOfDeliveryText = `${req.body.template['PERIOD OF DELIVERY']}`;
-                    doc.fontSize(9).fillColor('#000').text(periodOfDeliveryText, 150, 380);
+                    if (req.body.template['PERIOD OF DELIVERY']) {
+                        doc.fontSize(10).fillColor('#000').text('PERIOD OF DELIVERY', 25, 380);
+                        const periodOfDeliveryText = `${req.body.template['PERIOD OF DELIVERY']}`;
+                        doc.fontSize(9).fillColor('#000').text(periodOfDeliveryText, 150, 380);
+                    }
 
-                    doc.fontSize(10).fillColor('#000').text('PAYMENT', 25, 400);
-                    const paymentText = `${req.body.template.PAYMENT}`;
-                    doc.fontSize(9).fillColor('#000').text(paymentText, 150, 400);
+                    if (req.body.template.PAYMENT) {
+                        doc.fontSize(10).fillColor('#000').text('PAYMENT', 25, 400);
+                        const paymentText = `${req.body.template.PAYMENT}`;
+                        doc.fontSize(9).fillColor('#000').text(paymentText, 150, 400);
+                    }
 
-                    doc.fontSize(10).fillColor('#000').text('TERMS & CONDITIONS', 25, 420);
-                    const termsConditionsText = `${req.body.template['TERMS & CONDITIONS']}`;
-                    doc.fontSize(9).fillColor('#000').text(termsConditionsText, 150, 420);
+                    if (req.body.template['TERMS & CONDITIONS']) {
+                        doc.fontSize(10).fillColor('#000').text('TERMS & CONDITIONS', 25, 420);
+                        const termsConditionsText = `${req.body.template['TERMS & CONDITIONS']}`;
+                        doc.fontSize(9).fillColor('#000').text(termsConditionsText, 150, 420);
+                    }
 
-                    doc.fontSize(10).fillColor('#000').text('BROKERAGE LIABILITY', 25, 440);
-                    const brokerageLiabilityText = `${req.body.template['BROKERAGE LIABILITY']}`;
-                    doc.fontSize(9).fillColor('#000').text(brokerageLiabilityText, 150, 440);
+                    if (req.body.template['BROKERAGE LIABILITY']) {
+                        doc.fontSize(10).fillColor('#000').text('BROKERAGE LIABILITY', 25, 440);
+                        const brokerageLiabilityText = `${req.body.template['BROKERAGE LIABILITY']}`;
+                        doc.fontSize(9).fillColor('#000').text(brokerageLiabilityText, 150, 440);
+                    }
 
-                    doc.fontSize(10).fillColor('#000').text('BROKERAGE LIABILITY', 25, 520);
-                    const brokerageText = `${req.body.template['BROKERAGE']}`;
-                    doc.fontSize(9).fillColor('#000').text(brokerageText, 150, 520);
+                    if (req.body.template['BROKERAGE']) {
+                        doc.fontSize(10).fillColor('#000').text('BROKERAGE LIABILITY', 25, 520);
+                        const brokerageText = `${req.body.template['BROKERAGE']}`;
+                        doc.fontSize(9).fillColor('#000').text(brokerageText, 150, 520);
+                    }
 
                     doc.rect(doc.page.margins.left, 540, pageWidth, 20).stroke('#d9d9d9');
                     doc.fontSize(10).fillColor('#000').text('Subject to Mumbai Juridiction', 240, 545);
@@ -112,11 +124,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     doc.end();
 
                     const htmlContent = `<div>
-                                  <b>Dear ${'Manish'},</b>                                 
-                                </div>
-                              `;
+                                            <b>Dear ${'Dear Sir / Madam,'}</b>
+                                            <div style="margin-bottom:30px"></div>
 
-                    await sendEmail({ recipient: 'shiv@spakcomm.com', subject: 'Feeds & Seeds Contract', text: htmlContent });
+                                            <span>Best regards,</span>
+                                            <div></div>
+                                            <span>Team Seeds & Feeds India.</span>
+                                            <p style="margin-top:1px">
+                                               B-3 GIRIRAJ CO OP H S LTD, 6 MAMLATDAR WADI RAOD NO. 6, MALAD (WEST), MUMBAI - 400 064.
+                                                <br />
+                                               PHONE NO: 022 2880 2452 | MOBILE NO: +91 99200 10200 / 99200 90200
+                                            </p>
+                                        </div>
+                                    `;
+
+                    await sendEmail({ recipient: 'ajay@spakcomm.com', subject: 'Feeds & Seeds Contract', text: htmlContent });
 
                     res.status(200).json({ message: 'Pdf sent successfully.' });
                 } catch (error: any) {
