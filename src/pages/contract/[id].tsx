@@ -3,7 +3,7 @@ import { Button, Typography, Container } from '@mui/material';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { getContract } from "@/services/contract";
+import { getContract, sendContractOnEmail } from "@/services/contract";
 import { customDateFormatter } from "@/services/common";
 
 const Header = dynamic(() => import('../../../components/header/index'));
@@ -52,6 +52,21 @@ const Index: React.FC<compProps> = ({ detail }) => {
     console.log('Data', detailData);
   };
 
+  const sendEmailHandler = async () => {
+    console.log('Preview Handler');
+    console.log('Data', detailData);
+
+    try {
+      const response = await sendContractOnEmail(detailData);
+      console.log('response', response);
+    } catch (error: any) {
+      console.log(error);
+    }
+
+  };
+
+
+
 
   return (
     <>
@@ -62,7 +77,9 @@ const Index: React.FC<compProps> = ({ detail }) => {
           <div>
             <Typography variant="h5" component="article">Contract Detail</Typography>
           </div>
-          <div className="btn-wrapper">
+          <div className="btn-wrapper detail-btn-wrapper">
+            <Button variant="outlined" onClick={() => previewHandler()}>Preview</Button>
+            <Button variant="outlined" onClick={() => sendEmailHandler()}>Send Mail</Button>
             <Button variant="outlined" onClick={() => goToPage('/contract')}>Back</Button>
           </div>
         </div>

@@ -438,3 +438,12 @@ header .css-2uchni {
 .template-dropdown {
     width: 100%;
 }
+
+.detail-btn-wrapper button {
+    width: 120px !important;
+    margin-right: 15px;
+}
+
+.detail-btn-wrapper button:last-child {
+    margin-right: 0;
+}
