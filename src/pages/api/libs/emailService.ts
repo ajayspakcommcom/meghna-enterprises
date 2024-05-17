@@ -12,20 +12,20 @@ const sendEmail = async ({ recipient, subject, text }: EmailData): Promise<boole
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'info@astaracademy.in',
-            pass: 'jyiliqqxpgxomujn'
+            user: 'seedsfeedsindia@gmail.com',
+            pass: 'jsmjhxlchodmzlar'
         },
     });
 
     const mailOptions = {
-        from: 'info@astaracademy.in',
+        from: 'seedsfeedsindia@gmail.com',
         to: recipient,
         subject: subject,
         html: `${text}`,
-        // attachments: [{
-        //     //filename: 'dummy.pdf',
-        //     //path: path.resolve(__dirname, 'dummy.pdf')
-        // }]
+        attachments: [{
+            filename: 'contract.pdf',
+            path: path.resolve(process.cwd(), 'public', 'pdf', 'contract.pdf')
+        }]
     };
 
     try {
