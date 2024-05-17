@@ -67,17 +67,11 @@ const Index: React.FC<compProps> = ({ detail }) => {
       selectedSeller: { _id: detailData.seller_id._id as string, label: detailData.seller_id.name },
       selectedBuyer: { _id: detailData.buyer_id._id as string, label: detailData.buyer_id.name },
       selectedTemplate: { ...detailData.template },
-      labelFields: { ...detailData.labelFields },
+      labelFields: { ...detailData.label },
       formikValues: { quantity: detailData.price, price: detailData.quantity }
     };
 
-
-
-
-
     setPreviewContent(objectData);
-
-
 
   };
 
