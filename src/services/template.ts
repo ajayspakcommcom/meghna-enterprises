@@ -45,9 +45,9 @@ export const getTemplate = async (id: string): Promise<ApiResponse<Template>> =>
     }
 };
 
-export const updateTemplate = async (id: string, sellerData: Template): Promise<Template> => {
+export const updateTemplate = async (templateData: any): Promise<Template> => {
     try {
-        const response = await apiClient.put<Template>(`/template/${id}`, sellerData);
+        const response = await apiClient.post<Template>(`/template`, { type: 'UPDATE', ...templateData });
         return response.data;
     } catch (err: unknown) {
         throw err;

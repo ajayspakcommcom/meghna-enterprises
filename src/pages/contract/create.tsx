@@ -86,7 +86,9 @@ export default function Index() {
       const templateId = value?._id ?? '';
       const response: any = await getTemplate(templateId);
       const label = response.data.label;
+
       const newFields = Object.keys(label).map(key => ({ property: key, value: label[key] }));
+
       setFields(prevFields => [...prevFields, ...newFields]);
     } catch (error) {
       console.log('Error : ', error);

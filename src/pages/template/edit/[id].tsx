@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, Button, Typography, TextField, Container } from '@mui/material';
+import { Card, CardContent, Button, Typography, TextField, Container, Autocomplete } from '@mui/material';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
-import { createTemplate } from "@/services/template";
-import ErrorMessage from "../../../components/error-message";
-import SuccessMessage from "../../../components/success-message";
+import { createTemplate, getTemplate, updateTemplate } from "@/services/template";
+import ErrorMessage from "../../../../components/error-message";
+import SuccessMessage from "../../../../components/success-message";
+import { brokerageLiabilityText, brokerageText, commodityText, paymentText, periodOfDeliveryText, placeOfDeliveryText, termsConditionText } from "@/services/text-content";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 
-const Header = dynamic(() => import('../../../components/header/index'));
-const SuccessConfirmationDialogue = dynamic(() => import('../../../components/success-confirmation/index'));
+const Header = dynamic(() => import('../../../../components/header/index'));
+const SuccessConfirmationDialogue = dynamic(() => import('../../../../components/success-confirmation/index'));
 
 
 interface Field {
@@ -16,18 +18,91 @@ interface Field {
 }
 
 
-export default function Index() {
+interface selectedAutoField {
+  label: string;
+  _id: string;
+}
+
+interface compProps {
+  detail: { data: any };
+}
+
+const headings = [
+  { label: 'COMMODITY' },
+  { label: 'PLACE OF DELIVERY' },
+  { label: 'PERIOD OF DELIVERY' },
+  { label: 'PAYMENT' },
+  { label: 'TERMS & CONDITIONS' },
+  { label: "BROKERAGE LIABILITY" },
+  { label: 'BROKERAGE' }
+];
+
+interface DetailData {
+  _id: string;
+  name: string;
+  label: {};
+  updatedDate: Date | null;
+  deletedDate: Date | null;
+  isDeleted: boolean;
+  createdDate: Date;
+  __v: number;
+}
+
+
+const Index: React.FC<compProps> = ({ detail }) => {
 
   const router = useRouter();
 
+  const [detailData, setDetailData] = useState<DetailData>(detail.data as DetailData);
+
   const [fields, setFields] = useState<Field[]>([]);
   const [submittedValues, setSubmittedValues] = useState<Field[]>([]);
-  const [name, setName] = useState('');
+  const [name, setName] = useState((detail.data as DetailData).name);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setError] = useState<any>();
   const [success, setSuccess] = useState<any>();
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
+
+
+  const handleDropdownChange = (index: any, type: keyof Field, event: React.ChangeEvent<{}>) => {
+    const updatedFields = [...fields];
+    updatedFields[index][type] = (event.target as HTMLElement).textContent!;
+
+    let selectedProperty: string | null = (event.target as HTMLElement).textContent;
+    let inputFieldValue: string | null = '';
+
+    switch (selectedProperty?.trim().toLocaleLowerCase()) {
+      case "commodity":
+        inputFieldValue = commodityText;
+        break;
+      case "place of delivery":
+        inputFieldValue = placeOfDeliveryText;
+        break;
+      case "period of delivery":
+        inputFieldValue = periodOfDeliveryText;
+        break;
+      case "payment":
+        inputFieldValue = paymentText;
+        break;
+      case "terms & conditions":
+        inputFieldValue = termsConditionText;
+        break;
+      case "brokerage liability":
+        inputFieldValue = brokerageLiabilityText;
+        break;
+      case "brokerage":
+        inputFieldValue = brokerageText;
+        break;
+      default:
+        inputFieldValue = '';
+    }
+
+    updatedFields[index]['value'] = inputFieldValue;
+    setFields(updatedFields);
+
+  };
+
 
   const handleAddField = () => {
     setFields([...fields, { property: '', value: '' }]);
@@ -40,6 +115,7 @@ export default function Index() {
   };
 
   const handleInputChange = (index: number, type: keyof Field, value: string) => {
+
     const updatedFields = [...fields];
     updatedFields[index][type] = value;
     setFields(updatedFields);
@@ -51,9 +127,9 @@ export default function Index() {
 
   const handleSubmit = async (event: React.FormEvent) => {
 
-    setLoading(true);
-
     event.preventDefault();
+
+    setLoading(true);
     setSubmittedValues(fields);
 
     const transformedData: { [key: string]: string } = fields.reduce((acc: any, obj: any) => {
@@ -62,14 +138,17 @@ export default function Index() {
     }, {});
 
     const finalObject = {
+      id: (detail.data as DetailData)._id,
       label: transformedData,
       name: name.trim()
     };
 
+    console.log('finalObject', finalObject);
+
     try {
-      const response = await createTemplate(finalObject);
+      const response = await updateTemplate(finalObject);
       setLoading(false);
-      setSuccess('Template created successfully');
+      setSuccess('Template updated successfully');
       setTimeout(() => {
         setSuccess(null)
       }, 2000);
@@ -84,7 +163,6 @@ export default function Index() {
       setTimeout(() => {
         setError(null)
       }, 2000);
-
     }
 
   };
@@ -96,6 +174,22 @@ export default function Index() {
     if (!token) {
       router.push('/');
     }
+
+    const fetchData = async () => {
+      setFields([]);
+      try {
+        const templateId = detail.data._id ?? '';
+        const response: any = await getTemplate(templateId);
+        const label = response.data.label;
+        const newFields = Object.keys(label).map(key => ({ property: key, value: label[key] }));
+        console.log('newFields', newFields);
+        setFields(prevFields => [...newFields]);
+      } catch (error) {
+        console.log('Error : ', error);
+      }
+    };
+
+    fetchData();
 
   }, []);
 
@@ -114,7 +208,7 @@ export default function Index() {
           <div>
             <div className="header-content">
               <div>
-                <Typography variant="h5" component="article">Create Template</Typography>
+                <Typography variant="h5" component="article">Edit Template</Typography>
               </div>
               <div className="btn-wrapper">
                 <Button variant="outlined" onClick={() => goToPage('/template')}>Back</Button>
@@ -140,25 +234,23 @@ export default function Index() {
                     margin="normal"
                     className="template-name-txt"
                     onChange={handleChange}
+                    value={name}
                   />
 
                   {fields.map((field, index) => (
+
                     <div className="template-form-wrapper" key={index}>
                       <div>
-                        <TextField
-                          type="text"
-                          label="Label"
-                          name="email"
-                          variant="outlined"
-                          fullWidth
-                          margin="normal"
-                          value={field.property}
-                          placeholder="Property"
-                          multiline
-                          rows={3}
-                          onChange={(e) => handleInputChange(index, 'property', e.target.value)}
-                        />
 
+                        <Autocomplete
+                          disablePortal
+                          options={headings}
+                          sx={{ width: 300 }}
+                          renderInput={(params) => <TextField {...params} label="Heading" />}
+                          onChange={(e) => handleDropdownChange(index, 'property', e)}
+                          className="template-dropdown"
+                          value={{ label: field.property }}
+                        />
                       </div>
 
                       <div>
@@ -192,18 +284,6 @@ export default function Index() {
                   <Button type='submit' variant="contained" fullWidth>{loading ? "Submit..." : "Submit"}</Button>
                 </form>
 
-                {/* <div>
-                  <ul>
-                    {submittedValues.map((field, index) => (
-                      <li key={index}>
-                        <Typography variant="body1"><b>{field.property}:</b> {field.value}</Typography>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <hr /> */}
-
 
               </CardContent>
             </Card>
@@ -212,13 +292,22 @@ export default function Index() {
         </div>
       </Container>
 
-      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Template Created Successfully" />
-
-
-
-
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Template Updated Successfully" />
     </>
   );
 }
+
+export default Index;
+
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
+
+  const { id } = context.query;
+  const detail = await getTemplate(id as string);
+
+  return {
+    props: { detail }
+  };
+
+};
 
 
