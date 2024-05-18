@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { getTemplate } from './template';
 
 export const getUserData = (): { [key: string]: any } => {
     const userDataString = localStorage.getItem('userData');
@@ -90,4 +91,13 @@ export const generateContractNumber = (): string => {
     const randomNumber = Math.floor(Math.random() * 9000) + 1000;
 
     return `${randomNumber}/${getCurrentFinancialYear()}`;
+};
+
+export const getTemplateDetail = async (id: string) => {
+    try {
+        const response: any = await getTemplate(id);
+        return response;
+    } catch (error) {
+        console.log('Error : ', error);
+    }
 };

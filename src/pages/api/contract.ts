@@ -43,7 +43,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             label: req.body.label,
             quantity: req.body.quantity,
             price: req.body.price,
-            assessment_year: req.body.assessment_year
+            assessment_year: req.body.assessment_year,
+            template_id: req.body.template_id
           });
 
           res.status(201).json({ message: 'Contract have been successfully created.' });

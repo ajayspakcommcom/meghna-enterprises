@@ -40,6 +40,10 @@ const contractSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    template_id: {
+        type: String,
+        ref: 'Seller'
+    },
     createdDate: {
         type: Date,
         default: Date.now

@@ -3,21 +3,20 @@ import { Card, CardContent, Button, Typography, TextField, Container, Autocomple
 import { Formik, Form, Field } from 'formik';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
-import Contract from "../../../models/Contract";
+import Contract from "../../../../models/Contract";
 import { useFormik } from "formik";
-import ErrorMessage from "../../../components/error-message";
+import ErrorMessage from "../../../../components/error-message";
 import contractSchema from "@/validation/contractSchema";
 import { getSellerIdName } from "@/services/seller";
 import { getBuyerIdName } from "@/services/buyer";
 import { getTemplate, getTemplateIdName } from "@/services/template";
-import { createContract, getLastContract } from "@/services/contract";
-import { getCurrentFinancialYear, incrementContractNo } from "@/services/common";
+import { createContract, getContract, getLastContract } from "@/services/contract";
+import { getCurrentFinancialYear, getTemplateDetail, incrementContractNo } from "@/services/common";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 
-
-
-const Header = dynamic(() => import('../../../components/header/index'));
-const SuccessConfirmationDialogue = dynamic(() => import('../../../components/success-confirmation/index'));
-const ContractPreviewDialogue = dynamic(() => import('../../../components/contract-preview/index'));
+const Header = dynamic(() => import('../../../../components/header/index'));
+const SuccessConfirmationDialogue = dynamic(() => import('../../../../components/success-confirmation/index'));
+const ContractPreviewDialogue = dynamic(() => import('../../../../components/contract-preview/index'));
 
 interface selectedAutoField {
   label: string;
@@ -34,18 +33,44 @@ interface LabelField {
   value: string;
 }
 
-export default function Index() {
+interface compProps {
+  detail: { data: any };
+}
+
+interface DetailData {
+  _id: string;
+  contract_no: string;
+  buyer_id: any;
+  seller_id: any;
+  template: any;
+  label: { [key: string]: string; };
+  quantity: number;
+  price: number;
+  assessment_year: string;
+  updatedDate: string | null;
+  deletedDate: string | null;
+  isDeleted: boolean;
+  createdDate: string;
+  __v: number;
+}
+
+
+
+const Index: React.FC<compProps> = ({ detail }) => {
 
   const router = useRouter();
 
-  const [authData, setAuthData] = useState({ username: "", password: "" });
+  const detailedData = detail.data as DetailData;
+
+  //console.log('getTemplateDetail', getTemplateDetail(detailedData._id));
+
+
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setError] = useState<any>();
 
-  const [selectedSeller, setSelectedSeller] = useState<selectedAutoField | null>(null);
-  const [selectedBuyer, setSelectedBuyer] = useState<selectedAutoField | null>(null);
-  const [selectedTemplate, setSelectedTemplate] = useState<selectedAutoField | null>(null);
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string | undefined>('');
+  const [selectedSeller, setSelectedSeller] = useState<selectedAutoField | null>({ _id: detailedData.seller_id._id, label: detailedData.seller_id.name });
+  const [selectedBuyer, setSelectedBuyer] = useState<selectedAutoField | null>({ _id: detailedData.buyer_id._id, label: detailedData.buyer_id.name });
+  const [selectedTemplate, setSelectedTemplate] = useState<selectedAutoField | null>({ _id: detailedData._id, label: 'test' });
 
   const [sellerList, setSellerList] = useState<any[]>([]);
   const [buyerList, setBuyerList] = useState<any[]>([]);
@@ -56,6 +81,7 @@ export default function Index() {
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
   const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
   const [previewContent, setPreviewContent] = useState<any>();
+
 
   const handleAddLabelField = () => {
     setLabelFields([...labelFields, { property: '', value: '' }]);
@@ -74,6 +100,7 @@ export default function Index() {
   };
 
   const handleSellerChange = (event: React.ChangeEvent<{}>, value: selectedAutoField | null) => {
+    console.log('Selected Seller : ', value);
     setSelectedSeller(value);
   };
 
@@ -82,17 +109,13 @@ export default function Index() {
   };
 
   const handleTemplateChange = async (event: React.ChangeEvent<{}>, value: selectedAutoField | null) => {
-
-    setSelectedTemplateId(value?._id)
-
+    console.log('Selected Template : ', value);
     setFields([]);
     try {
       const templateId = value?._id ?? '';
       const response: any = await getTemplate(templateId);
       const label = response.data.label;
-
       const newFields = Object.keys(label).map(key => ({ property: key, value: label[key] }));
-
       setFields(prevFields => [...prevFields, ...newFields]);
     } catch (error) {
       console.log('Error : ', error);
@@ -171,6 +194,8 @@ export default function Index() {
     fetchBuyerIdName();
     fetchTemplateIdName();
 
+    console.log('Data : ', detail.data);
+
   }, []);
 
   const goToPage = (url: string) => {
@@ -201,22 +226,21 @@ export default function Index() {
       seller_id: selectedSeller?._id,
       template: transformedFeildData,
       label: transformedLabelFeildData,
-      assessment_year: getCurrentFinancialYear(),
-      template_id: selectedTemplateId
+      assessment_year: getCurrentFinancialYear()
     };
 
-    console.log('submittedData', submittedData);
 
-    setLoading(true);
-    try {
-      const response = await createContract(submittedData);
-      setLoading(false);
-      formik.resetForm();
-      setIsSuccessDialogOpen(true);
-    } catch (error: any) {
-      setLoading(false);
-      setError(error);
-    }
+
+    // setLoading(true);
+    // try {
+    //   const response = await createContract(submittedData);
+    //   setLoading(false);
+    //   formik.resetForm();
+    //   setIsSuccessDialogOpen(true);
+    // } catch (error: any) {
+    //   setLoading(false);
+    //   setError(error);
+    // }
 
   };
 
@@ -274,7 +298,7 @@ export default function Index() {
           <div>
             <div className="header-content">
               <div>
-                <Typography variant="h5" component="article">Create Contract</Typography>
+                <Typography variant="h5" component="article">Edit Contract</Typography>
               </div>
               <div className="btn-wrapper">
                 <Button variant="outlined" onClick={() => goToPage('/contract')}>Back</Button>
@@ -296,6 +320,7 @@ export default function Index() {
                         options={sellerList}
                         renderInput={(params) => <TextField {...params} label="Seller" required />}
                         onChange={handleSellerChange}
+                        value={selectedSeller}
                       />
                     </div>
                     <div>
@@ -304,6 +329,7 @@ export default function Index() {
                         options={buyerList}
                         renderInput={(params) => <TextField {...params} label="Buyer" required />}
                         onChange={handleBuyerChange}
+                        value={selectedBuyer}
                       />
                     </div>
                   </div>
@@ -315,6 +341,7 @@ export default function Index() {
                         options={templateList}
                         renderInput={(params) => <TextField {...params} label="Template" required />}
                         onChange={handleTemplateChange}
+                        value={selectedTemplate}
                       />
                     </div>
                   </div>
@@ -463,5 +490,18 @@ export default function Index() {
     </>
   );
 }
+
+export default Index;
+
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
+
+  const { id } = context.query;
+  const detail = await getContract(id as string);
+
+  return {
+    props: { detail }
+  };
+
+};
 
 
