@@ -10,7 +10,7 @@ import contractSchema from "@/validation/contractSchema";
 import { getSellerIdName } from "@/services/seller";
 import { getBuyerIdName } from "@/services/buyer";
 import { getTemplate, getTemplateIdName } from "@/services/template";
-import { createContract, getContract, getLastContract } from "@/services/contract";
+import { createContract, getContract, getLastContract, updateContract } from "@/services/contract";
 import { getCurrentFinancialYear, incrementContractNo } from "@/services/common";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 
@@ -222,8 +222,6 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
 
 
-
-
   }, []);
 
   const goToPage = (url: string) => {
@@ -254,23 +252,23 @@ const Index: React.FC<compProps> = ({ detail }) => {
       seller_id: selectedSeller?._id,
       template: transformedFeildData,
       label: transformedLabelFeildData,
-      assessment_year: getCurrentFinancialYear()
+      assessment_year: getCurrentFinancialYear(),
+      template_id: selectedTemplate?._id,
+      id: detailedData._id
     };
 
     console.log('submittedData', submittedData);
 
-
-
-    // setLoading(true);
-    // try {
-    //   const response = await createContract(submittedData);
-    //   setLoading(false);
-    //   formik.resetForm();
-    //   setIsSuccessDialogOpen(true);
-    // } catch (error: any) {
-    //   setLoading(false);
-    //   setError(error);
-    // }
+    setLoading(true);
+    try {
+      const response = await updateContract(submittedData);
+      setLoading(false);
+      formik.resetForm();
+      setIsSuccessDialogOpen(true);
+    } catch (error: any) {
+      setLoading(false);
+      setError(error);
+    }
 
   };
 
@@ -514,7 +512,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
         </div>
       </Container>
 
-      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Contract Created Successfully" />
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Contract Updated Successfully" />
       <ContractPreviewDialogue isOpen={isPreviewDialogOpen} heading="Contract Preview" contentData={previewContent} onClick={previewClickHandler} />
 
     </>

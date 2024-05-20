@@ -45,14 +45,15 @@ export const getLastContract = async (): Promise<Contract> => {
     }
 };
 
-export const updateContract = async (id: string, sellerData: Contract): Promise<Contract> => {
+export const updateContract = async (contractData: Contract): Promise<Contract> => {
     try {
-        const response = await apiClient.put<Contract>(`/contract/${id}`, sellerData);
+        const response = await apiClient.post<Contract>(`/contract`, { type: 'UPDATE', ...contractData });
         return response.data;
     } catch (err: unknown) {
         throw err;
     }
 };
+
 
 export const deleteContract = async (id: string): Promise<Contract> => {
     try {

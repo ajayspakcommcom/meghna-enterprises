@@ -85,6 +85,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             quantity: req.body.quantity,
             price: req.body.price,
             assessment_year: req.body.assessment_year,
+            template_id: req.body.template_id,
             updatedDate: Date.now(),
           };
 
