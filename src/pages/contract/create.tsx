@@ -433,7 +433,7 @@ export default function Index() {
                       </div>
                     </div>
                     <div>
-                      <Button type='button' variant="contained" color="success" fullWidth onClick={handleAddLabelField}>Add Heading</Button>
+                      <Button type='button' variant="contained" color="success" fullWidth onClick={handleAddLabelField} className="add-heading">Add Heading</Button>
                     </div>
                   </div>
 

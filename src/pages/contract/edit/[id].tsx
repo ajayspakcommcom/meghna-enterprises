@@ -410,6 +410,8 @@ const Index: React.FC<compProps> = ({ detail }) => {
                           onChange={(e) => handleInputChange(index, 'value', e.target.value)}
                         />
                       </div>
+
+
                     </div>
                   ))}
 

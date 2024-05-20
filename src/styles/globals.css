@@ -89,7 +89,8 @@ header .css-2uchni {
 .master-wrapper .css-bhp9pd-MuiPaper-root-MuiCard-root,
 .dashboard-wrapper .css-s18byi,
 .master-wrapper .css-s18byi {
-    width: 500px !important;
+    width: 600px !important;
+    padding: 15px 15px;
 }
 
 .dashboard-wrapper .css-bhp9pd-MuiPaper-root-MuiCard-root table,
@@ -471,4 +472,20 @@ header .css-2uchni {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.action-btn-wrapper>button {
+    background: transparent;
+    color: #000;
+    border: 1px solid #000;
+}
+
+.action-btn-wrapper>button:hover {
+    background-color: transparent;
+}
+
+.add-heading {
+    background: transparent;
+    color: #000;
+    border: 1px solid #000;
 }
