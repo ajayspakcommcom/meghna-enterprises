@@ -11,7 +11,7 @@ import { getSellerIdName } from "@/services/seller";
 import { getBuyerIdName } from "@/services/buyer";
 import { getTemplate, getTemplateIdName } from "@/services/template";
 import { createContract, getContract, getLastContract } from "@/services/contract";
-import { getCurrentFinancialYear, getTemplateDetail, incrementContractNo } from "@/services/common";
+import { getCurrentFinancialYear, incrementContractNo } from "@/services/common";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 
 const Header = dynamic(() => import('../../../../components/header/index'));
@@ -51,6 +51,7 @@ interface DetailData {
   deletedDate: string | null;
   isDeleted: boolean;
   createdDate: string;
+  template_id: string;
   __v: number;
 }
 
@@ -62,15 +63,16 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
   const detailedData = detail.data as DetailData;
 
-  //console.log('getTemplateDetail', getTemplateDetail(detailedData._id));
-
 
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setError] = useState<any>();
 
   const [selectedSeller, setSelectedSeller] = useState<selectedAutoField | null>({ _id: detailedData.seller_id._id, label: detailedData.seller_id.name });
   const [selectedBuyer, setSelectedBuyer] = useState<selectedAutoField | null>({ _id: detailedData.buyer_id._id, label: detailedData.buyer_id.name });
-  const [selectedTemplate, setSelectedTemplate] = useState<selectedAutoField | null>({ _id: detailedData._id, label: 'test' });
+  const [selectedTemplate, setSelectedTemplate] = useState<selectedAutoField | null>({ _id: '', label: '' });
+
+  const [quantityInput, setQuantityInput] = useState<any>();
+  const [priceInput, setPriceInput] = useState<any>();
 
   const [sellerList, setSellerList] = useState<any[]>([]);
   const [buyerList, setBuyerList] = useState<any[]>([]);
@@ -189,12 +191,38 @@ const Index: React.FC<compProps> = ({ detail }) => {
       }
     };
 
+    const fetchTemplateDetailById = async () => {
+      setFields([]);
+      try {
+        const response: any = (await getTemplate(detailedData.template_id)).data;
+        console.log('Response : ', response);
+        setSelectedTemplate({ _id: detailedData.template_id, label: response.name })
+
+        const newFields = Object.keys(detailedData.template).map(key => ({ property: key, value: detailedData.template[key] }));
+        setFields(prevFields => [...newFields]);
+
+      } catch (error) {
+        console.error('Error fetching template data:', error);
+      }
+    };
+
+
     fetchLastContract();
     fetchSellerIdName();
     fetchBuyerIdName();
     fetchTemplateIdName();
+    fetchTemplateDetailById();
 
     console.log('Data : ', detail.data);
+
+    formik.setValues({
+      quantity: detailedData.quantity.toString(),
+      price: detailedData.price.toString(),
+    });
+
+
+
+
 
   }, []);
 
@@ -228,6 +256,8 @@ const Index: React.FC<compProps> = ({ detail }) => {
       label: transformedLabelFeildData,
       assessment_year: getCurrentFinancialYear()
     };
+
+    console.log('submittedData', submittedData);
 
 
 
