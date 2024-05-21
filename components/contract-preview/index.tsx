@@ -135,15 +135,6 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
                                 }
 
 
-
-
-                                {contentData.selectedTemplate && Object.entries(contentData.selectedTemplate).filter(([key]) => key !== '_id' && key !== '__v' && key !== 'isDeleted' && key !== 'updatedDate' && key !== 'deletedDate' && key !== 'createdDate').map(([key, value]) => (
-                                    <React.Fragment key={key}>
-                                        <div className="column"><Typography variant="body1" component="article"><b>{key.charAt(0).toUpperCase() + key.slice(1)}</b></Typography></div>
-                                        <div className="column"><Typography variant="body2" component="article"><span>{value as string}</span></Typography></div>
-                                    </React.Fragment>
-                                ))}
-
                                 {
                                     contentData.formikValues &&
                                     <>
@@ -160,6 +151,18 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
                                         <div className="column"><Typography variant="body2" component="article"><span>{contentData.formikValues.price}</span></Typography></div>
                                     </>
                                 }
+
+
+
+
+                                {contentData.selectedTemplate && Object.entries(contentData.selectedTemplate).filter(([key]) => key !== '_id' && key !== '__v' && key !== 'isDeleted' && key !== 'updatedDate' && key !== 'deletedDate' && key !== 'createdDate').map(([key, value]) => (
+                                    <React.Fragment key={key}>
+                                        <div className="column"><Typography variant="body1" component="article"><b>{key.charAt(0).toUpperCase() + key.slice(1)}</b></Typography></div>
+                                        <div className="column"><Typography variant="body2" component="article"><span>{value as string}</span></Typography></div>
+                                    </React.Fragment>
+                                ))}
+
+
 
 
 

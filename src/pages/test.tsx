@@ -10,12 +10,9 @@ export default function Index() {
 
 
 
-
     return (
         <>
             <Header />
-
-
         </>
     );
 }

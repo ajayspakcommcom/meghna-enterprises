@@ -56,66 +56,123 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     const sellerText = `${req.body.seller_id.name}, ${req.body.seller_id.address}, PAN : ${req.body.seller_id.pan}, GSTIN :  ${req.body.seller_id.gstin}`;
                     doc.fontSize(9).fillColor('#000').text(sellerText, 150, 200);
 
-                    doc.fontSize(10).fillColor('#000').text('BUYER', 25, 240);
+
+                    const sellerTextHeight = doc.heightOfString(sellerText);
+
+
+                    doc.fontSize(9).fillColor('#000').text('BUYER', 25, 210 + sellerTextHeight);
                     const buyerText = `${req.body.buyer_id.name}, ${req.body.buyer_id.address}, PAN : ${req.body.buyer_id.pan}, GSTIN :  ${req.body.buyer_id.gstin}`;
-                    doc.fontSize(9).fillColor('#000').text(buyerText, 150, 240);
+                    doc.fontSize(9).fillColor('#000').text(buyerText, 150, 210 + sellerTextHeight);
 
-                    doc.fontSize(10).fillColor('#000').text('COMMODITY', 25, 280);
-                    const commodityText = `${req.body.template.COMMODITY}`;
-                    doc.fontSize(9).fillColor('#000').text(commodityText, 150, 280);
+                    const buyerTextHeight = doc.heightOfString(buyerText);
 
-                    doc.fontSize(10).fillColor('#000').text('QUANTITY', 25, 320);
+                    doc.fontSize(10).fillColor('#000').text('QUANTITY', 25, 255 + buyerTextHeight);
                     const quantityText = `${req.body.quantity}`;
-                    doc.fontSize(9).fillColor('#000').text(quantityText, 150, 320);
+                    doc.fontSize(9).fillColor('#000').text(quantityText, 150, 255 + buyerTextHeight);
 
-                    doc.fontSize(10).fillColor('#000').text('PRICE', 25, 340);
+                    const quantityTextHeight = doc.heightOfString(quantityText);
+
+                    doc.fontSize(10).fillColor('#000').text('PRICE', 25, 275 + quantityTextHeight);
                     const priceText = `${req.body.price}`;
-                    doc.fontSize(9).fillColor('#000').text(priceText, 150, 340);
+                    doc.fontSize(9).fillColor('#000').text(priceText, 150, 275 + quantityTextHeight);
+
+                    const priceTextHeight = doc.heightOfString(priceText);
+
+                    doc.fontSize(10).fillColor('#000').text('COMMODITY', 25, 295 + priceTextHeight);
+                    const commodityText = `${req.body.template.COMMODITY}`;
+                    doc.fontSize(9).fillColor('#000').text(commodityText, 150, 295 + priceTextHeight);
+
+                    const templateTextHeight = doc.heightOfString(commodityText);
+
 
                     if (req.body.template['PLACE OF DELIVERY']) {
-                        doc.fontSize(10).fillColor('#000').text('PLACE OF DELIVERY', 25, 360);
+                        doc.fontSize(10).fillColor('#000').text('PLACE OF DELIVERY', 25, 320 + templateTextHeight);
                         const placeOfDeliveryText = `${req.body.template['PLACE OF DELIVERY']}`;
-                        doc.fontSize(9).fillColor('#000').text(placeOfDeliveryText, 150, 360);
+                        doc.fontSize(9).fillColor('#000').text(placeOfDeliveryText, 150, 320 + templateTextHeight);
                     }
 
                     if (req.body.template['PERIOD OF DELIVERY']) {
-                        doc.fontSize(10).fillColor('#000').text('PERIOD OF DELIVERY', 25, 380);
-                        const periodOfDeliveryText = `${req.body.template['PERIOD OF DELIVERY']}`;
-                        doc.fontSize(9).fillColor('#000').text(periodOfDeliveryText, 150, 380);
+                        if (doc.heightOfString(req.body.template['PLACE OF DELIVERY'])) {
+                            const placeOfDeliveryTextHeight = doc.heightOfString(req.body.template['PLACE OF DELIVERY']);
+                            doc.fontSize(10).fillColor('#000').text('PERIOD OF DELIVERY', 25, 380 + placeOfDeliveryTextHeight);
+                            const periodOfDeliveryText = `${req.body.template['PERIOD OF DELIVERY']}`;
+                            doc.fontSize(9).fillColor('#000').text(periodOfDeliveryText, 150, 380 + placeOfDeliveryTextHeight);
+                        } else {
+                            doc.fontSize(10).fillColor('#000').text('PERIOD OF DELIVERY', 25, 380);
+                            const periodOfDeliveryText = `${req.body.template['PERIOD OF DELIVERY']}`;
+                            doc.fontSize(9).fillColor('#000').text(periodOfDeliveryText, 150, 380);
+                        }
                     }
 
+
                     if (req.body.template.PAYMENT) {
-                        doc.fontSize(10).fillColor('#000').text('PAYMENT', 25, 400);
-                        const paymentText = `${req.body.template.PAYMENT}`;
-                        doc.fontSize(9).fillColor('#000').text(paymentText, 150, 400);
+
+                        if (doc.heightOfString(req.body.template['PERIOD OF DELIVERY'])) {
+                            const periodOfDeliveryTextHeight = doc.heightOfString(req.body.template['PERIOD OF DELIVERY']);
+                            doc.fontSize(10).fillColor('#000').text('PAYMENT', 25, 420);
+                            const paymentText = `${req.body.template.PAYMENT}`;
+                            doc.fontSize(9).fillColor('#000').text(paymentText, 150, 420);
+                        } else {
+                            doc.fontSize(10).fillColor('#000').text('PAYMENT', 25, 420);
+                            const paymentText = `${req.body.template.PAYMENT}`;
+                            doc.fontSize(9).fillColor('#000').text(paymentText, 150, 420);
+                        }
                     }
 
                     if (req.body.template['TERMS & CONDITIONS']) {
-                        doc.fontSize(10).fillColor('#000').text('TERMS & CONDITIONS', 25, 420);
-                        const termsConditionsText = `${req.body.template['TERMS & CONDITIONS']}`;
-                        doc.fontSize(9).fillColor('#000').text(termsConditionsText, 150, 420);
+                        if (doc.heightOfString(req.body.template.PAYMENT)) {
+                            const paymentTextHeight = doc.heightOfString(req.body.template.PAYMENT);
+                            doc.fontSize(10).fillColor('#000').text('TERMS & CONDITIONS', 25, 440 + paymentTextHeight);
+                            const termsConditionsText = `${req.body.template['TERMS & CONDITIONS']}`;
+                            doc.fontSize(9).fillColor('#000').text(termsConditionsText, 150, 440 + paymentTextHeight);
+                        } else {
+                            doc.fontSize(10).fillColor('#000').text('TERMS & CONDITIONS', 25, 440);
+                            const termsConditionsText = `${req.body.template['TERMS & CONDITIONS']}`;
+                            doc.fontSize(9).fillColor('#000').text(termsConditionsText, 150, 440);
+                        }
                     }
 
                     if (req.body.template['BROKERAGE LIABILITY']) {
-                        doc.fontSize(10).fillColor('#000').text('BROKERAGE LIABILITY', 25, 440);
-                        const brokerageLiabilityText = `${req.body.template['BROKERAGE LIABILITY']}`;
-                        doc.fontSize(9).fillColor('#000').text(brokerageLiabilityText, 150, 440);
+
+                        if (doc.heightOfString(req.body.template['TERMS & CONDITIONS'])) {
+                            const termsConditionTextHeight = doc.heightOfString(req.body.template.PAYMENT);
+                            doc.fontSize(10).fillColor('#000').text('BROKERAGE LIABILITY', 25, 470 + termsConditionTextHeight);
+                            const brokerageLiabilityText = `${req.body.template['BROKERAGE LIABILITY']}`;
+                            doc.fontSize(9).fillColor('#000').text(brokerageLiabilityText, 150, 470 + termsConditionTextHeight);
+                        } else {
+                            doc.fontSize(10).fillColor('#000').text('BROKERAGE LIABILITY', 25, 470);
+                            const brokerageLiabilityText = `${req.body.template['BROKERAGE LIABILITY']}`;
+                            doc.fontSize(9).fillColor('#000').text(brokerageLiabilityText, 150, 470);
+                        }
                     }
 
                     if (req.body.template['BROKERAGE']) {
-                        doc.fontSize(10).fillColor('#000').text('BROKERAGE LIABILITY', 25, 520);
-                        const brokerageText = `${req.body.template['BROKERAGE']}`;
-                        doc.fontSize(9).fillColor('#000').text(brokerageText, 150, 520);
+                        if (doc.heightOfString(req.body.template['BROKERAGE LIABILITY'])) {
+                            const brokerageLiabilityTextHeight = doc.heightOfString(req.body.template['BROKERAGE LIABILITY']);
+                            doc.fontSize(10).fillColor('#000').text('BROKERAGE LIABILITY', 25, 500 + brokerageLiabilityTextHeight);
+                            const brokerageText = `${req.body.template['BROKERAGE']}`;
+                            doc.fontSize(9).fillColor('#000').text(brokerageText, 150, 500 + brokerageLiabilityTextHeight);
+                        } else {
+                            doc.fontSize(10).fillColor('#000').text('BROKERAGE LIABILITY', 25, 500);
+                            const brokerageText = `${req.body.template['BROKERAGE']}`;
+                            doc.fontSize(9).fillColor('#000').text(brokerageText, 150, 500);
+                        }
                     }
 
-                    doc.rect(doc.page.margins.left, 540, pageWidth, 20).stroke('#d9d9d9');
-                    doc.fontSize(10).fillColor('#000').text('Subject to Mumbai Juridiction', 240, 545);
+                    const brokerageTextHeight = doc.heightOfString(req.body.template['BROKERAGE']);
 
-                    doc.fontSize(10).fillColor('#000').text('For SEEDS & FEEDS INDIA', 240, 575);
+                    if (brokerageTextHeight) {
+                        doc.rect(doc.page.margins.left, 580 + brokerageTextHeight, pageWidth, 20).stroke('#d9d9d9');
+                    } else {
+                        doc.rect(doc.page.margins.left, 580 + brokerageTextHeight, pageWidth, 20).stroke('#d9d9d9');
+                    }
 
-                    doc.fontSize(10).fillColor('#000').text('FOR SELLER', 25, 600);
-                    doc.fontSize(10).fillColor('#000').text('FOR BUYER', 520, 600);
-                    doc.fontSize(10).fillColor('#000').text('(AS BROKER)', 270, 620);
+
+                    doc.fontSize(10).fillColor('#000').text('Subject to Mumbai Juridiction', 240, 596);
+                    doc.fontSize(10).fillColor('#000').text('For SEEDS & FEEDS INDIA', 240, 625);
+                    doc.fontSize(10).fillColor('#000').text('FOR SELLER', 25, 650);
+                    doc.fontSize(10).fillColor('#000').text('FOR BUYER', 520, 650);
+                    doc.fontSize(10).fillColor('#000').text('(AS BROKER)', 270, 670);
 
                     doc.end();
 
@@ -134,7 +191,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                         </div>
                                     `;
 
-                    await sendEmail({ recipient: 'ajay@spakcomm.com', subject: 'Feeds & Seeds Contract', text: htmlContent });
+                    //await sendEmail({ recipient: 'ajay@spakcomm.com', subject: 'Feeds & Seeds Contract', text: htmlContent });
 
                     res.status(200).json({ message: 'Pdf sent successfully.' });
                 } catch (error: any) {
