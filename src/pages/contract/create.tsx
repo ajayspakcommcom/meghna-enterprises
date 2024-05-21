@@ -308,6 +308,37 @@ export default function Index() {
                     </div>
                   </div>
 
+                  <div className="buyer-seller-forms-wrapper contract-form-wrapper">
+                    <div>
+                      <TextField
+                        type="text"
+                        label="Quantity"
+                        name="quantity"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        value={formik.values.quantity}
+                        onChange={formik.handleChange}
+                        error={formik.touched.quantity && Boolean(formik.errors.quantity)}
+                        helperText={formik.touched.quantity && formik.errors.quantity}
+                      />
+                    </div>
+                    <div>
+                      <TextField
+                        type="text"
+                        label="Price"
+                        name="price"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        value={formik.values.price}
+                        onChange={formik.handleChange}
+                        error={formik.touched.price && Boolean(formik.errors.price)}
+                        helperText={formik.touched.price && formik.errors.price}
+                      />
+                    </div>
+                  </div>
+
                   <div className="buyer-seller-forms-wrapper contract-form-wrapper template">
                     <div>
                       <Autocomplete
@@ -318,6 +349,8 @@ export default function Index() {
                       />
                     </div>
                   </div>
+
+
 
 
                   {fields.map((field, index) => (
@@ -358,36 +391,7 @@ export default function Index() {
                     </div>
                   ))}
 
-                  <div className="buyer-seller-forms-wrapper contract-form-wrapper">
-                    <div>
-                      <TextField
-                        type="text"
-                        label="Quantity"
-                        name="quantity"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.quantity}
-                        onChange={formik.handleChange}
-                        error={formik.touched.quantity && Boolean(formik.errors.quantity)}
-                        helperText={formik.touched.quantity && formik.errors.quantity}
-                      />
-                    </div>
-                    <div>
-                      <TextField
-                        type="text"
-                        label="Price"
-                        name="price"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.price}
-                        onChange={formik.handleChange}
-                        error={formik.touched.price && Boolean(formik.errors.price)}
-                        helperText={formik.touched.price && formik.errors.price}
-                      />
-                    </div>
-                  </div>
+
 
                   {labelFields.map((field, index) => (
                     <div className="template-form-wrapper contract-form-wrapper" key={index}>
