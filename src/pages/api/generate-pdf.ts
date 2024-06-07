@@ -199,7 +199,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 
 
-                    await sendEmail({ recipient: 'ajay@spakcomm.com', subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
+                    await sendEmail({ recipient: 'shiv@spakcomm.com', subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
 
                     res.status(200).json({ message: 'Pdf sent successfully.' });
                 } catch (error: any) {
