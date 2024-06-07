@@ -62,47 +62,47 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     const sellerTextHeight = doc.heightOfString(sellerText);
 
 
-                    doc.fontSize(9).fillColor('#000').text('BUYER', 25, 210 + sellerTextHeight);
+                    doc.fontSize(9).fillColor('#000').text('BUYER', 25, 240 + sellerTextHeight);
                     const buyerText = `${req.body.buyer_id.name}, ${req.body.buyer_id.address}, PAN : ${req.body.buyer_id.pan}, GSTIN :  ${req.body.buyer_id.gstin}`;
-                    doc.fontSize(9).fillColor('#000').text(buyerText, 150, 210 + sellerTextHeight);
+                    doc.fontSize(9).fillColor('#000').text(buyerText, 150, 240 + sellerTextHeight);
 
                     const buyerTextHeight = doc.heightOfString(buyerText);
 
-                    doc.fontSize(10).fillColor('#000').text('QUANTITY', 25, 255 + buyerTextHeight);
+                    doc.fontSize(10).fillColor('#000').text('QUANTITY', 25, 295 + buyerTextHeight);
                     const quantityText = `${req.body.quantity}`;
-                    doc.fontSize(9).fillColor('#000').text(quantityText, 150, 255 + buyerTextHeight);
+                    doc.fontSize(9).fillColor('#000').text(quantityText, 150, 295 + buyerTextHeight);
 
                     const quantityTextHeight = doc.heightOfString(quantityText);
 
-                    doc.fontSize(10).fillColor('#000').text('PRICE', 25, 275 + quantityTextHeight);
+                    doc.fontSize(10).fillColor('#000').text('PRICE', 25, 315 + quantityTextHeight);
                     const priceText = `${req.body.price}`;
-                    doc.fontSize(9).fillColor('#000').text(priceText, 150, 275 + quantityTextHeight);
+                    doc.fontSize(9).fillColor('#000').text(priceText, 150, 315 + quantityTextHeight);
 
                     const priceTextHeight = doc.heightOfString(priceText);
 
-                    doc.fontSize(10).fillColor('#000').text('COMMODITY', 25, 295 + priceTextHeight);
+                    doc.fontSize(10).fillColor('#000').text('COMMODITY', 25, 335 + priceTextHeight);
                     const commodityText = `${req.body.template.COMMODITY}`;
-                    doc.fontSize(9).fillColor('#000').text(commodityText, 150, 295 + priceTextHeight);
+                    doc.fontSize(9).fillColor('#000').text(commodityText, 150, 335 + priceTextHeight);
 
                     const templateTextHeight = doc.heightOfString(commodityText);
 
 
                     if (req.body.template['PLACE OF DELIVERY']) {
-                        doc.fontSize(10).fillColor('#000').text('PLACE OF DELIVERY', 25, 320 + templateTextHeight);
+                        doc.fontSize(10).fillColor('#000').text('PLACE OF DELIVERY', 25, 360 + templateTextHeight);
                         const placeOfDeliveryText = `${req.body.template['PLACE OF DELIVERY']}`;
-                        doc.fontSize(9).fillColor('#000').text(placeOfDeliveryText, 150, 320 + templateTextHeight);
+                        doc.fontSize(9).fillColor('#000').text(placeOfDeliveryText, 150, 360 + templateTextHeight);
                     }
 
                     if (req.body.template['PERIOD OF DELIVERY']) {
                         if (doc.heightOfString(req.body.template['PLACE OF DELIVERY'])) {
                             const placeOfDeliveryTextHeight = doc.heightOfString(req.body.template['PLACE OF DELIVERY']);
-                            doc.fontSize(10).fillColor('#000').text('PERIOD OF DELIVERY', 25, 380 + placeOfDeliveryTextHeight);
+                            doc.fontSize(10).fillColor('#000').text('PERIOD OF DELIVERY', 25, 420 + placeOfDeliveryTextHeight);
                             const periodOfDeliveryText = `${req.body.template['PERIOD OF DELIVERY']}`;
-                            doc.fontSize(9).fillColor('#000').text(periodOfDeliveryText, 150, 380 + placeOfDeliveryTextHeight);
+                            doc.fontSize(9).fillColor('#000').text(periodOfDeliveryText, 150, 420 + placeOfDeliveryTextHeight);
                         } else {
-                            doc.fontSize(10).fillColor('#000').text('PERIOD OF DELIVERY', 25, 380);
+                            doc.fontSize(10).fillColor('#000').text('PERIOD OF DELIVERY', 25, 420);
                             const periodOfDeliveryText = `${req.body.template['PERIOD OF DELIVERY']}`;
-                            doc.fontSize(9).fillColor('#000').text(periodOfDeliveryText, 150, 380);
+                            doc.fontSize(9).fillColor('#000').text(periodOfDeliveryText, 150, 420);
                         }
                     }
 
@@ -111,26 +111,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                         if (doc.heightOfString(req.body.template['PERIOD OF DELIVERY'])) {
                             const periodOfDeliveryTextHeight = doc.heightOfString(req.body.template['PERIOD OF DELIVERY']);
-                            doc.fontSize(10).fillColor('#000').text('PAYMENT', 25, 420);
+                            doc.fontSize(10).fillColor('#000').text('PAYMENT', 25, 460);
                             const paymentText = `${req.body.template.PAYMENT}`;
-                            doc.fontSize(9).fillColor('#000').text(paymentText, 150, 420);
+                            doc.fontSize(9).fillColor('#000').text(paymentText, 150, 460);
                         } else {
-                            doc.fontSize(10).fillColor('#000').text('PAYMENT', 25, 420);
+                            doc.fontSize(10).fillColor('#000').text('PAYMENT', 25, 460);
                             const paymentText = `${req.body.template.PAYMENT}`;
-                            doc.fontSize(9).fillColor('#000').text(paymentText, 150, 420);
+                            doc.fontSize(9).fillColor('#000').text(paymentText, 150, 460);
                         }
                     }
 
                     if (req.body.template['TERMS & CONDITIONS']) {
                         if (doc.heightOfString(req.body.template.PAYMENT)) {
                             const paymentTextHeight = doc.heightOfString(req.body.template.PAYMENT);
-                            doc.fontSize(10).fillColor('#000').text('TERMS & CONDITIONS', 25, 440 + paymentTextHeight);
+                            doc.fontSize(10).fillColor('#000').text('TERMS & CONDITIONS', 25, 480 + paymentTextHeight);
                             const termsConditionsText = `${req.body.template['TERMS & CONDITIONS']}`;
-                            doc.fontSize(9).fillColor('#000').text(termsConditionsText, 150, 440 + paymentTextHeight);
+                            doc.fontSize(9).fillColor('#000').text(termsConditionsText, 150, 480 + paymentTextHeight);
                         } else {
-                            doc.fontSize(10).fillColor('#000').text('TERMS & CONDITIONS', 25, 440);
+                            doc.fontSize(10).fillColor('#000').text('TERMS & CONDITIONS', 25, 480);
                             const termsConditionsText = `${req.body.template['TERMS & CONDITIONS']}`;
-                            doc.fontSize(9).fillColor('#000').text(termsConditionsText, 150, 440);
+                            doc.fontSize(9).fillColor('#000').text(termsConditionsText, 150, 480);
                         }
                     }
 
@@ -138,43 +138,43 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                         if (doc.heightOfString(req.body.template['TERMS & CONDITIONS'])) {
                             const termsConditionTextHeight = doc.heightOfString(req.body.template.PAYMENT);
-                            doc.fontSize(10).fillColor('#000').text('BROKERAGE LIABILITY', 25, 470 + termsConditionTextHeight);
+                            doc.fontSize(10).fillColor('#000').text('BROKERAGE LIABILITY', 25, 510 + termsConditionTextHeight);
                             const brokerageLiabilityText = `${req.body.template['BROKERAGE LIABILITY']}`;
-                            doc.fontSize(9).fillColor('#000').text(brokerageLiabilityText, 150, 470 + termsConditionTextHeight);
+                            doc.fontSize(9).fillColor('#000').text(brokerageLiabilityText, 150, 510 + termsConditionTextHeight);
                         } else {
-                            doc.fontSize(10).fillColor('#000').text('BROKERAGE LIABILITY', 25, 470);
+                            doc.fontSize(10).fillColor('#000').text('BROKERAGE LIABILITY', 25, 510);
                             const brokerageLiabilityText = `${req.body.template['BROKERAGE LIABILITY']}`;
-                            doc.fontSize(9).fillColor('#000').text(brokerageLiabilityText, 150, 470);
+                            doc.fontSize(9).fillColor('#000').text(brokerageLiabilityText, 150, 510);
                         }
                     }
 
                     if (req.body.template['BROKERAGE']) {
                         if (doc.heightOfString(req.body.template['BROKERAGE LIABILITY'])) {
                             const brokerageLiabilityTextHeight = doc.heightOfString(req.body.template['BROKERAGE LIABILITY']);
-                            doc.fontSize(10).fillColor('#000').text('BROKERAGE LIABILITY', 25, 500 + brokerageLiabilityTextHeight);
+                            doc.fontSize(10).fillColor('#000').text('BROKERAGE', 25, 560 + brokerageLiabilityTextHeight);
                             const brokerageText = `${req.body.template['BROKERAGE']}`;
-                            doc.fontSize(9).fillColor('#000').text(brokerageText, 150, 500 + brokerageLiabilityTextHeight);
+                            doc.fontSize(9).fillColor('#000').text(brokerageText, 150, 560 + brokerageLiabilityTextHeight);
                         } else {
-                            doc.fontSize(10).fillColor('#000').text('BROKERAGE LIABILITY', 25, 500);
+                            doc.fontSize(10).fillColor('#000').text('BROKERAGE', 25, 560);
                             const brokerageText = `${req.body.template['BROKERAGE']}`;
-                            doc.fontSize(9).fillColor('#000').text(brokerageText, 150, 500);
+                            doc.fontSize(9).fillColor('#000').text(brokerageText, 150, 560);
                         }
                     }
 
                     const brokerageTextHeight = doc.heightOfString(req.body.template['BROKERAGE']);
 
                     if (brokerageTextHeight) {
-                        doc.rect(doc.page.margins.left, 580 + brokerageTextHeight, pageWidth, 20).stroke('#d9d9d9');
+                        doc.rect(doc.page.margins.left, 640 + brokerageTextHeight, pageWidth, 20).stroke('#d9d9d9');
                     } else {
-                        doc.rect(doc.page.margins.left, 580 + brokerageTextHeight, pageWidth, 20).stroke('#d9d9d9');
+                        doc.rect(doc.page.margins.left, 640 + brokerageTextHeight, pageWidth, 20).stroke('#d9d9d9');
                     }
 
 
-                    doc.fontSize(10).fillColor('#000').text('Subject to Mumbai Juridiction', 240, 596);
-                    doc.fontSize(10).fillColor('#000').text('For SEEDS & FEEDS INDIA', 240, 625);
-                    doc.fontSize(10).fillColor('#000').text('FOR SELLER', 25, 650);
-                    doc.fontSize(10).fillColor('#000').text('FOR BUYER', 520, 650);
-                    doc.fontSize(10).fillColor('#000').text('(AS BROKER)', 270, 670);
+                    doc.fontSize(10).fillColor('#000').text('Subject to Mumbai Juridiction', 240, 656);
+                    doc.fontSize(10).fillColor('#000').text('For SEEDS & FEEDS INDIA', 240, 685);
+                    doc.fontSize(10).fillColor('#000').text('FOR SELLER', 25, 710);
+                    doc.fontSize(10).fillColor('#000').text('FOR BUYER', 520, 710);
+                    doc.fontSize(10).fillColor('#000').text('(AS BROKER)', 270, 730);
 
                     doc.end();
 
@@ -193,7 +193,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                         </div>
                                     `;
 
-                    await sendEmail({ recipient: 'ajay@spakcomm.com', subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
+                    //await sendEmail({ recipient: 'ajay@spakcomm.com', subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
 
                     res.status(200).json({ message: 'Pdf sent successfully.' });
                 } catch (error: any) {
