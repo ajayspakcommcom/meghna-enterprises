@@ -93,3 +93,15 @@ export const generateContractNumber = (): string => {
     return `${randomNumber}/${getCurrentFinancialYear()}`;
 };
 
+
+export const setLocalStorage = (key: string, data: any) => {
+    localStorage.setItem(key, JSON.stringify(data));
+};
+
+export const getLocalStorage = <T>(key: string): T | null => {
+    const item = localStorage.getItem(key);
+    if (item) {
+        return JSON.parse(item) as T;
+    }
+    return null;
+};

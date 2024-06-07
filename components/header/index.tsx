@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import Image from "next/image";
 import { useRouter } from 'next/router';
+import { getLocalStorage } from '@/services/common';
 
 
 interface HeaderProps {
@@ -26,6 +27,7 @@ const Header: React.FC<HeaderProps> = ({ message }) => {
 
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+    const [logo, setLogo] = React.useState<string | null>('');
     const router = useRouter();
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -85,6 +87,18 @@ const Header: React.FC<HeaderProps> = ({ message }) => {
         router.push('/dashboard');
     };
 
+    React.useEffect(() => {
+
+        console.log(getLocalStorage('appLogo'));
+        if (getLocalStorage('appLogo')) {
+            setLogo(getLocalStorage('appLogo'))
+        }
+
+        return () => {
+            // Cleanup code goes here
+        };
+    }, [logo]);
+
 
     return (
         <header className='header'>
@@ -92,7 +106,9 @@ const Header: React.FC<HeaderProps> = ({ message }) => {
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
                         <Typography variant="h6" noWrap component="a" onClick={() => gotoHome()}>
-                            <Image src={require(`../../public/images/logo.svg`)} alt="Description of the image" className="responsive-img center" />
+
+                            {(logo && logo === 'logo') && <Image src={require(`../../public/images/${logo}.png`)} alt="Description of the image" className="responsive-img center" />}
+                            {(logo && logo !== 'logo') && <Image src={require(`../../public/images/${logo}.png`)} alt="Description of the image" className="responsive-img center" />}
                         </Typography>
 
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>

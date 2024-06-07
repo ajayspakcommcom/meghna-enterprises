@@ -8,6 +8,7 @@ import loginSchema from "@/validation/loginSchema";
 import { authUser } from "@/services/auth";
 import ErrorMessage from "../../components/error-message";
 import { useRouter } from 'next/router';
+import { setLocalStorage } from "@/services/common";
 
 
 
@@ -78,7 +79,7 @@ export default function Index() {
   const toggleLoginHandler = (str: string) => {
     setIsLoginForm(prevState => !prevState);
     setLogo(str);
-    console.log(str);
+    setLocalStorage('appLogo', str);
   };
 
 
