@@ -491,9 +491,9 @@ const Index: React.FC<compProps> = ({ detail }) => {
                         <Button type='button' variant="outlined" fullWidth onClick={() => previewHandler()}>Preview</Button>
                       </div>
                     </div>
-                    <div>
+                    {/* <div>
                       <Button type='button' variant="contained" color="success" fullWidth onClick={handleAddLabelField}>Add Heading</Button>
-                    </div>
+                    </div> */}
                   </div>
 
                   <Button type='submit' variant="contained" fullWidth>{loading ? "Submit..." : "Submit"}</Button>
