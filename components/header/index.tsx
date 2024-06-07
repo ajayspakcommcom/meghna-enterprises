@@ -107,7 +107,7 @@ const Header: React.FC<HeaderProps> = ({ message }) => {
                     <Toolbar disableGutters>
                         <Typography variant="h6" noWrap component="a" onClick={() => gotoHome()}>
 
-                            {(logo && logo === 'logo') && <Image src={require(`../../public/images/${logo}.png`)} alt="Description of the image" className="responsive-img center" />}
+                            {(logo && logo === 'logo') && <Image src={require(`../../public/images/${logo}.svg`)} alt="Description of the image" className="responsive-img center" />}
                             {(logo && logo !== 'logo') && <Image src={require(`../../public/images/${logo}.png`)} alt="Description of the image" className="responsive-img center" />}
                         </Typography>
 

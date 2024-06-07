@@ -7,7 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Image from "next/image";
 import { Typography } from "@mui/material";
-import { customDateFormatter, customFormatDate } from "@/services/common";
+import { customDateFormatter, customFormatDate, getLocalStorage } from "@/services/common";
 import { getBuyer } from "@/services/buyer";
 import { getSeller } from "@/services/seller";
 
@@ -24,10 +24,9 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
 
     const [buyerData, setBuyerData] = React.useState<any>();
     const [sellerData, setSellerData] = React.useState<any>();
+    const [logo, setLogo] = React.useState<string | null>('');
 
     useEffect(() => {
-
-        console.log('contentData', contentData);
 
         const fetchBuyerData = async () => {
             const resp: any = await getBuyer(contentData.selectedBuyer._id as string);
@@ -44,11 +43,15 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
                 fetchBuyerData();
                 fetchSellerData();
             }
-
         }
 
+        if (getLocalStorage('appLogo')) {
+            setLogo(getLocalStorage('appLogo'))
+        }
+
+
         setOpen(isOpen);
-    }, [isOpen]);
+    }, [isOpen, logo]);
 
 
     const handleClose = () => {
@@ -76,7 +79,8 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
 
                         <div className="preview-wrapper">
                             <div className="header">
-                                <Image src={require('../../public/images/logo.svg')} alt="Description of the image" className="responsive-img center" />
+                                {(logo && logo === 'logo') && <Image src={require(`../../public/images/${logo}.svg`)} alt="Description of the image" className="responsive-img center" />}
+                                {(logo && logo !== 'logo') && <Image src={require(`../../public/images/${logo}.png`)} alt="Description of the image" className="responsive-img center" />}
                             </div>
                             <div className="address">
                                 <Typography variant="body2">B-3 GIRIRAJ CO OP H S LTD, 6 MAMLATDAR WADI RAOD NO. 6 MALAD (WEST), MUMBAI - 400 064.</Typography>
