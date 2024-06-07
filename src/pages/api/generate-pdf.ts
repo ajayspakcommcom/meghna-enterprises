@@ -39,6 +39,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     doc.rect(doc.page.margins.left, 15, pageWidth, 70).fill('#000');
 
                     const imagePath = path.join(process.cwd(), 'public', 'images', 'seedsnfeeds.png');
+                    // const imagePath = path.join(process.cwd(), 'public', 'images', 'bombay.png');
+                    // const imagePath = path.join(process.cwd(), 'public', 'images', 'agro.png');
                     doc.image(imagePath, 135, 5, { width: 335, height: 85 });
 
 
