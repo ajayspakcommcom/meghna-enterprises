@@ -11,13 +11,16 @@ import { useRouter } from 'next/router';
 
 
 
+
 export default function Index() {
 
 
   const router = useRouter();
 
   const [authData, setAuthData] = useState({ username: "", password: "" });
+  const [logo, setLogo] = useState<string>('logo');
   const [loading, setLoading] = useState<boolean>(false);
+  const [isLoginForm, setIsLoginForm] = useState<boolean>(false);
   const [errors, setError] = useState<any>();
 
   const initialValues: User = {
@@ -72,53 +75,83 @@ export default function Index() {
     onReset: handleReset
   });
 
+  const toggleLoginHandler = (str: string) => {
+    setIsLoginForm(prevState => !prevState);
+    setLogo(str);
+    console.log(str);
+  };
+
 
   return (
     <>
 
       <div className='login-form-wrapper'>
-        <Card sx={{ maxWidth: 345 }}>
-          <CardContent>
-            <Image src={require('../../public/images/logo.png')} alt="Description of the image" className="responsive-img center" />
 
-            <form onSubmit={formik.handleSubmit} onReset={formik.handleReset} className='form'>
-
-              {errors && <div className="error"><ErrorMessage message={errors} /></div>}
-
-              <TextField
-                type="text"
-                label="Username"
-                name="username"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                value={formik.values.username}
-                onChange={formik.handleChange}
-                error={formik.touched.username && Boolean(formik.errors.username)}
-                helperText={formik.touched.username && formik.errors.username}
-              />
-
-
-              <TextField
-                type="password"
-                label="Password"
-                name="password"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                error={formik.touched.password && Boolean(formik.errors.password)}
-                helperText={formik.touched.password && formik.errors.password}
-              />
-              <Button type='submit' variant="contained">{loading ? "Login..." : "Login"}</Button>
-            </form>
+        {
+          !isLoginForm &&
+          <div className="three-companies">
+            <div>
+              <Card variant="outlined">
+                <Image src={require('../../public/images/logo.svg')} alt="Description of the image" className="responsive-img center" onClick={() => toggleLoginHandler('logo')} />
+              </Card>
+              <Card variant="outlined">
+                <Image src={require('../../public/images/agro.png')} alt="Description of the image" className="responsive-img center" onClick={() => toggleLoginHandler('agro')} />
+              </Card>
+            </div>
+            <div>
+              <Card variant="outlined">
+                <Image src={require('../../public/images/bombay.png')} alt="Description of the image" className="responsive-img center" onClick={() => toggleLoginHandler('bombay')} />
+              </Card>
+              <Card variant="outlined">
+                <Image src={require('../../public/images/meghna.png')} alt="Description of the image" className="responsive-img center" onClick={() => toggleLoginHandler('meghna')} />
+              </Card>
+            </div>
+          </div>
+        }
 
 
-          </CardContent>
-        </Card>
+        {isLoginForm &&
+          <Card sx={{ maxWidth: 345 }}>
+            <CardContent>
+              <Image src={require(`../../public/images/${logo}.png`)} alt="Description of the image" className="responsive-img center" />
+
+              <form onSubmit={formik.handleSubmit} onReset={formik.handleReset} className='form'>
+
+                {errors && <div className="error"><ErrorMessage message={errors} /></div>}
+
+                <TextField
+                  type="text"
+                  label="Username"
+                  name="username"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={formik.values.username}
+                  onChange={formik.handleChange}
+                  error={formik.touched.username && Boolean(formik.errors.username)}
+                  helperText={formik.touched.username && formik.errors.username}
+                />
+
+
+                <TextField
+                  type="password"
+                  label="Password"
+                  name="password"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  error={formik.touched.password && Boolean(formik.errors.password)}
+                  helperText={formik.touched.password && formik.errors.password}
+                />
+                <Button type='submit' variant="contained">{loading ? "Login..." : "Login"}</Button>
+              </form>
+            </CardContent>
+          </Card>
+        }
+
       </div>
-
 
     </>
   );

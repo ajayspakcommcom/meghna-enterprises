@@ -494,3 +494,23 @@ header .css-2uchni {
 .preview-pop-ok-btn {
     padding: 0 30px 15px 0;
 }
+
+.three-companies>div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.three-companies>div>div {
+    background-color: #000;
+    display: flex;
+    width: 350px;
+    min-height: 250px;
+    margin: 15px 15px;
+    cursor: pointer;
+}
+
+.three-companies>div>img[src$=".svg"],
+.three-companies>div>img[src$=".png"] {
+    width: 300px;
+}

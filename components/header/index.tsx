@@ -92,7 +92,7 @@ const Header: React.FC<HeaderProps> = ({ message }) => {
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
                         <Typography variant="h6" noWrap component="a" onClick={() => gotoHome()}>
-                            <Image src={require('../../public/images/logo.svg')} alt="Description of the image" className="responsive-img center" />
+                            <Image src={require(`../../public/images/logo.svg`)} alt="Description of the image" className="responsive-img center" />
                         </Typography>
 
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
