@@ -37,9 +37,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                     doc.rect(doc.page.margins.left, 15, pageWidth, 70).fill('#000');
 
-                    const imagePath = path.join(process.cwd(), 'public', 'images', 'seedsnfeeds.png');
+                    // const imagePath = path.join(process.cwd(), 'public', 'images', 'seedsnfeeds.png');
                     // const imagePath = path.join(process.cwd(), 'public', 'images', 'bombay.png');
                     // const imagePath = path.join(process.cwd(), 'public', 'images', 'agro.png');
+                    // const imagePath = path.join(process.cwd(), 'public', 'images', 'meghna.png');
+
+                    const imagePath = path.join(process.cwd(), 'public', 'images', `${req.body.logo === 'logo' ? 'seedsnfeeds' : req.body.logo}.png`);
                     doc.image(imagePath, 135, 5, { width: 335, height: 85 });
 
 
@@ -194,7 +197,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                         </div>
                                     `;
 
-                    console.log('Body : ', req.body);
+
 
                     await sendEmail({ recipient: 'ajay@spakcomm.com', subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
 

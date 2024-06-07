@@ -53,6 +53,7 @@ const Header: React.FC<HeaderProps> = ({ message }) => {
                 console.log('Clicked page:', page);
                 localStorage.removeItem("token");
                 localStorage.removeItem("userData");
+                localStorage.removeItem("appLogo");
                 router.push('/');
                 break;
             case 'master':

@@ -37,7 +37,7 @@ interface DetailData {
 const Index: React.FC<compProps> = ({ detail }) => {
 
   const router = useRouter();
-  const [detailData, setDetailData] = useState<any>(detail.data as DetailData);
+  const [detailData, setDetailData] = useState<any>({ ...detail.data as DetailData, logo: getLocalStorage('appLogo') });
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
   const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
   const [previewContent, setPreviewContent] = useState<any>();
@@ -82,10 +82,8 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
 
     setDetailData((prevDetailData: any) => ({
-      logo: 'logo', //logo
-      ...prevDetailData,
+      ...prevDetailData
     }));
-    console.log('detailData', detailData);
 
     setIsLoader(true);
     try {
