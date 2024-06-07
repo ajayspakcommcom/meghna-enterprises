@@ -89,7 +89,6 @@ const Header: React.FC<HeaderProps> = ({ message }) => {
 
     React.useEffect(() => {
 
-        console.log(getLocalStorage('appLogo'));
         if (getLocalStorage('appLogo')) {
             setLogo(getLocalStorage('appLogo'))
         }

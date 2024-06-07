@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { getContract, sendContractOnEmail } from "@/services/contract";
-import { customDateFormatter } from "@/services/common";
+import { customDateFormatter, getLocalStorage } from "@/services/common";
 
 const Header = dynamic(() => import('../../../components/header/index'));
 const SuccessConfirmationDialogue = dynamic(() => import('../../../components/success-confirmation/index'));
@@ -42,12 +42,17 @@ const Index: React.FC<compProps> = ({ detail }) => {
   const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
   const [previewContent, setPreviewContent] = useState<any>();
   const [isLoader, setIsLoader] = useState<boolean>(false);
+  const [logo, setLogo] = React.useState<string | null>('');
 
   useEffect(() => {
 
     const token = localStorage.getItem("token");
     if (!token) {
       router.push('/');
+    }
+
+    if (getLocalStorage('appLogo')) {
+      setLogo(getLocalStorage('appLogo'))
     }
 
   }, []);
@@ -58,8 +63,6 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
   const previewHandler = () => {
     setIsPreviewDialogOpen(true);
-
-    console.log('Preview Data', detailData);
 
     const objectData: any = {
       contract_no: detailData.contract_no,
@@ -77,9 +80,14 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
   const sendEmailHandler = async () => {
 
+
+    setDetailData((prevDetailData: any) => ({
+      logo: 'logo', //logo
+      ...prevDetailData,
+    }));
+    console.log('detailData', detailData);
+
     setIsLoader(true);
-
-
     try {
       const response = await sendContractOnEmail(detailData);
       console.log('response', response);
