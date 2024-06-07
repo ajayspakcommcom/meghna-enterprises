@@ -315,7 +315,8 @@ header .css-2uchni {
 }
 
 .contract-form-btn>div {
-    width: 50% !important;
+    width: 100% !important;
+    padding: 0 0 !important;
 }
 
 .detail-wrapper {
@@ -488,4 +489,8 @@ header .css-2uchni {
     background: transparent;
     color: #000;
     border: 1px solid #000;
+}
+
+.preview-pop-ok-btn {
+    padding: 0 15px 15px 0;
 }
