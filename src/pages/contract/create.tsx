@@ -461,7 +461,7 @@ export default function Index() {
         </div>
       </Container>
 
-      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Contract Created Successfully" />
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Contract Created Successfully" redirect="contract" />
       <ContractPreviewDialogue isOpen={isPreviewDialogOpen} heading="Contract Preview" contentData={previewContent} onClick={previewClickHandler} />
 
     </>

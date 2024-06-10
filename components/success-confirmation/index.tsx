@@ -5,17 +5,19 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { useRouter } from "next/router";
 
 interface SuccessConfirmationDialogProps {
     isOpen: boolean;
     heading: string;
     onClick?: (val: boolean) => void;
-
+    redirect?: string
 }
 
-const Index: React.FC<SuccessConfirmationDialogProps> = ({ isOpen, heading, onClick }) => {
+const Index: React.FC<SuccessConfirmationDialogProps> = ({ isOpen, heading, onClick, redirect }) => {
 
     const [open, setOpen] = React.useState(false);
+    const router = useRouter();
 
     useEffect(() => {
 
@@ -28,6 +30,7 @@ const Index: React.FC<SuccessConfirmationDialogProps> = ({ isOpen, heading, onCl
             onClick(false);
         }
         setOpen(false);
+        router.push(`/${redirect}`);
     };
 
     return (

@@ -255,7 +255,7 @@ export default function Index() {
         </div>
       </Container>
 
-      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Template Created Successfully" />
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Template Created Successfully" redirect="template" />
 
 
 

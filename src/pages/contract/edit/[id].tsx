@@ -516,7 +516,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
         </div>
       </Container>
 
-      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Contract Updated Successfully" />
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Contract Updated Successfully" redirect="contract" />
       <ContractPreviewDialogue isOpen={isPreviewDialogOpen} heading="Contract Preview" contentData={previewContent} onClick={previewClickHandler} />
 
     </>

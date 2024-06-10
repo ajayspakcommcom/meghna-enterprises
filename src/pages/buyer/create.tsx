@@ -259,7 +259,7 @@ export default function Index() {
         </div>
       </Container>
 
-      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Buyer Created Successfully" />
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Buyer Created Successfully" redirect="seller" />
 
 
     </>

@@ -288,7 +288,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
         </div>
       </Container>
 
-      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Seller Updated Successfully" />
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Seller Updated Successfully" redirect="seller" />
 
     </>
   );
