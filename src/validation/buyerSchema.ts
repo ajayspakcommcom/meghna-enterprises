@@ -16,6 +16,7 @@ const buyerSchema = yup.object().shape({
     gstin: yup.string().matches(gstinRegExp, 'GSTIN must be a valid 15-character alphanumeric code').required('GSTIN is required'),
     state_code: yup.string().required('State code is required'),
     email: yup.string().required('Email is required').email('Invalid email format'),
+    account_detail: yup.string().required('Account Detail is required')
 });
 
 export default buyerSchema;

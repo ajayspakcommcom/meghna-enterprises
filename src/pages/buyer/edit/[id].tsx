@@ -27,6 +27,7 @@ interface DetailData {
   gstin: string;
   state_code: string;
   email: string;
+  account_detail: string;
   updatedDate: Date | null;
   deletedDate: Date | null;
   isDeleted: boolean;
@@ -68,13 +69,12 @@ const Index: React.FC<compProps> = ({ detail }) => {
     pan: detailData.pan,
     gstin: detailData.gstin,
     state_code: detailData.state_code,
-    email: detailData.email
+    email: detailData.email,
+    account_detail: detailData.account_detail
   };
 
   const handleSubmit = async (buyer: Buyer) => {
 
-    console.log('Buyer', buyer);
-    console.log('detailData', detailData);
     const data = { ...buyer, id: detailData._id! };
 
     setLoading(true);
@@ -275,6 +275,21 @@ const Index: React.FC<compProps> = ({ detail }) => {
                     helperText={formik.touched.address && formik.errors.address}
                   />
 
+                  <TextField
+                    type="text"
+                    label="Account Detail"
+                    name="account_detail"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    multiline
+                    rows={3}
+                    value={formik.values.account_detail}
+                    onChange={formik.handleChange}
+                    error={formik.touched.account_detail && Boolean(formik.errors.account_detail)}
+                    helperText={formik.touched.account_detail && formik.errors.account_detail}
+                  />
+
 
                   <Button type='submit' variant="contained" fullWidth>{loading ? "Submit..." : "Submit"}</Button>
                 </form>
@@ -287,7 +302,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
         </div>
       </Container>
 
-      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Buyer Updated Successfully" redirect="seller" />
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Buyer Updated Successfully" redirect="buyer" />
 
     </>
   );

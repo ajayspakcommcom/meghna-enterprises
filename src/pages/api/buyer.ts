@@ -47,7 +47,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             pan: req.body.pan,
             gstin: req.body.gstin,
             state_code: req.body.state_code,
-            email: req.body.email
+            email: req.body.email,
+            account_detail: req.body.account_detail
           });
 
           res.status(201).json({ message: 'Buyer have been successfully created.' });
@@ -81,6 +82,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             gstin: req.body.gstin,
             state_code: req.body.state_code,
             email: req.body.email,
+            account_detail: req.body.account_detail,
             updatedDate: Date.now(),
           };
 

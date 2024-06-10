@@ -22,6 +22,7 @@ interface DetailData {
   gstin: string;
   state_code: string;
   email: string;
+  account_detail: string;
   updatedDate: Date | null;
   deletedDate: Date | null;
   isDeleted: boolean;
@@ -87,6 +88,9 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
           <div className="column"><Typography variant="body1" component="article"><b>State Code</b></Typography></div>
           <div className="column"><Typography variant="body1" component="article"><span>{detailData.state_code}</span></Typography></div>
+
+          <div className="column"><Typography variant="body1" component="article"><b>Account Detail</b></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><span>{detailData.account_detail}</span></Typography></div>
 
         </div>
 

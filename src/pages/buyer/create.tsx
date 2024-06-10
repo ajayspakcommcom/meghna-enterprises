@@ -45,7 +45,8 @@ export default function Index() {
     pan: '',
     gstin: '',
     state_code: '',
-    email: ''
+    email: '',
+    account_detail: ''
   };
 
   const handleSubmit = async (buyer: Buyer) => {
@@ -247,6 +248,21 @@ export default function Index() {
                     helperText={formik.touched.address && formik.errors.address}
                   />
 
+                  <TextField
+                    type="text"
+                    label="Account Detail"
+                    name="account_detail"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    multiline
+                    rows={3}
+                    value={formik.values.account_detail}
+                    onChange={formik.handleChange}
+                    error={formik.touched.account_detail && Boolean(formik.errors.account_detail)}
+                    helperText={formik.touched.account_detail && formik.errors.account_detail}
+                  />
+
 
                   <Button type='submit' variant="contained" fullWidth>{loading ? "Submit..." : "Submit"}</Button>
                 </form>
@@ -259,7 +275,7 @@ export default function Index() {
         </div>
       </Container>
 
-      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Buyer Created Successfully" redirect="seller" />
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Buyer Created Successfully" redirect="buyer" />
 
 
     </>
