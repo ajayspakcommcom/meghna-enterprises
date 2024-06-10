@@ -105,3 +105,11 @@ export const getLocalStorage = <T>(key: string): T | null => {
     }
     return null;
 };
+
+export function removeBackslash(input: string): string {
+    if (input && input.trim() !== '') {
+        return input.replace(/\//g, '');
+    } else {
+        return input;
+    }
+}

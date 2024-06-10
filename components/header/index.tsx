@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import Image from "next/image";
 import { useRouter } from 'next/router';
-import { getLocalStorage } from '@/services/common';
+import { getLocalStorage, removeBackslash } from '@/services/common';
 
 
 interface HeaderProps {
@@ -46,6 +46,7 @@ const Header: React.FC<HeaderProps> = ({ message }) => {
         //     router.push('/');
         // }
 
+        const currentUrl = router.asPath;
         const normalizedPage = page.toLowerCase().trim();
 
         switch (normalizedPage) {
@@ -66,7 +67,7 @@ const Header: React.FC<HeaderProps> = ({ message }) => {
                 break;
             case 'billing':
                 console.log('Navigating to Billing page');
-                router.push('/billing');  // Adjust the route as necessary
+                router.push(`/${removeBackslash(currentUrl)}`);  // Adjust the route as necessary
                 break;
             case 'home':
                 console.log('Navigating to Home page');

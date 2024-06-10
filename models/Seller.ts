@@ -10,4 +10,5 @@ export default interface Seller {
     gstin?: string | null;
     state_code?: string | null;
     email?: string | null;
+    account_detail?: string | null;
 }
