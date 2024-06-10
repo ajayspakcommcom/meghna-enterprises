@@ -44,7 +44,8 @@ export default function Index() {
     pan: '',
     gstin: '',
     state_code: '',
-    email: ''
+    email: '',
+    account_detail: ''
   };
 
   const handleSubmit = async (seller: Seller) => {
@@ -244,6 +245,22 @@ export default function Index() {
                     onChange={formik.handleChange}
                     error={formik.touched.address && Boolean(formik.errors.address)}
                     helperText={formik.touched.address && formik.errors.address}
+                  />
+
+
+                  <TextField
+                    type="text"
+                    label="Account Detail"
+                    name="account_detail"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    multiline
+                    rows={3}
+                    value={formik.values.account_detail}
+                    onChange={formik.handleChange}
+                    error={formik.touched.address && Boolean(formik.errors.account_detail)}
+                    helperText={formik.touched.account_detail && formik.errors.account_detail}
                   />
 
                   <Button type='submit' variant="contained" fullWidth>{loading ? "Submit..." : "Submit"}</Button>

@@ -20,6 +20,7 @@ export default function Index() {
     { field: 'pan', headerName: 'Pan', width: 200 },
     { field: 'gstin', headerName: 'GSTIN', width: 200 },
     { field: 'state_code', headerName: 'State Code', width: 200 },
+    { field: 'account_detail', headerName: 'Account Detail', width: 200 },
     {
       field: 'action',
       headerName: 'Action',

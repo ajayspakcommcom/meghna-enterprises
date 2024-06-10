@@ -56,6 +56,13 @@ const sellerSchema = new mongoose.Schema({
     }
 });
 
+sellerSchema.add({
+    account_detail: {
+        type: String,
+        required: false
+    }
+})
+
 export const Seller = mongoose.models.Seller || mongoose.model('Seller', sellerSchema);
 
 
