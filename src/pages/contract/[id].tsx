@@ -182,7 +182,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
       </Container>
 
       <ContractPreviewDialogue isOpen={isPreviewDialogOpen} heading="Contract Preview" contentData={previewContent} onClick={previewClickHandler} />
-      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Contract sent successfully" onClick={onSuccessConfirmationHandler} />
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Contract sent successfully" onClick={onSuccessConfirmationHandler} redirect="contract" />
       {isLoader && <CircularProgressLoader />}
 
 

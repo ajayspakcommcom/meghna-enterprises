@@ -59,7 +59,7 @@ export const getCurrentFinancialYear = (isDashed: boolean = false): string => {
 export const incrementContractNo = (inputString: string, currentFinancialYear: string): string => {
 
     if (!inputString) {
-        inputString = "S&F/L/0001/";
+        inputString = "S&F/L/0000/";
     }
 
     const regex = /\/(\d+)\//;

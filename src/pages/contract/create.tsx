@@ -118,7 +118,11 @@ export default function Index() {
     const fetchLastContract = async () => {
       try {
         const response: any = await getLastContract();
-        setContractNo(incrementContractNo(response.data.contract_no, getCurrentFinancialYear(true)))
+        if (response.data !== null) {
+          setContractNo(incrementContractNo(response.data.contract_no, getCurrentFinancialYear(true)))
+        } else {
+          setContractNo(incrementContractNo('', getCurrentFinancialYear(true)));
+        }
       } catch (error) {
         console.error('Error fetching seller data:', error);
       }
@@ -204,8 +208,6 @@ export default function Index() {
       assessment_year: getCurrentFinancialYear(),
       template_id: selectedTemplateId
     };
-
-    console.log('submittedData', submittedData);
 
     setLoading(true);
     try {
