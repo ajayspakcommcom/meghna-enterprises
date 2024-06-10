@@ -62,6 +62,13 @@ const contractSchema = new mongoose.Schema({
     }
 });
 
+contractSchema.add({
+    company: {
+        type: String,
+        required: false
+    }
+});
+
 
 export const Contract = mongoose.models.Contract || mongoose.model('Contract', contractSchema);
 

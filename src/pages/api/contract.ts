@@ -35,6 +35,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       case 'CREATE':
         try {
 
+          console.clear();
+          console.log(req.body);
+
           const contract = await Contract.create({
             contract_no: req.body.contract_no,
             buyer_id: req.body.buyer_id,
@@ -44,7 +47,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             quantity: req.body.quantity,
             price: req.body.price,
             assessment_year: req.body.assessment_year,
-            template_id: req.body.template_id
+            template_id: req.body.template_id,
+            company: req.body.company
           });
 
           res.status(201).json({ message: 'Contract have been successfully created.' });

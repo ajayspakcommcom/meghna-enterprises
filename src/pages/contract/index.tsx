@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { deleteContract, getAllContracts } from "@/services/contract";
-import { customFormatDate } from '../../services/common';
+import { customFormatDate, getCompanyName } from '../../services/common';
 
 const Header = dynamic(() => import('../../../components/header/index'));
 const ConfirmationDialogue = dynamic(() => import('../../../components/confirmation-pop/index'));
@@ -14,6 +14,10 @@ export default function Index() {
 
   const columns: GridColDef[] = [
     { field: 'contract_no', headerName: 'Contract No', width: 200 },
+    {
+      field: 'company', headerName: 'Company', width: 250,
+      valueGetter: (value, row) => `${getCompanyName(row.company)}`,
+    },
     {
       field: 'buyer_id',
       headerName: 'Buyer',

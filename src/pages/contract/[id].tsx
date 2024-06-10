@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { getContract, sendContractOnEmail } from "@/services/contract";
-import { customDateFormatter, getLocalStorage } from "@/services/common";
+import { customDateFormatter, getCompanyName, getLocalStorage } from "@/services/common";
 
 const Header = dynamic(() => import('../../../components/header/index'));
 const SuccessConfirmationDialogue = dynamic(() => import('../../../components/success-confirmation/index'));
@@ -128,6 +128,9 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
           <div className="column"><Typography variant="body1" component="article"><b>Contract No</b></Typography></div>
           <div className="column"><Typography variant="body1" component="article"><span>{detailData.contract_no}</span></Typography></div>
+
+          <div className="column"><Typography variant="body1" component="article"><b>Company</b></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><span>{getCompanyName(detailData.company)}</span></Typography></div>
 
           <div className="column"><Typography variant="body1" component="article"><b>Buyer</b></Typography></div>
 

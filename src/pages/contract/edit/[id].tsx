@@ -11,7 +11,7 @@ import { getSellerIdName } from "@/services/seller";
 import { getBuyerIdName } from "@/services/buyer";
 import { getTemplate, getTemplateIdName } from "@/services/template";
 import { createContract, getContract, getLastContract, updateContract } from "@/services/contract";
-import { getCurrentFinancialYear, incrementContractNo } from "@/services/common";
+import { getCurrentFinancialYear, getLocalStorage, incrementContractNo } from "@/services/common";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 
 const Header = dynamic(() => import('../../../../components/header/index'));
@@ -52,6 +52,7 @@ interface DetailData {
   isDeleted: boolean;
   createdDate: string;
   template_id: string;
+  company: string;
   __v: number;
 }
 
@@ -254,7 +255,8 @@ const Index: React.FC<compProps> = ({ detail }) => {
       label: transformedLabelFeildData,
       assessment_year: getCurrentFinancialYear(),
       template_id: selectedTemplate?._id,
-      id: detailedData._id
+      id: detailedData._id,
+      company: detailedData.company
     };
 
     console.log('submittedData', submittedData);

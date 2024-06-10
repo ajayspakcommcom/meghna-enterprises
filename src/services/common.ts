@@ -113,3 +113,18 @@ export function removeBackslash(input: string): string {
         return input;
     }
 }
+
+export function getCompanyName(input: string): string {
+    switch (input.toLowerCase()) {
+        case 'meghna':
+            return 'Meghna Enterprise';
+        case 'bombay':
+            return 'Meghna Agencies (Bombay)';
+        case 'logo':
+            return 'Seeds & Feeds India';
+        case 'agro':
+            return 'Meghna Agro Commodities';
+        default:
+            return 'Unknown value';
+    }
+}

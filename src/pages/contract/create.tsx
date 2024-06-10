@@ -11,7 +11,7 @@ import { getSellerIdName } from "@/services/seller";
 import { getBuyerIdName } from "@/services/buyer";
 import { getTemplate, getTemplateIdName } from "@/services/template";
 import { createContract, getLastContract } from "@/services/contract";
-import { getCurrentFinancialYear, incrementContractNo } from "@/services/common";
+import { getCurrentFinancialYear, getLocalStorage, incrementContractNo } from "@/services/common";
 
 
 
@@ -206,7 +206,8 @@ export default function Index() {
       template: transformedFeildData,
       label: transformedLabelFeildData,
       assessment_year: getCurrentFinancialYear(),
-      template_id: selectedTemplateId
+      template_id: selectedTemplateId,
+      company: getLocalStorage('appLogo') ? getLocalStorage('appLogo') : ''
     };
 
     setLoading(true);
