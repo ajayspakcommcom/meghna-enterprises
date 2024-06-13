@@ -32,8 +32,9 @@ export const customFormatDate = (date: Date): string => {
 };
 
 export const getCurrentFinancialYear = (isDashed: boolean = false): string => {
+
     const today = new Date();
-    const currentMonth = today.getMonth(); // 0-indexed (January is 0, December is 11)
+    const currentMonth = today.getMonth(); //0-indexed (January is 0, December is 11)
     const currentYear = today.getFullYear();
 
     // Financial year starts from April (month index 3)
@@ -58,8 +59,32 @@ export const getCurrentFinancialYear = (isDashed: boolean = false): string => {
 
 export const incrementContractNo = (inputString: string, currentFinancialYear: string): string => {
 
+    const appLogo = getLocalStorage('appLogo');
+
     if (!inputString) {
-        inputString = "S&F/L/0000/";
+
+        //inputString = "S&F/L/0000/";  //logo => Seeds&Feeds
+        //inputString = "MAC/L/0000/"; //bombay => Meghna Bombay Agency
+        //inputString = "MA/L/0000/"; //agro => Meghna Agro Commodities 
+        //inputString = "MEC/L/0000/"; //meghna => Meghna Enterprise
+
+        switch (appLogo) {
+            case 'logo':
+                inputString = "S&F/L/0000/";
+                break;
+            case 'agro':
+                inputString = "MA/L/0000/";
+                break;
+            case 'bombay':
+                inputString = "MAC/L/0000/";
+                break;
+            case 'meghna':
+                inputString = "MEC/L/0000/";
+                break;
+            default:
+                break;
+        }
+
     }
 
     const regex = /\/(\d+)\//;
@@ -76,7 +101,25 @@ export const incrementContractNo = (inputString: string, currentFinancialYear: s
         const lastIndex = resultString.lastIndexOf('/');
         const finalString = resultString.substring(0, lastIndex + 1) + currentFinancialYear;
 
-        return finalString;
+        const index = finalString.indexOf("/L");
+
+        if (index !== -1) {
+            switch (appLogo) {
+                case 'logo':
+                    return 'S&F' + finalString.slice(index);
+                case 'agro':
+                    return 'MA' + finalString.slice(index);
+                case 'bombay':
+                    return 'MAC' + finalString.slice(index);
+                case 'meghna':
+                    return 'MEC' + finalString.slice(index);
+                default:
+                    break;
+            }
+
+        }
+
+        return '';
     } else {
         throw new Error("Numeric portion not found in the input string.");
     }

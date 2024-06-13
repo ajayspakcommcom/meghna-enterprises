@@ -11,8 +11,6 @@ const SuccessConfirmationDialogue = dynamic(() => import('../../../components/su
 const ContractPreviewDialogue = dynamic(() => import('../../../components/contract-preview/index'));
 const CircularProgressLoader = dynamic(() => import('../../../components/loader/index'));
 
-
-
 interface compProps {
   detail: { data: {} };
 }
