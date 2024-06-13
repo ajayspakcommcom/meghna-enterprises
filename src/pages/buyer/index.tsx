@@ -8,8 +8,6 @@ import { getAllBuyers, deleteBuyer } from "@/services/buyer";
 const Header = dynamic(() => import('../../../components/header/index'));
 const ConfirmationDialogue = dynamic(() => import('../../../components/confirmation-pop/index'));
 
-
-
 export default function Index() {
 
   const columns: GridColDef[] = [
