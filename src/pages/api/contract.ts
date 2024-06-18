@@ -34,10 +34,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     switch (req.body.type) {
       case 'CREATE':
         try {
-
-          console.clear();
-          console.log(req.body);
-
           const contract = await Contract.create({
             contract_no: req.body.contract_no,
             buyer_id: req.body.buyer_id,
@@ -61,13 +57,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         break;
       case 'LIST':
         try {
-          //const dataList = await Contract.find({ isDeleted: false }).sort({ _id: -1 }).exec();
-          const dataList = await Contract.find({ isDeleted: false })
+
+          const dataList = await Contract.find({ isDeleted: false, company: req.body.company })
             .sort({ _id: -1 }).populate('buyer_id')
             .populate('seller_id').exec();
-
-          console.clear();
-          console.log('dataList', dataList);
 
           res.status(200).json({ data: dataList });
         } catch (error: any) {

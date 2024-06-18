@@ -28,6 +28,9 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
 
     useEffect(() => {
 
+        console.clear();
+        console.log('contentData', contentData);
+
         const fetchBuyerData = async () => {
             const resp: any = await getBuyer(contentData.selectedBuyer._id as string);
             setBuyerData(resp.data);
@@ -55,7 +58,6 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
 
 
     const handleClose = () => {
-        console.log('Ram');
         if (onClick) {
             onClick(false);
         }

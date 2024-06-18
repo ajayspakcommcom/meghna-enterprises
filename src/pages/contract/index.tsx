@@ -90,8 +90,6 @@ export default function Index() {
       try {
         const response = await getAllContracts();
         const formattedData = response.data.map((contract: any) => ({ ...contract, id: contract._id, _id: undefined }));
-        console.clear();
-        console.log('Data', formattedData);
         setRowData(formattedData);
       } catch (error) {
         console.error('Error fetching data:', error);

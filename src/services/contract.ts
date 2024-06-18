@@ -1,5 +1,6 @@
 // services/sellerService.ts
 import axios from 'axios';
+import { getLocalStorage } from './common';
 
 
 // Set the base URL for your API
@@ -67,7 +68,7 @@ export const deleteContract = async (id: string): Promise<Contract> => {
 
 export const getAllContracts = async (): Promise<ApiResponse<Contract>> => {
     try {
-        const response = await apiClient.post<ApiResponse<Contract>>('/contract', { type: 'LIST' });
+        const response = await apiClient.post<ApiResponse<Contract>>('/contract', { type: 'LIST', company: getLocalStorage('appLogo') });
         return response.data;
     } catch (err: unknown) {
         throw err;
