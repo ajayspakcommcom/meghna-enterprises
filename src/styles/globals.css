@@ -493,8 +493,16 @@ header .css-2uchni {
 
 .preview-pop-ok-btn {
     padding: 0 15px 15px 0;
-    width: 50%;
+    width: 100%;
     margin: auto;
+    text-align: right;
+}
+
+.preview-pop-ok-btn button {
+    width: 200px;
+    background: transparent;
+    color: #000;
+    border: 1px solid #000;
 }
 
 .three-companies>div {
