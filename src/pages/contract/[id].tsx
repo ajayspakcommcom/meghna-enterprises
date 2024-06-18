@@ -43,7 +43,6 @@ const Index: React.FC<compProps> = ({ detail }) => {
   const [logo, setLogo] = React.useState<string | null>('');
 
   useEffect(() => {
-
     const token = localStorage.getItem("token");
     if (!token) {
       router.push('/');
