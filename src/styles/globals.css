@@ -492,7 +492,9 @@ header .css-2uchni {
 }
 
 .preview-pop-ok-btn {
-    padding: 0 30px 15px 0;
+    padding: 0 15px 15px 0;
+    width: 50%;
+    margin: auto;
 }
 
 .three-companies>div {

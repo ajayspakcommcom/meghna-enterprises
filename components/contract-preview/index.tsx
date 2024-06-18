@@ -215,7 +215,7 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
 
                 <DialogActions>
                     <div className="preview-pop-ok-btn">
-                        <Button onClick={handleClose} variant="outlined">Ok</Button>
+                        <Button onClick={handleClose} variant="outlined" fullWidth>Ok</Button>
                     </div>
                 </DialogActions>
             </Dialog>
