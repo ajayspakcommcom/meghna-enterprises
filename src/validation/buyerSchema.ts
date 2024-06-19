@@ -8,15 +8,15 @@ const gstinRegExp = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
 
 const buyerSchema = yup.object().shape({
     name: yup.string().required('Name is required'),
-    address: yup.string().required('Address is required'),
-    telephone_no: yup.string().matches(phoneRegExp, 'Telephone is not valid').required('Telephone no is required'),
-    mobile_no: yup.string().matches(mobileRegExp, 'Mobile number is not valid').required('Mobile is required'),
-    fax: yup.string().required('Fax is required'),
+    address: yup.string(),
+    telephone_no: yup.string(),
+    mobile_no: yup.string(),
+    fax: yup.string(),
     pan: yup.string().matches(panRegExp, 'PAN must be in format: AAAAA9999A').required('Pan is required'),
-    gstin: yup.string().matches(gstinRegExp, 'GSTIN must be a valid 15-character alphanumeric code').required('GSTIN is required'),
-    state_code: yup.string().required('State code is required'),
+    gstin: yup.string(),
+    state_code: yup.string(),
     email: yup.string().required('Email is required').email('Invalid email format'),
-    account_detail: yup.string().required('Account Detail is required')
+    account_detail: yup.string()
 });
 
 export default buyerSchema;

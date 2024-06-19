@@ -55,7 +55,6 @@ export default function Index() {
 
     try {
       const response = await createBuyer(buyer);
-      console.log('response', response);
       setLoading(false);
       formik.resetForm();
       setIsSuccessDialogOpen(true);
