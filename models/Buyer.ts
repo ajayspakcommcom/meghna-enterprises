@@ -9,6 +9,7 @@ export default interface Buyer {
     pan?: string | null;
     gstin?: string | null;
     state_code?: string | null;
-    email?: string | null;
+    email?: string;
+    emails: string[];
     account_detail?: string | null;
 }

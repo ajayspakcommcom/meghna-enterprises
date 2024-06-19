@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, Button, Typography, TextField, Container } from '@mui/material';
+import { Card, CardContent, Button, Typography, TextField, Container, Autocomplete } from '@mui/material';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Buyer from "../../../models/Buyer";
@@ -46,12 +46,19 @@ export default function Index() {
     gstin: '',
     state_code: '',
     email: '',
-    account_detail: ''
+    emails: [],
+    account_detail: '',
   };
 
   const handleSubmit = async (buyer: Buyer) => {
 
     setLoading(true);
+
+    if (Array.isArray(buyer.emails) && buyer.emails.length > 0) {
+      buyer.email = buyer.emails.join(', ');
+    } else {
+      buyer.email = '-----';
+    }
 
     try {
       const response = await createBuyer(buyer);
@@ -118,25 +125,7 @@ export default function Index() {
                         helperText={formik.touched.name && formik.errors.name}
                       />
                     </div>
-                    <div>
 
-                      <TextField
-                        type="text"
-                        label="Email"
-                        name="email"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.email}
-                        onChange={formik.handleChange}
-                        error={formik.touched.email && Boolean(formik.errors.email)}
-                        helperText={formik.touched.email && formik.errors.email}
-                      />
-                    </div>
-                  </div>
-
-
-                  <div className="buyer-seller-forms-wrapper">
                     <div>
                       <TextField
                         type="text"
@@ -151,6 +140,11 @@ export default function Index() {
                         helperText={formik.touched.telephone_no && formik.errors.telephone_no}
                       />
                     </div>
+                  </div>
+
+
+                  <div className="buyer-seller-forms-wrapper">
+
                     <div>
                       <TextField
                         type="text"
@@ -165,10 +159,7 @@ export default function Index() {
                         helperText={formik.touched.mobile_no && formik.errors.mobile_no}
                       />
                     </div>
-                  </div>
 
-
-                  <div className="buyer-seller-forms-wrapper">
                     <div>
                       <TextField
                         type="text"
@@ -183,6 +174,12 @@ export default function Index() {
                         helperText={formik.touched.fax && formik.errors.fax}
                       />
                     </div>
+
+                  </div>
+
+
+                  <div className="buyer-seller-forms-wrapper">
+
                     <div>
                       <TextField
                         type="text"
@@ -197,11 +194,7 @@ export default function Index() {
                         helperText={formik.touched.pan && formik.errors.pan}
                       />
                     </div>
-                  </div>
 
-
-
-                  <div className="buyer-seller-forms-wrapper">
                     <div>
                       <TextField
                         type="text"
@@ -216,21 +209,66 @@ export default function Index() {
                         helperText={formik.touched.gstin && formik.errors.gstin}
                       />
                     </div>
-                    <div>
-                      <TextField
+
+                  </div>
+
+
+
+                  <TextField
+                    type="text"
+                    label="State Code"
+                    name="state_code"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    value={formik.values.state_code}
+                    onChange={formik.handleChange}
+                    error={formik.touched.state_code && Boolean(formik.errors.state_code)}
+                    helperText={formik.touched.state_code && formik.errors.state_code}
+                  />
+
+
+
+                  {/* <TextField
                         type="text"
-                        label="State Code"
-                        name="state_code"
+                        label="Email"
+                        name="email"
                         variant="outlined"
                         fullWidth
                         margin="normal"
-                        value={formik.values.state_code}
+                        value={formik.values.email}
                         onChange={formik.handleChange}
-                        error={formik.touched.state_code && Boolean(formik.errors.state_code)}
-                        helperText={formik.touched.state_code && formik.errors.state_code}
-                      />
-                    </div>
+                        error={formik.touched.email && Boolean(formik.errors.email)}
+                        helperText={formik.touched.email && formik.errors.email}
+                      /> */}
+
+                  <div className="autocomplete-email">
+                    <Autocomplete
+                      multiple
+                      id="emails"
+                      options={[]} // options array is empty as we are allowing free-form input
+                      freeSolo
+                      fullWidth
+                      value={formik.values.emails}
+                      onChange={(event, newValue) => {
+                        formik.setFieldValue('emails', newValue);
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          name="emails"
+                          label="Enter multiple emails"
+                          variant="outlined"
+                          fullWidth
+                          error={formik.touched.emails && Boolean(formik.errors.emails)}
+                          helperText={formik.touched.emails && formik.errors.emails}
+                        />
+                      )}
+                    />
                   </div>
+
+
+
 
                   <TextField
                     type="text"

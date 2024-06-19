@@ -524,3 +524,7 @@ header .css-2uchni {
 .three-companies>div>img[src$=".png"] {
     width: 300px;
 }
+
+.autocomplete-email {
+    padding: 15px 0 5px 0;
+}
