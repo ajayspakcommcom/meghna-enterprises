@@ -38,18 +38,40 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     doc.rect(doc.page.margins.left, 15, pageWidth, 70).fill('#000');
 
                     // const imagePath = path.join(process.cwd(), 'public', 'images', 'seedsnfeeds.png');
-                    // const imagePath = path.join(process.cwd(), 'public', 'images', 'bombay.png');
-                    // const imagePath = path.join(process.cwd(), 'public', 'images', 'agro.png');
-                    // const imagePath = path.join(process.cwd(), 'public', 'images', 'meghna.png');
+
+                    console.clear();
+                    console.log('req.body.logo', req.body.logo);
 
                     const imagePath = path.join(process.cwd(), 'public', 'images', `${req.body.logo === 'logo' ? 'seedsnfeeds' : req.body.logo}.png`);
                     doc.image(imagePath, 135, 5, { width: 335, height: 85 });
 
+                    if (req.body.logo === 'logo') {
+                        doc.fontSize(8).fillColor('#000').text('B-3 GIRIRAJ CO OP H S LTD, 6 MAMLATDAR WADI RAOD NO. 6 MALAD (WEST), MUMBAI - 400 064.', 120, 100);
+                        doc.fontSize(8).fillColor('#000').text('PHONE NO: 022 2880 2452 | MOBILE NO: +91 99200 10200 / 99200 90200', 170, 115);
+                        doc.fontSize(8).fillColor('#000').text('Email: | Pan No. AFRPC6408E', 250, 130);
+                        doc.fontSize(8).fillColor('#000').text('GSTIN: 27AFRPC6408E1ZI', 252, 145);
+                    }
 
-                    doc.fontSize(8).fillColor('#000').text('B-3 GIRIRAJ CO OP H S LTD, 6 MAMLATDAR WADI RAOD NO. 6 MALAD (WEST), MUMBAI - 400 064.', 120, 100);
-                    doc.fontSize(8).fillColor('#000').text('PHONE NO: 022 2880 2452 | MOBILE NO: +91 99200 10200 / 99200 90200', 170, 115);
-                    doc.fontSize(8).fillColor('#000').text('Email: | Pan No. AFRPC6408E', 250, 130);
-                    doc.fontSize(8).fillColor('#000').text('GSTIN: 27AFRPC6408E1ZI', 252, 145);
+                    if (req.body.logo === 'agro') {
+                        doc.fontSize(8).fillColor('#000').text('504, SYNERGY, KACH PADA RD NO. 2, NEAR MALAD IND. ESTATE, RAMCHANDRA LANE EXTENTION, MALAD (W), MUMBAI - 400 064.', 55, 100);
+                        doc.fontSize(8).fillColor('#000').text('Tel. : 022 2880 2452', 250, 115);
+                        doc.fontSize(8).fillColor('#000').text('Email : meghnaagrocommodities@gmail.com | PAN No. : ABRPC6999E', 165, 130);
+                    }
+
+                    if (req.body.logo === 'bombay') {
+                        doc.fontSize(8).fillColor('#000').text('504, SYNERGY, KACH PADA RD NO. 2, NEAR MALAD IND. ESTATE, RAMCHANDRA LANE EXTENTION, MALAD (W), MUMBAI - 400 064.', 55, 100);
+                        doc.fontSize(8).fillColor('#000').text('Tel. : 022 2880 2683 / 2880 3920 | Cell : +91 98200 10200 / 93200 10200', 165, 115);
+                        doc.fontSize(8).fillColor('#000').text('Email : meghnaagencies@gmail.com | PAN No. : AAAPC7200L', 185, 130);
+                        doc.fontSize(8).fillColor('#000').text('GSTIN : 27AAAPC7200L1Z2', 252, 145);
+                    }
+
+                    if (req.body.logo === 'meghna') {
+                        doc.fontSize(8).fillColor('#000').text('504, SYNERGY, KACH PADA RD NO. 2, NEAR MALAD IND. ESTATE, RAMCHANDRA LANE EXTENTION, MALAD (W), MUMBAI - 400 064.', 55, 100);
+                        doc.fontSize(8).fillColor('#000').text('Tel. : 022 2880 2452-Fax : 022 2881 5002', 250, 115);
+                        doc.fontSize(8).fillColor('#000').text('Email : meghnaagencies@gmail.com | PAN No. : AFRPC6408E', 195, 130);
+                        doc.fontSize(8).fillColor('#000').text('GSTIN : 27AFRPC6408E1ZI', 252, 145);
+                    }
+
 
                     doc.rect(doc.page.margins.left, 160, pageWidth, 30).fill('#d9d9d9');
                     doc.fontSize(11).fillColor('#000').text('CONTRACT NO : ', 25, 170);
@@ -166,10 +188,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }
 
                     const brokerageTextHeight = doc.heightOfString(req.body.template['BROKERAGE']);
-
-                    console.clear();
-                    console.log('brokerageTextHeight', brokerageTextHeight);
-                    console.log('pageWidth', pageWidth);
 
                     if (brokerageTextHeight) {
                         doc.rect(doc.page.margins.left, 640 + brokerageTextHeight, pageWidth, 20).stroke('#d9d9d9');
