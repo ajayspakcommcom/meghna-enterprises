@@ -167,10 +167,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                     const brokerageTextHeight = doc.heightOfString(req.body.template['BROKERAGE']);
 
+                    console.clear();
+                    console.log('brokerageTextHeight', brokerageTextHeight);
+                    console.log('pageWidth', pageWidth);
+
                     if (brokerageTextHeight) {
                         doc.rect(doc.page.margins.left, 640 + brokerageTextHeight, pageWidth, 20).stroke('#d9d9d9');
                     } else {
-                        doc.rect(doc.page.margins.left, 640 + brokerageTextHeight, pageWidth, 20).stroke('#d9d9d9');
+                        doc.rect(doc.page.margins.left, 650 + brokerageTextHeight, pageWidth, 20).stroke('#d9d9d9');
                     }
 
 
@@ -197,9 +201,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                         </div>
                                     `;
 
-                    await sendEmail({ recipient: 'ajay@spakcomm.com', subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
-                    await sendEmail({ recipient: `${req.body.buyer_id.email}`, subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
-                    await sendEmail({ recipient: `${req.body.seller_id.email}`, subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
+                    // await sendEmail({ recipient: 'ajay@spakcomm.com', subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
+                    // await sendEmail({ recipient: `${req.body.buyer_id.email}`, subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
+                    // await sendEmail({ recipient: `${req.body.seller_id.email}`, subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
 
                     res.status(200).json({ message: 'Pdf sent successfully.' });
                 } catch (error: any) {
