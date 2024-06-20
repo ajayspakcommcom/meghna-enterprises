@@ -51,7 +51,6 @@ const Index: React.FC<compProps> = ({ detail }) => {
     if (getLocalStorage('appLogo')) {
       setLogo(getLocalStorage('appLogo'))
     }
-
   }, []);
 
   const goToPage = (url: string) => {
@@ -77,7 +76,6 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
   const sendEmailHandler = async () => {
 
-
     setDetailData((prevDetailData: any) => ({
       ...prevDetailData
     }));
@@ -91,6 +89,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
     } catch (error: any) {
       console.log(error);
     }
+
   };
 
 
@@ -102,6 +101,12 @@ const Index: React.FC<compProps> = ({ detail }) => {
   const previewClickHandler = (val: boolean) => {
     setIsPreviewDialogOpen(val)
   };
+
+  // const getPdfLink = (fileName: string) => {
+  //   return `/pdf/${fileName}`;
+  // };
+
+
 
 
   return (
@@ -116,6 +121,9 @@ const Index: React.FC<compProps> = ({ detail }) => {
           <div className="btn-wrapper detail-btn-wrapper">
             <Button variant="outlined" onClick={() => previewHandler()}>Preview</Button>
             <Button variant="outlined" onClick={() => sendEmailHandler()}>Send Mail</Button>
+
+            <a href={'/pdf/contract.pdf'} target="_blank" rel="noopener noreferrer" download={true}> Open PDF </a>
+
             <Button variant="outlined" onClick={() => goToPage('/contract')}>Back</Button>
           </div>
         </div>
