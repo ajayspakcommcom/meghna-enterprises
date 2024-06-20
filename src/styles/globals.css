@@ -242,6 +242,13 @@ header .css-2uchni {
 .template-form-wrapper form button {
     height: 56px;
     margin-top: 10px;
+    background-color: #000;
+}
+
+.buyer-seller-form-wrapper form button:hover,
+.template-form-wrapper form button:hover {
+    background-color: #000;
+    opacity: 0.8;
 }
 
 .buyer-seller-form-wrapper form .template-form-wrapper {
@@ -326,6 +333,8 @@ header .css-2uchni {
     border-radius: 4px;
     display: grid;
     grid-template-columns: 25% 75%;
+    background-color: #fff;
+    box-shadow: 1px 1px 10px 1px rgba(128, 128, 128, 0.5);
 }
 
 .detail-wrapper .column {
@@ -531,4 +540,17 @@ header .css-2uchni {
 
 .multiline {
     padding: 0 0 15px 0;
+}
+
+.list-wrapper {
+    background: #fff;
+}
+
+/* .list-wrapper .css-n3fyjk-MuiDataGrid-root .MuiDataGrid-container--top [role=row] {
+    background-color: #000 !important;
+    color: #fff;
+} */
+
+.css-1q39md6-MuiButtonBase-root-MuiButton-root:hover {
+    text-decoration: underline;
 }
