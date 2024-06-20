@@ -84,12 +84,44 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
                                 {(logo && logo === 'logo') && <Image src={require(`../../public/images/${logo}.svg`)} alt="Description of the image" className="responsive-img center" />}
                                 {(logo && logo !== 'logo') && <Image src={require(`../../public/images/${logo}.png`)} alt="Description of the image" className="responsive-img center" />}
                             </div>
-                            <div className="address">
-                                <Typography variant="body2">B-3 GIRIRAJ CO OP H S LTD, 6 MAMLATDAR WADI RAOD NO. 6 MALAD (WEST), MUMBAI - 400 064.</Typography>
-                                <Typography variant="body2">PHONE NO: 022 2880 2452 | MOBILE NO: +91 99200 10200 / 99200 90200</Typography>
-                                <Typography variant="body2">Email: | Pan No. AFRPC6408E </Typography>
-                                <Typography variant="body2"><b>GSTIN: 27AFRPC6408E1ZI</b></Typography>
-                            </div>
+
+
+                            {logo === 'logo' &&
+                                <div className="address">
+                                    <Typography variant="body2">B-3 GIRIRAJ CO OP H S LTD, 6 MAMLATDAR WADI RAOD NO. 6 MALAD (WEST), MUMBAI - 400 064.</Typography>
+                                    <Typography variant="body2">PHONE NO: 022 2880 2452 | MOBILE NO: +91 99200 10200 / 99200 90200</Typography>
+                                    <Typography variant="body2">Email: | Pan No. AFRPC6408E </Typography>
+                                    <Typography variant="body2"><b>GSTIN: 27AFRPC6408E1ZI</b></Typography>
+                                </div>
+                            }
+
+
+                            {logo === 'agro' &&
+                                <div className="address">
+                                    <Typography variant="body2">504, SYNERGY, KACH PADA RD NO. 2, NEAR MALAD IND. ESTATE, RAMCHANDRA LANE EXTENTION, MALAD (W), MUMBAI - 400 064.</Typography>
+                                    <Typography variant="body2">Tel. : 022 2880 2452</Typography>
+                                    <Typography variant="body2">Email : meghnaagrocommodities@gmail.com | PAN No. : ABRPC6999E</Typography>
+                                </div>
+                            }
+
+
+                            {logo === 'bombay' &&
+                                <div className="address">
+                                    <Typography variant="body2">504, SYNERGY, KACH PADA RD NO. 2, NEAR MALAD IND. ESTATE, RAMCHANDRA LANE EXTENTION, MALAD (W), MUMBAI - 400 064.</Typography>
+                                    <Typography variant="body2">Tel. : 022 2880 2683 / 2880 3920 | Cell : +91 98200 10200 / 93200 10200</Typography>
+                                    <Typography variant="body2">Email : meghnaagencies@gmail.com | PAN No. : AAAPC7200L</Typography>
+                                    <Typography variant="body2">GSTIN : 27AAAPC7200L1Z2</Typography>
+                                </div>
+                            }
+
+                            {logo === 'meghna' &&
+                                <div className="address">
+                                    <Typography variant="body2">504, SYNERGY, KACH PADA RD NO. 2, NEAR MALAD IND. ESTATE, RAMCHANDRA LANE EXTENTION, MALAD (W), MUMBAI - 400 064.</Typography>
+                                    <Typography variant="body2">Tel. : 022 2880 2452-Fax : 022 2881 5002</Typography>
+                                    <Typography variant="body2">Email : meghnaagencies@gmail.com | PAN No. : AFRPC6408E</Typography>
+                                    <Typography variant="body2">GSTIN : 27AFRPC6408E1ZI</Typography>
+                                </div>
+                            }
 
                             <div className="contract-box">
                                 <div>
