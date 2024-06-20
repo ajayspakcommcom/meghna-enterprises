@@ -150,7 +150,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
           <div className="btn-wrapper detail-btn-wrapper">
             <Button variant="outlined" onClick={() => previewHandler()}>Preview</Button>
             <Button variant="outlined" onClick={() => sendEmailHandler()}>Send Mail</Button>
-            <Button variant="outlined" onClick={() => generatePdfHandler()}>Print Pdf</Button>
+            <Button variant="outlined" onClick={() => generatePdfHandler()}>Download Pdf</Button>
             <Button variant="outlined" onClick={() => goToPage('/contract')}>Back</Button>
           </div>
         </div>
