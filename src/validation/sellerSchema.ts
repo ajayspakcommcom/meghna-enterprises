@@ -15,8 +15,11 @@ const sellerSchema = yup.object().shape({
     pan: yup.string().matches(panRegExp, 'PAN must be in format: AAAAA9999A').required('Pan is required'),
     gstin: yup.string(),
     state_code: yup.string(),
-    email: yup.string().required('Email is required').email('Invalid email format'),
+    email: yup.string(),
+    emails: yup.array().required('Emails are required').of(yup.string().email('Invalid email format').required('Email is required')),
     account_detail: yup.string(),
 });
 
 export default sellerSchema;
+
+
