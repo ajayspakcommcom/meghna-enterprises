@@ -219,9 +219,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                         </div>
                                     `;
 
+
                     await sendEmail({ recipient: 'ajay@spakcomm.com', subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
-                    await sendEmail({ recipient: `${req.body.buyer_id.email}`, subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
-                    await sendEmail({ recipient: `${req.body.seller_id.email}`, subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
+
+                    const sellerEmails = req.body.seller_id.email.split(',').map((email: any) => email.trim());
+                    const buyerEmails = req.body.buyer_id.email.split(',').map((email: any) => email.trim());
+
+                    if (Array.isArray(sellerEmails) && sellerEmails.length > 0) {
+                        for (const email of sellerEmails) {
+                            await sendEmail({ recipient: `${email}`, subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
+                        }
+                    }
+
+                    if (Array.isArray(buyerEmails) && buyerEmails.length > 0) {
+                        for (const email of buyerEmails) {
+                            await sendEmail({ recipient: `${email}`, subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
+                        }
+                    }
 
                     res.status(200).json({ message: 'Pdf sent successfully.' });
                 } catch (error: any) {
