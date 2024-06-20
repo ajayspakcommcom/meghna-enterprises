@@ -142,11 +142,26 @@ export const setLocalStorage = (key: string, data: any) => {
 };
 
 export const getLocalStorage = <T>(key: string): T | null => {
+
+    if (typeof window === 'undefined') {
+        return null;
+    }
     const item = localStorage.getItem(key);
     if (item) {
-        return JSON.parse(item) as T;
+        try {
+            return JSON.parse(item) as T;
+        } catch (error) {
+            console.error('Error parsing JSON from localStorage:', error);
+            return null;
+        }
     }
     return null;
+
+    // const item = localStorage.getItem(key);
+    // if (item) {
+    //     return JSON.parse(item) as T;
+    // }
+    // return null;
 };
 
 export function removeBackslash(input: string): string {
