@@ -87,3 +87,13 @@ export const sendContractOnEmail = async (contractData: any): Promise<any> => {
         throw err;
     }
 };
+
+export const generatePdf = async (contractData: any): Promise<any> => {
+
+    try {
+        const response = await apiClient.post<Contract>('/generate-pdf-only', { ...contractData, type: 'EMAIL-SEND' });
+        return response.data;
+    } catch (err: unknown) {
+        throw err;
+    }
+};

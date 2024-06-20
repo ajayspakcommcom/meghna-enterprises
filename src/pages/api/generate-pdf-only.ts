@@ -204,39 +204,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                     doc.end();
 
-                    const htmlContent = `<div>
-                                            <b>Dear ${'Dear Sir / Madam,'}</b>
-                                            <div style="margin-bottom:30px"></div>
-
-                                            <span>Best regards,</span>
-                                            <div></div>
-                                            <span>Team Seeds & Feeds India.</span>
-                                            <p style="margin-top:1px">
-                                               B-3 GIRIRAJ CO OP H S LTD, 6 MAMLATDAR WADI RAOD NO. 6, MALAD (WEST), MUMBAI - 400 064.
-                                                <br />
-                                               PHONE NO: 022 2880 2452 | MOBILE NO: +91 99200 10200 / 99200 90200
-                                            </p>
-                                        </div>
-                                    `;
-
-
-                    await sendEmail({ recipient: 'ajay@spakcomm.com', subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
-
-                    const sellerEmails = req.body.seller_id.email.split(',').map((email: any) => email.trim());
-                    const buyerEmails = req.body.buyer_id.email.split(',').map((email: any) => email.trim());
-
-                    if (Array.isArray(sellerEmails) && sellerEmails.length > 0) {
-                        for (const email of sellerEmails) {
-                            await sendEmail({ recipient: `${email}`, subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
-                        }
-                    }
-
-                    if (Array.isArray(buyerEmails) && buyerEmails.length > 0) {
-                        for (const email of buyerEmails) {
-                            await sendEmail({ recipient: `${email}`, subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
-                        }
-                    }
-
                     res.status(200).json({ message: 'Pdf sent successfully.' });
                 } catch (error: any) {
                     console.clear();

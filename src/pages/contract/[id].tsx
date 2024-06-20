@@ -3,7 +3,7 @@ import { Button, Typography, Container, CircularProgress } from '@mui/material';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { getContract, sendContractOnEmail } from "@/services/contract";
+import { generatePdf, getContract, sendContractOnEmail } from "@/services/contract";
 import { customDateFormatter, getCompanyName, getLocalStorage } from "@/services/common";
 
 const Header = dynamic(() => import('../../../components/header/index'));
@@ -106,8 +106,37 @@ const Index: React.FC<compProps> = ({ detail }) => {
   //   return `/pdf/${fileName}`;
   // };
 
+  const generatePdfHandler = async () => {
+    console.clear();
 
+    try {
+      const response = await generatePdf(detailData);
+      console.log('response', response);
 
+      if (response.message) {
+        const blob = new Blob([response], { type: 'application/pdf' });
+        const blobUrl = URL.createObjectURL(blob);
+
+        const tempLink = document.createElement('a');
+        tempLink.href = '/pdf/contract.pdf';
+        tempLink.target = '_blank';
+        tempLink.rel = 'noopener noreferrer';
+        tempLink.download = '/pdf/contract.pdf';
+
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        document.body.removeChild(tempLink);
+
+        setTimeout(() => {
+          URL.revokeObjectURL(blobUrl);
+        }, 1000);
+      }
+
+    } catch (error: any) {
+      console.log(error);
+    }
+
+  };
 
   return (
     <>
@@ -121,9 +150,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
           <div className="btn-wrapper detail-btn-wrapper">
             <Button variant="outlined" onClick={() => previewHandler()}>Preview</Button>
             <Button variant="outlined" onClick={() => sendEmailHandler()}>Send Mail</Button>
-
-            <a href={'/pdf/contract.pdf'} target="_blank" rel="noopener noreferrer" download={true}> Open PDF </a>
-
+            <Button variant="outlined" onClick={() => generatePdfHandler()}>Print Pdf</Button>
             <Button variant="outlined" onClick={() => goToPage('/contract')}>Back</Button>
           </div>
         </div>
