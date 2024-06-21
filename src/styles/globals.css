@@ -241,15 +241,22 @@ header .css-2uchni {
 .buyer-seller-form-wrapper form button,
 .template-form-wrapper form button {
     height: 56px;
-    margin-top: 10px;
+}
+
+.buyer-seller-form-wrapper form button[type="submit"],
+.template-form-wrapper form button[type="submit"] {
+    height: 56px;
     background-color: #000;
 }
 
-.buyer-seller-form-wrapper form button:hover,
-.template-form-wrapper form button:hover {
+.buyer-seller-form-wrapper form button[type="submit"]:hover,
+.template-form-wrapper form button[type="submit"]:hover {
     background-color: #000;
-    opacity: 0.8;
+    opacity: 0.5;
 }
+
+
+
 
 .buyer-seller-form-wrapper form .template-form-wrapper {
     align-self: center;
