@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { deleteBilling, getAllBilling } from "@/services/billing";
 import { customFormatDate } from "@/services/common";
+import { getAllContracts } from "@/services/contract";
 
 const Header = dynamic(() => import('../../../components/header/index'));
 const ConfirmationDialogue = dynamic(() => import('../../../components/confirmation-pop/index'));
@@ -57,14 +58,6 @@ export default function Index() {
     setItemId(id);
   };
 
-
-  useEffect(() => {
-
-    const token = localStorage.getItem("token");
-    if (!token) {
-      router.push('/');
-    }
-
     const fetchData = async () => {
       try {
         const response = await getAllBilling();
@@ -76,6 +69,12 @@ export default function Index() {
       }
     };
 
+  useEffect(() => {
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push('/');
+    }
     fetchData();
 
   }, []);
@@ -111,7 +110,7 @@ export default function Index() {
             <Typography variant="h5" component="article">Billing List</Typography>
           </div>
           <div className="btn-wrapper">
-            <Button variant="contained" color="success" onClick={() => goToPage('/seller/create')}>Create</Button>
+            <Button variant="contained" color="success" onClick={() => goToPage('/billing/create')}>Create</Button>
             <Button variant="outlined" onClick={() => goToPage('/master')}>Back</Button>
           </div>
         </div>

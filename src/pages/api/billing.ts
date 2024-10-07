@@ -5,6 +5,7 @@ import { Error as MongooseError } from 'mongoose';
 import runMiddleware from './libs/runMiddleware';
 import Cors from 'cors';
 import { Billing } from './models/Billing';
+import { Contract } from './models/Contract';
 
 interface ApiResponse {
   message?: string;

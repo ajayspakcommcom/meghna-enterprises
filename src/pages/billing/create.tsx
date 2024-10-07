@@ -2,24 +2,31 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, Button, Typography, TextField, Container, Autocomplete } from '@mui/material';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
-import Seller from "../../../models/Seller";
+import Billing from "../../../models/Billing";
 import { useFormik } from "formik";
 import ErrorMessage from "../../../components/error-message";
-import sellerSchema from "@/validation/sellerSchema";
-import { createSeller } from "@/services/seller";
+import { createBilling, getContractIdName } from "@/services/billing";
+import billingSchema from "@/validation/billingSchema";
+import { getContractBuyerSellerDetail } from "@/services/contract";
+
 
 const Header = dynamic(() => import('../../../components/header/index'));
 const SuccessConfirmationDialogue = dynamic(() => import('../../../components/success-confirmation/index'));
 
+interface selectedAutoField {
+  _id: string;
+  label: string;  
+}
 
 export default function Index() {
 
   const router = useRouter();
-
-  const [authData, setAuthData] = useState({ username: "", password: "" });
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setError] = useState<any>();
-  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
+  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);  
+
+   const [contractList, setContractList] = useState<selectedAutoField[]>([]);
+  const [selectedContract, setSelectedContract] = useState<selectedAutoField | null>(null);
 
 
   useEffect(() => {
@@ -35,7 +42,7 @@ export default function Index() {
     router.push(`${url}`);
   };
 
-  const initialValues: Seller = {
+  const initialValues: Billing = {
     name: '',
     address: '',
     telephone_no: '',
@@ -49,18 +56,18 @@ export default function Index() {
     account_detail: ''
   };
 
-  const handleSubmit = async (seller: Seller) => {
+  const handleSubmit = async (billing: Billing) => {
 
     setLoading(true);
 
-    if (Array.isArray(seller.emails) && seller.emails.length > 0) {
-      seller.email = seller.emails.join(', ');
+    if (Array.isArray(billing.emails) && billing.emails.length > 0) {
+      billing.email = billing.emails.join(', ');
     } else {
-      seller.email = '-----';
+      billing.email = '-----';
     }
 
     try {
-      const response = await createSeller(seller);
+      await createBilling(billing);
       setLoading(false);
       formik.resetForm();
       setIsSuccessDialogOpen(true);
@@ -79,25 +86,54 @@ export default function Index() {
 
   const formik = useFormik({
     initialValues,
-    validationSchema: sellerSchema,
+    validationSchema: billingSchema,
     onSubmit: handleSubmit,
     onReset: handleReset
   });
 
+  const fetchContractIdName = async () => {
+    try {
+      const response = await getContractIdName();  
+      console.log(response);
+      const formattedData = response.data.map((contract: any) => {        
+        return {
+          ...contract,
+          label: contract.contract_no
+        }; 
+      });      
+      setContractList(formattedData);
+    } catch (error) {
+      console.error('Error fetching contract data:', error);
+    }
+  };
+
+ const handleContractChange = async (event: React.ChangeEvent<{}>, value: selectedAutoField | null) => {   
+   const contractId = (value as selectedAutoField)?._id;   
+   if(contractId){
+      const response = await getContractBuyerSellerDetail(contractId);      
+      console.log(response);  
+  } else {
+    console.log('No contract selected');
+  }
+   
+  };
+  
+  useEffect(() => {
+    fetchContractIdName();    
+  }, []);
+
   return (
     <>
       <Header />
-
       <Container maxWidth="xl">
-        <div className='buyer-seller-form-wrapper'>
-
+        <div className='buyer-seller-form-wrapper'>          
           <div>
             <div className="header-content">
               <div>
-                <Typography variant="h5" component="article">Create Seller</Typography>
+                <Typography variant="h5" component="article">Create Billing</Typography>
               </div>
               <div className="btn-wrapper">
-                <Button variant="outlined" onClick={() => goToPage('/seller')}>Back</Button>
+                <Button variant="outlined" onClick={() => goToPage('/billing')}>Back</Button>
               </div>
             </div>
           </div>
@@ -109,177 +145,14 @@ export default function Index() {
 
                   {errors && <div className="error"><ErrorMessage message={errors} /></div>}
 
-                  <div className="buyer-seller-forms-wrapper">
-                    <div>
-                      <TextField
-                        type="text"
-                        label="Name"
-                        name="name"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.name}
-                        onChange={formik.handleChange}
-                        error={formik.touched.name && Boolean(formik.errors.name)}
-                        helperText={formik.touched.name && formik.errors.name}
+                  <div>
+                      <Autocomplete
+                        disablePortal
+                        options={contractList}
+                        renderInput={(params) => <TextField {...params} label="Contract" required />}
+                        onChange={handleContractChange}
                       />
-                    </div>
-
-                    <div>
-                      <TextField
-                        type="text"
-                        label="Telephone No"
-                        name="telephone_no"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.telephone_no}
-                        onChange={formik.handleChange}
-                        error={formik.touched.telephone_no && Boolean(formik.errors.telephone_no)}
-                        helperText={formik.touched.telephone_no && formik.errors.telephone_no}
-                      />
-                    </div>
-
                   </div>
-
-
-                  <div className="buyer-seller-forms-wrapper">
-
-                    <div>
-                      <TextField
-                        type="text"
-                        label="Mobile No"
-                        name="mobile_no"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.mobile_no}
-                        onChange={formik.handleChange}
-                        error={formik.touched.mobile_no && Boolean(formik.errors.mobile_no)}
-                        helperText={formik.touched.mobile_no && formik.errors.mobile_no}
-                      />
-                    </div>
-
-                    <div>
-                      <TextField
-                        type="text"
-                        label="Fax"
-                        name="fax"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.fax}
-                        onChange={formik.handleChange}
-                        error={formik.touched.fax && Boolean(formik.errors.fax)}
-                        helperText={formik.touched.fax && formik.errors.fax}
-                      />
-                    </div>
-
-                  </div>
-
-
-                  <div className="buyer-seller-forms-wrapper">
-
-                    <div>
-                      <TextField
-                        type="text"
-                        label="Pan"
-                        name="pan"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.pan}
-                        onChange={formik.handleChange}
-                        error={formik.touched.pan && Boolean(formik.errors.pan)}
-                        helperText={formik.touched.pan && formik.errors.pan}
-                      />
-                    </div>
-                    <div>
-                      <TextField
-                        type="text"
-                        label="gstin"
-                        name="gstin"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.gstin}
-                        onChange={formik.handleChange}
-                        error={formik.touched.gstin && Boolean(formik.errors.gstin)}
-                        helperText={formik.touched.gstin && formik.errors.gstin}
-                      />
-                    </div>
-                  </div>
-
-
-
-                  <TextField
-                    type="text"
-                    label="State Code"
-                    name="state_code"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    value={formik.values.state_code}
-                    onChange={formik.handleChange}
-                    error={formik.touched.state_code && Boolean(formik.errors.state_code)}
-                    helperText={formik.touched.state_code && formik.errors.state_code}
-                  />
-
-                  <div className="autocomplete-email">
-                    <Autocomplete
-                      multiple
-                      id="emails"
-                      options={[]} // options array is empty as we are allowing free-form input
-                      freeSolo
-                      fullWidth
-                      value={formik.values.emails}
-                      onChange={(event, newValue) => {
-                        formik.setFieldValue('emails', newValue);
-                      }}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          name="emails"
-                          label="Enter multiple emails"
-                          variant="outlined"
-                          fullWidth
-                          error={formik.touched.emails && Boolean(formik.errors.emails)}
-                          helperText={formik.touched.emails && formik.errors.emails}
-                        />
-                      )}
-                    />
-                  </div>
-
-                  <TextField
-                    type="text"
-                    label="Address"
-                    name="address"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    multiline
-                    rows={3}
-                    value={formik.values.address}
-                    onChange={formik.handleChange}
-                    error={formik.touched.address && Boolean(formik.errors.address)}
-                    helperText={formik.touched.address && formik.errors.address}
-                  />
-
-
-                  <TextField
-                    type="text"
-                    label="Account Detail"
-                    name="account_detail"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    multiline
-                    rows={3}
-                    value={formik.values.account_detail}
-                    onChange={formik.handleChange}
-                    error={formik.touched.address && Boolean(formik.errors.account_detail)}
-                    helperText={formik.touched.account_detail && formik.errors.account_detail}
-                  />
 
                   <Button type='submit' variant="contained" fullWidth>{loading ? "Submit..." : "Submit"}</Button>
                 </form>
@@ -291,12 +164,7 @@ export default function Index() {
 
         </div>
       </Container>
-
-
-      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Seller Created Successfully" redirect="seller" />
-
-
-
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Seller Created Successfully" redirect="billing" />
     </>
   );
 }

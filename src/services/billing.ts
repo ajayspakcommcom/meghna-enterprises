@@ -11,7 +11,11 @@ const apiClient = axios.create({
     baseURL: API_BASE_URL
 });
 
-interface Seller {
+interface Billing {
+    id: string;
+}
+
+interface Contract {
     id: string;
 }
 
@@ -21,25 +25,25 @@ interface ApiResponse<T> {
 
 export const createBilling = async (billingData: any): Promise<any> => {
     try {
-        const response = await apiClient.post<Seller>('/billing', { ...billingData, type: 'CREATE' });
+        const response = await apiClient.post<Billing>('/billing', { ...billingData, type: 'CREATE' });
         return response.data;
     } catch (err: unknown) {
         throw err;
     }
 };
 
-export const getBillingIdName = async (): Promise<ApiResponse<Seller>> => {
+export const getContractIdName = async (): Promise<ApiResponse<Billing>> => {
     try {
-        const response = await apiClient.post<ApiResponse<Seller>>('/billing', { type: 'ID-NAME' });
+        const response = await apiClient.post<ApiResponse<Contract>>('/contract', { type: 'ID-NAME' });
         return response.data;
     } catch (err: unknown) {
         throw err;
     }
 };
 
-export const getBilling = async (id: string): Promise<Seller> => {
+export const getBilling = async (id: string): Promise<Billing> => {
     try {
-        const response = await apiClient.post<Seller>('/billing', { id: id, type: 'DETAIL' });
+        const response = await apiClient.post<Billing>('/billing', { id: id, type: 'DETAIL' });
         return response.data;
     } catch (err: unknown) {
         throw err;
@@ -47,27 +51,27 @@ export const getBilling = async (id: string): Promise<Seller> => {
 };
 
 
-export const updateBilling = async (billingData: any): Promise<Seller> => {
+export const updateBilling = async (billingData: any): Promise<Billing> => {
     try {
-        const response = await apiClient.post<Seller>(`/billing`, { type: 'UPDATE', ...billingData });
+        const response = await apiClient.post<Billing>(`/billing`, { type: 'UPDATE', ...billingData });
         return response.data;
     } catch (err: unknown) {
         throw err;
     }
 };
 
-export const deleteBilling = async (id: string): Promise<Seller> => {
+export const deleteBilling = async (id: string): Promise<Billing> => {
     try {
-        const response = await apiClient.post<Seller>('/billing', { id: id, type: 'DELETE' });
+        const response = await apiClient.post<Billing>('/billing', { id: id, type: 'DELETE' });
         return response.data;
     } catch (err: unknown) {
         throw err;
     }
 };
 
-export const getAllBilling = async (): Promise<ApiResponse<Seller>> => {
+export const getAllBilling = async (): Promise<ApiResponse<Billing>> => {
     try {
-        const response = await apiClient.post<ApiResponse<Seller>>('/billing', { type: 'LIST' });
+        const response = await apiClient.post<ApiResponse<Billing>>('/billing', { type: 'LIST' });
         return response.data;
     } catch (err: unknown) {
         throw err;

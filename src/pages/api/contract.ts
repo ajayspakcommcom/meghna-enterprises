@@ -15,7 +15,6 @@ interface ApiResponse {
 }
 
 const cors = Cors({
-  // Only allow requests with GET, POST and OPTIONS
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 });
 
@@ -23,18 +22,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
   await connectToMongoDB();
   await runMiddleware(req, res, cors);
-  //const user = verifyToken(req);
-
-  // if (!user) {
-  //   return res.status(401).json({ message: 'Unauthorized' });
-  // } else {
 
   if (req.method === 'POST') {
 
     switch (req.body.type) {
       case 'CREATE':
         try {
-          const contract = await Contract.create({
+          await Contract.create({
             contract_no: req.body.contract_no,
             buyer_id: req.body.buyer_id,
             seller_id: req.body.seller_id,
@@ -139,6 +133,37 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         } catch (error: any) {
           res.status(500).json({ error: 'Internal Server Error' });
         }
+        break;
+
+      case 'ID-NAME':
+        try {
+          const dataList = await Contract.find({ isDeleted: false }).select('_id contract_no').exec();
+          if (!dataList) {
+            return res.status(404).json({ error: 'Contract not found' });
+          }
+          res.status(200).json({ data: dataList });
+        } catch (error) {
+          res.status(500).json({ error: 'Internal Server Error' });
+        }
+        break;
+
+      case 'BUYER-SELLER-DETAIL':
+
+        try {
+          const dataList = await Contract.find({ isDeleted: false, _id: req.body.id })
+            .populate('buyer_id') // Populate buyer details, selecting specific fields (e.g., name and email)
+            .populate('seller_id') // Populate seller details, selecting specific fields (e.g., name and email)
+            .exec();
+
+          if (!dataList || dataList.length === 0) {
+            return res.status(404).json({ error: 'Contracts not found' });
+          }
+
+          res.status(200).json({ data: dataList });
+        } catch (error) {
+          res.status(500).json({ error: 'Internal Server Error' });
+        }
+
         break;
 
     }

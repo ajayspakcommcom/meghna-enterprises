@@ -94,3 +94,13 @@ export const generatePdf = async (contractData: any): Promise<any> => {
         throw err;
     }
 };
+
+export const getContractBuyerSellerDetail = async (id: string): Promise<ApiResponse<Contract>> => {
+    try {
+        const response = await apiClient.post<ApiResponse<Contract>>('/contract', { id: id, type: 'BUYER-SELLER-DETAIL' });
+        return response.data;
+    } catch (err: unknown) {
+        throw err;
+    }
+};
+
