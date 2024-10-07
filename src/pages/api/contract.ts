@@ -150,9 +150,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       case 'BUYER-SELLER-DETAIL':
 
         try {
-          const dataList = await Contract.find({ isDeleted: false, _id: req.body.id })
-            .populate('buyer_id') // Populate buyer details, selecting specific fields (e.g., name and email)
-            .populate('seller_id') // Populate seller details, selecting specific fields (e.g., name and email)
+          const dataList = await Contract.findById({ isDeleted: false, _id: req.body.id })
+            .populate('buyer_id')
+            .populate('seller_id')
             .exec();
 
           if (!dataList || dataList.length === 0) {
