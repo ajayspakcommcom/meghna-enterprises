@@ -49,8 +49,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
           res.status(201).json({ message: 'Contract have been successfully created.' });
         } catch (error: any) {
-          console.clear();
-          console.log('Error', error)
           res.status(500).json({ error: 'Internal Error', errorDetail: 'An unexpected error occurred' });
         }
 

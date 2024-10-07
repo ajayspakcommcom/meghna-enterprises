@@ -77,9 +77,6 @@ export const getAllContracts = async (): Promise<ApiResponse<Contract>> => {
 
 
 export const sendContractOnEmail = async (contractData: any): Promise<any> => {
-
-    console.log(contractData);
-
     try {
         const response = await apiClient.post<Contract>('/generate-pdf', { ...contractData, type: 'EMAIL-SEND' });
         return response.data;

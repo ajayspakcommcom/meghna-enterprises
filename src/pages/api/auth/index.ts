@@ -29,8 +29,6 @@ const cors = Cors({
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     // Only allow POST requests
 
-    console.log('POST...');
-
     await connectToMongoDB(); // This is for database connection
     await runMiddleware(req, res, cors); // This is for cors
 
@@ -47,8 +45,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (!user) {
                 return res.status(401).json({ message: 'Invalid username or password' });
             }
-
-            console.log('user', user)
 
             //Check if the password is correct
             const isPasswordValid = user.password === password;

@@ -37,10 +37,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     switch (req.body.type) {
       case 'CREATE':
         try {
-
-          console.clear();
-          console.log('body', req.body);
-
           const seller = await Seller.create({
             name: req.body.name,
             address: req.body.address,

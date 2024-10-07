@@ -27,10 +27,6 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
     const [logo, setLogo] = React.useState<string | null>('');
 
     useEffect(() => {
-
-        console.clear();
-        console.log('contentData', contentData);
-
         const fetchBuyerData = async () => {
             const resp: any = await getBuyer(contentData.selectedBuyer._id as string);
             setBuyerData(resp.data);

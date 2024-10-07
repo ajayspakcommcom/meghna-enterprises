@@ -30,7 +30,6 @@ const sendEmail = async ({ recipient, subject, text }: EmailData): Promise<boole
 
     try {
         const info = await transporter.sendMail(mailOptions);
-        console.log('Email sent: ' + info.response);
         return true; // Email sent successfully
     } catch (error) {
         console.error('Error sending email:', error);

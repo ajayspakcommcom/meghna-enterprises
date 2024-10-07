@@ -94,8 +94,7 @@ export default function Index() {
       const newFields = Object.keys(label).map(key => ({ property: key, value: label[key] }));
 
       setFields(prevFields => [...prevFields, ...newFields]);
-    } catch (error) {
-      console.log('Error : ', error);
+    } catch (error) {      
     }
     setSelectedTemplate(value);
   };

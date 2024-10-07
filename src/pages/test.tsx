@@ -20,8 +20,7 @@ export default function Index() {
             emails: [],
         },
         validationSchema,
-        onSubmit: (values) => {
-            console.log('Submitted emails:', values.emails);
+        onSubmit: (values) => {            
             // Handle form submission logic here
         },
     });

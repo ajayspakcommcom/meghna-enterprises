@@ -1,5 +1,4 @@
-// UserModel.js
-import mongoose, { Schema } from 'mongoose';
+import mongoose from 'mongoose';
 
 const sellerSchema = new mongoose.Schema({
     name: {

@@ -125,7 +125,6 @@ export default function Index() {
       name: name.trim()
     };
 
-    console.log('finalObject', finalObject);
 
     try {
       const response = await createTemplate(finalObject);

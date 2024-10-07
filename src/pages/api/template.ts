@@ -37,11 +37,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     switch (req.body.type) {
       case 'CREATE':
         try {
-
-          console.clear();
-          console.log('req.body.name', req.body.name);
-          console.log('req.body.label', req.body.label);
-
           const template = await Template.create({
             name: req.body.name,
             label: req.body.label,

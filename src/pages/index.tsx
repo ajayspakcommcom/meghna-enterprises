@@ -46,14 +46,12 @@ export default function Index() {
         router.push('/dashboard');
 
       } else if (resp.status == 400) {
-        setError(resp?.errors);
-        console.log('Save Ending');
+        setError(resp?.errors);        
         setLoading(false);
       }
 
     } catch (err: any) {
-      setLoading(false);
-      console.log(err.response.data.message);
+      setLoading(false);      
       setError(err.response.data.message);
 
       setTimeout(() => {

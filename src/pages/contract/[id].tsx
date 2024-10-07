@@ -82,19 +82,16 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
     setIsLoader(true);
     try {
-      const response = await sendContractOnEmail(detailData);
-      console.log('response', response);
+      const response = await sendContractOnEmail(detailData);      
       setIsSuccessDialogOpen(true);
       setIsLoader(false);
-    } catch (error: any) {
-      console.log(error);
+    } catch (error: any) {      
     }
 
   };
 
 
-  const onSuccessConfirmationHandler = (val: boolean) => {
-    console.log(val);
+  const onSuccessConfirmationHandler = (val: boolean) => {    
     setIsSuccessDialogOpen(val);
   };
 
@@ -110,8 +107,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
     console.clear();
 
     try {
-      const response = await generatePdf(detailData);
-      console.log('response', response);
+      const response = await generatePdf(detailData);      
 
       if (response.message) {
         const blob = new Blob([response], { type: 'application/pdf' });
@@ -132,8 +128,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
         }, 1000);
       }
 
-    } catch (error: any) {
-      console.log(error);
+    } catch (error: any) {      
     }
 
   };
@@ -231,9 +226,6 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 
   const { id } = context.query;
   const detail = await getContract(id as string);
-  console.clear();
-  console.log('Res ', detail);
-
   return {
     props: {
       detail

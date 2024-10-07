@@ -1,5 +1,5 @@
 
-import mongoose, { Schema } from 'mongoose';
+import mongoose from 'mongoose';
 
 const templateSchema = new mongoose.Schema({
     name: {

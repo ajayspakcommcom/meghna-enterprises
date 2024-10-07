@@ -143,7 +143,6 @@ const Index: React.FC<compProps> = ({ detail }) => {
       name: name.trim()
     };
 
-    console.log('finalObject', finalObject);
 
     try {
       const response = await updateTemplate(finalObject);
@@ -181,11 +180,9 @@ const Index: React.FC<compProps> = ({ detail }) => {
         const templateId = detail.data._id ?? '';
         const response: any = await getTemplate(templateId);
         const label = response.data.label;
-        const newFields = Object.keys(label).map(key => ({ property: key, value: label[key] }));
-        console.log('newFields', newFields);
+        const newFields = Object.keys(label).map(key => ({ property: key, value: label[key] }));        
         setFields(prevFields => [...newFields]);
-      } catch (error) {
-        console.log('Error : ', error);
+      } catch (error) {        
       }
     };
 

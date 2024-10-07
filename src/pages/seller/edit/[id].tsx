@@ -88,14 +88,12 @@ const Index: React.FC<compProps> = ({ detail }) => {
     setLoading(true);
 
     try {
-      const response = await updateSeller(data);
-      console.log('response', response);
+      const response = await updateSeller(data);      
       setLoading(false);
       formik.resetForm();
       setIsSuccessDialogOpen(true);
     } catch (error: any) {
-      setLoading(false);
-      console.error('Error saving:', error);
+      setLoading(false);      
       setError(error);
     }
 

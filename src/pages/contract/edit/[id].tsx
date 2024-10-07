@@ -102,8 +102,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
     setLabelFields(updatedLabelFields);
   };
 
-  const handleSellerChange = (event: React.ChangeEvent<{}>, value: selectedAutoField | null) => {
-    console.log('Selected Seller : ', value);
+  const handleSellerChange = (event: React.ChangeEvent<{}>, value: selectedAutoField | null) => {    
     setSelectedSeller(value);
   };
 
@@ -111,8 +110,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
     setSelectedBuyer(value);
   };
 
-  const handleTemplateChange = async (event: React.ChangeEvent<{}>, value: selectedAutoField | null) => {
-    console.log('Selected Template : ', value);
+  const handleTemplateChange = async (event: React.ChangeEvent<{}>, value: selectedAutoField | null) => {    
     setFields([]);
     try {
       const templateId = value?._id ?? '';
@@ -121,7 +119,6 @@ const Index: React.FC<compProps> = ({ detail }) => {
       const newFields = Object.keys(label).map(key => ({ property: key, value: label[key] }));
       setFields(prevFields => [...prevFields, ...newFields]);
     } catch (error) {
-      console.log('Error : ', error);
     }
     setSelectedTemplate(value);
   };
@@ -195,8 +192,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
     const fetchTemplateDetailById = async () => {
       setFields([]);
       try {
-        const response: any = (await getTemplate(detailedData.template_id)).data;
-        console.log('Response : ', response);
+        const response: any = (await getTemplate(detailedData.template_id)).data;        
         setSelectedTemplate({ _id: detailedData.template_id, label: response.name })
 
         const newFields = Object.keys(detailedData.template).map(key => ({ property: key, value: detailedData.template[key] }));
@@ -213,8 +209,6 @@ const Index: React.FC<compProps> = ({ detail }) => {
     fetchBuyerIdName();
     fetchTemplateIdName();
     fetchTemplateDetailById();
-
-    console.log('Data : ', detail.data);
 
     formik.setValues({
       quantity: detailedData.quantity.toString(),
@@ -259,7 +253,6 @@ const Index: React.FC<compProps> = ({ detail }) => {
       company: detailedData.company
     };
 
-    console.log('submittedData', submittedData);
 
     setLoading(true);
     try {

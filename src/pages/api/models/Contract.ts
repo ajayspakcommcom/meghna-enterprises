@@ -1,5 +1,5 @@
 
-import mongoose, { Schema } from 'mongoose';
+import mongoose from 'mongoose';
 import './Buyer';
 import './Seller';
 

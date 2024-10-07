@@ -38,10 +38,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     doc.rect(doc.page.margins.left, 15, pageWidth, 70).fill('#000');
 
                     // const imagePath = path.join(process.cwd(), 'public', 'images', 'seedsnfeeds.png');
-
-                    console.clear();
-                    console.log('req.body.logo', req.body.logo);
-
                     const imagePath = path.join(process.cwd(), 'public', 'images', `${req.body.logo === 'logo' ? 'seedsnfeeds' : req.body.logo}.png`);
                     doc.image(imagePath, 135, 5, { width: 335, height: 85 });
 
@@ -239,8 +235,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                     res.status(200).json({ message: 'Pdf sent successfully.' });
                 } catch (error: any) {
-                    console.clear();
-                    console.log('Error', error)
                     res.status(500).json({ error: 'Internal Error', errorDetail: 'An unexpected error occurred' });
                 }
 
