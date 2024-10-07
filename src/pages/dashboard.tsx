@@ -42,9 +42,8 @@ export default function Index() {
       <div className='dashboard-wrapper'>
         <Card>
           <CardContent>
-
             <table>
-              <tbody>
+              <tbody>                
                 <tr>
                   <td>
                     <Button type='submit' variant="contained" onClick={() => goToPage('/master')} className="master-btn">Master</Button>
@@ -55,7 +54,7 @@ export default function Index() {
                 </tr>
                 <tr>
                   <td colSpan={2}>
-                    <Button type='submit' variant="contained">Billing</Button>
+                    <Button type='submit' onClick={() => goToPage('/billing')} variant="contained">Billing</Button>
                   </td>
                 </tr>
               </tbody>

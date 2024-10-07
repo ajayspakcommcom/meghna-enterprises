@@ -73,3 +73,5 @@ export const getAllSellers = async (): Promise<ApiResponse<Seller>> => {
         throw err;
     }
 };
+
+

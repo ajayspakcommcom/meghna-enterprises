@@ -56,7 +56,7 @@ const Header: React.FC<HeaderProps> = ({ message }) => {
                 router.push('/contract');  // Adjust the route as necessary
                 break;
             case 'billing':                
-                router.push(`/${removeBackslash(currentUrl)}`);  // Adjust the route as necessary
+                router.push(`/billing`);  // Adjust the route as necessary
                 break;
             case 'home':                
                 router.push('/dashboard');  // Adjust the route as necessary
