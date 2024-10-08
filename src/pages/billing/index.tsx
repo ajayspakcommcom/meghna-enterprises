@@ -61,8 +61,7 @@ export default function Index() {
     const fetchData = async () => {
       try {
         const response = await getAllBilling();
-        const formattedData = response.data.map((billing: any) => ({ ...billing, id: billing._id, _id: undefined }));
-        console.log(formattedData);
+        const formattedData = response.data.map((billing: any) => ({ ...billing, id: billing._id, _id: undefined }));        
         setRowData(formattedData);
       } catch (error) {
         console.error('Error fetching data:', error);

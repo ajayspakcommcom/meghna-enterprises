@@ -1,19 +1,4 @@
 
-// export default interface Billing {
-//     _id?: string;
-//     name?: string | null;
-//     address?: string | null;
-//     telephone_no?: string | null;
-//     mobile_no?: string | null;
-//     fax?: string | null;
-//     pan?: string | null;
-//     gstin?: string | null;
-//     state_code?: string | null;
-//     email?: string;
-//     emails: string[];
-//     account_detail?: string | null;
-// }
-
 export default interface Billing {
     _id: string;
     contract_no: string;
@@ -31,6 +16,14 @@ export default interface Billing {
     company: string;
     createdDate: Date;
     __v: number;
+    brokerageAmount: number;
+    totalPurchasedAmount: number;
+    brockerage: number;
+    igst: number;
+    cgst: number;
+    sgst: number;
+    grandTotal: number;
+
 }
 
 interface Buyer {

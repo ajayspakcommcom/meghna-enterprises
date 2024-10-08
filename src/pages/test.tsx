@@ -1,67 +1,59 @@
-import React, { useState, useEffect } from "react";
-import { Card, CardContent, Button, Typography, TextField, Container, Autocomplete } from '@mui/material';
-import { useRouter } from 'next/router';
+import React from "react";
+import { Button, TextField, Autocomplete, Box } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
 
 
 const validationSchema = yup.object().shape({
-    emails: yup.array()
-        .required('Emails are required')
-        .of(yup.string().email('Invalid email format').required('Email is required')),
+    emails: yup.array().required('Emails are required').of(yup.string().email('Invalid email format').required('Email is required')),
+    name: yup.string().required('Name is required')
 });
 
 
 export default function Index() {
 
+const handleSubmit = async (values: any) => {
+    console.log(values);
+  };
+
     const formik = useFormik({
         initialValues: {
             emails: [],
-        },
-        validationSchema,
-        onSubmit: (values) => {            
-            // Handle form submission logic here
-        },
+            name: '',
+            manish: ''
+        },        
+        onSubmit: handleSubmit        
     });
 
-
-    return (
-        <>
-
-            <br />
-            <br />
-
+    return (      
             <form onSubmit={formik.handleSubmit}>
                 <Autocomplete
-                    multiple
-                    id="emails"
-                    options={[]} // options array is empty as we are allowing free-form input
-                    freeSolo
-                    fullWidth
-                    value={formik.values.emails}
-                    onChange={(event, newValue) => {
-                        formik.setFieldValue('emails', newValue);
-                    }}
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            name="emails"
-                            label="Enter multiple emails"
-                            variant="outlined"
-                            fullWidth
-                            error={formik.touched.emails && Boolean(formik.errors.emails)}
-                            helperText={formik.touched.emails && formik.errors.emails}
-                        />
-                    )}
+                        multiple
+                        id="emails"
+                        options={['test@gmail.com', 'test1@gmail.com', 'test2@gmail.com']}
+                        freeSolo
+                        fullWidth
+                        value={formik.values.emails}
+                        onChange={(event, newValue) => {formik.setFieldValue('emails', newValue)}}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                name="emails"
+                                label="Enter multiple emails"
+                                variant="outlined"
+                                fullWidth
+                                error={formik.touched.emails && Boolean(formik.errors.emails)}
+                                helperText={formik.touched.emails && formik.errors.emails}
+                            />
+                        )}
                 />
-
+                <TextField id="outlined-basic" label="Outlined" variant="outlined" name="name" value={formik.values.name} onChange={formik.handleChange} />   
+                <TextField id="outlined-basic" label="Outlined" variant="outlined" name="manish" value={formik.values.manish} onChange={formik.handleChange} />   
                 <Button type="submit" variant="contained" color="primary">
                     Submit
                 </Button>
-            </form>
-
-        </>
+            </form>               
     );
 }
 
