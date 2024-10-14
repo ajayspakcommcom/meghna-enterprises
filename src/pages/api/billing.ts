@@ -22,8 +22,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
   await connectToMongoDB();
   await runMiddleware(req, res, cors);
-  //const user = verifyToken(req);
 
+  //const user = verifyToken(req);
   // if (!user) {
   //   return res.status(401).json({ message: 'Unauthorized' });
   // } else {
@@ -33,12 +33,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     switch (req.body.type) {
       case 'CREATE':
         try {
-
           await Billing.create({
             billDate: req.body.billDate || Date.now(),
             contractReferenceNo: req.body.contractReferenceNo,
             contractReferenceNo_Id: req.body.contractReferenceNo_Id,
-            category: req.body.category,
+            buyer: req.body.buyer,
+            seller: req.body.seller,
             quantity: req.body.quantity,
             price: req.body.price,
             brokeragePrice: req.body.brokeragePrice,
@@ -47,17 +47,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             sgst: req.body.sgst,
             cgst: req.body.cgst,
             igst: req.body.igst,
-            dealerName: req.body.dealerName,
-            contractDate: req.body.contractDate || Date.now(),
-            address: req.body.address,
-            email: req.body.email,
-            mobileNo: req.body.mobileNo,
             createdDate: req.body.createdDate || Date.now(),
             updatedDate: req.body.updatedDate || null,
             deletedDate: req.body.deletedDate || null,
             isDeleted: req.body.isDeleted || false
           });
-
           res.status(201).json({ message: 'Billing have been successfully created.' });
         } catch (error: any) {
           res.status(500).json({ error: `Internal Error`, errorDetail: `An unexpected error occurred ${error}` });

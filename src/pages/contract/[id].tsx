@@ -43,6 +43,9 @@ const Index: React.FC<compProps> = ({ detail }) => {
   const [logo, setLogo] = React.useState<string | null>('');
 
   useEffect(() => {
+
+    console.log('detailData', detailData);
+
     const token = localStorage.getItem("token");
     if (!token) {
       router.push('/');

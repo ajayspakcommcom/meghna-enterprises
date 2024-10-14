@@ -3,7 +3,7 @@ import { Button, Typography, Container } from '@mui/material';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { getSeller } from "@/services/seller";
+import { generatePdf, getBilling, sendContractOnEmail } from "@/services/billing";
 
 const Header = dynamic(() => import('../../../components/header/index'));
 
@@ -13,20 +13,23 @@ interface compProps {
 
 interface DetailData {
   _id: string;
-  name: string;
-  address: string;
-  telephone_no: string;
-  mobile_no: string;
-  fax: string;
-  pan: string;
-  gstin: string;
-  state_code: string;
-  email: string;
-  account_detail: string;
-  updatedDate: Date | null;
-  deletedDate: Date | null;
+  billDate: string;  // ISO date string
+  contractReferenceNo_Id: string;
+  contractReferenceNo: string;
+  buyer: string;
+  seller: string;
+  quantity: number;
+  price: number;
+  brokeragePrice: number;
+  brokerageOn: 'Price' | 'Quantity';
+  brokerageAmount: number;
+  sgst: number;
+  cgst: number;
+  igst: number;
+  createdDate: string;  // ISO date string
+  updatedDate: string | null;
+  deletedDate: string | null;
   isDeleted: boolean;
-  createdDate: Date;
   __v: number;
 }
 
@@ -34,6 +37,10 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
   const router = useRouter();
   const [detailData, setDetailData] = useState<DetailData>(detail.data as DetailData);
+  const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
+  const [previewContent, setPreviewContent] = useState<any>();
+  const [isLoader, setIsLoader] = useState<boolean>(false);
+  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
 
   useEffect(() => {
 
@@ -48,6 +55,59 @@ const Index: React.FC<compProps> = ({ detail }) => {
     router.push(`${url}`);
   };
 
+   const previewHandler = () => {
+    //setIsPreviewDialogOpen(true);
+    // const objectData: any = {
+    //   contract_no: detailData.contract_no,
+    //   createdDate: detailData.createdDate,
+    //   selectedSeller: { _id: detailData.seller_id._id as string, label: detailData.seller_id.name },
+    //   selectedBuyer: { _id: detailData.buyer_id._id as string, label: detailData.buyer_id.name },
+    //   selectedTemplate: { ...detailData.template },
+    //   labelFields: { ...detailData.label },
+    //   formikValues: { quantity: detailData.price, price: detailData.quantity }
+    // };
+    // setPreviewContent(objectData);
+   };
+  
+   const sendEmailHandler = async () => {
+
+    setDetailData((prevDetailData: any) => ({...prevDetailData}));
+    setIsLoader(true);
+    try {
+      await sendContractOnEmail(detailData);      
+      setIsSuccessDialogOpen(true);
+      setIsLoader(false);
+    } catch (error: any) {      
+    }
+   };
+  
+  const generatePdfHandler = async () => {    
+    try {
+      const response = await generatePdf(detailData);      
+
+      if (response.message) {
+        const blob = new Blob([response], { type: 'application/pdf' });
+        const blobUrl = URL.createObjectURL(blob);
+
+        const tempLink = document.createElement('a');
+        tempLink.href = '/pdf/contract.pdf';
+        tempLink.target = '_blank';
+        tempLink.rel = 'noopener noreferrer';
+        tempLink.download = '/pdf/contract.pdf';
+
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        document.body.removeChild(tempLink);
+
+        setTimeout(() => {
+          URL.revokeObjectURL(blobUrl);
+        }, 1000);
+      }
+
+    } catch (error: any) {      
+    }
+  };
+
 
   return (
     <>
@@ -56,44 +116,55 @@ const Index: React.FC<compProps> = ({ detail }) => {
       <Container maxWidth="xl">
         <div className="header-content">
           <div>
-            <Typography variant="h5" component="article">Seller Detail</Typography>
+            <Typography variant="h5" component="article">Billing Detail</Typography>
           </div>
-          <div className="btn-wrapper">
-            <Button variant="outlined" onClick={() => goToPage('/seller')}>Back</Button>
+          <div className="btn-wrapper detail-btn-wrapper">
+            <Button variant="outlined" onClick={() => previewHandler()}>Preview</Button>
+            <Button variant="outlined" onClick={() => sendEmailHandler()}>Send Mail</Button>
+            <Button variant="outlined" onClick={() => generatePdfHandler()}>Download Pdf</Button>
+            <Button variant="outlined" onClick={() => goToPage('/billing')}>Back</Button>
           </div>
         </div>
 
         <div className="detail-wrapper">
 
-          <div className="column"><Typography variant="body1" component="article"><b>Name</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{detailData.name}</span></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><b>Contract Reference No</b></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><span>{detailData.contractReferenceNo}</span></Typography></div>
 
-          <div className="column"><Typography variant="body1" component="article"><b>Email</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{detailData.email}</span></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><b>Billing Date</b></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><span>{detailData.billDate}</span></Typography></div>
 
-          <div className="column"><Typography variant="body1" component="article"><b>Telephone no</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{detailData.telephone_no}</span></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><b>Buyer</b></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><span>{detailData.buyer}</span></Typography></div>
 
-          <div className="column"><Typography variant="body1" component="article"><b>Mobile no</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{detailData.mobile_no}</span></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><b>Seller</b></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><span>{detailData.seller}</span></Typography></div>
 
-          <div className="column"><Typography variant="body1" component="article"><b>Fax no</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{detailData.fax}</span></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><b>Quantity</b></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><span>{detailData.quantity}</span></Typography></div>
 
-          <div className="column"><Typography variant="body1" component="article"><b>Pan no</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{detailData.pan}</span></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><b>Price</b></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><span>{detailData.price}</span></Typography></div>
 
-          <div className="column"><Typography variant="body1" component="article"><b>GSTIN</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{detailData.gstin}</span></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><b>Brokerage Price</b></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><span>{detailData.brokeragePrice}</span></Typography></div>
 
-          <div className="column"><Typography variant="body1" component="article"><b>State Code</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{detailData.state_code}</span></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><b>Brokerga On</b></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><span>{detailData.brokerageOn}</span></Typography></div>
 
-          <div className="column"><Typography variant="body1" component="article"><b>Account Detail</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{detailData.account_detail}</span></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><b>SGST</b></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><span>{detailData.sgst}</span></Typography></div>
+
+          <div className="column"><Typography variant="body1" component="article"><b>CGST</b></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><span>{detailData.cgst}</span></Typography></div>
+
+          <div className="column"><Typography variant="body1" component="article"><b>IGST</b></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><span>{detailData.igst}</span></Typography></div>
+
+          <div className="column"><Typography variant="body1" component="article"><b>Brokerage Amount</b></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><span>{detailData.brokerageAmount}</span></Typography></div>
 
         </div>
-
       </Container>
 
     </>
@@ -104,9 +175,8 @@ export default Index;
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
 
-  const { id } = context.query;
-  const detail = await getSeller(id as string);
-
+  const { id } = context.query;  
+  const detail = await getBilling(id as string);  
   return {
     props: {
       detail

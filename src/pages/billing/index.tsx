@@ -5,7 +5,6 @@ import dynamic from 'next/dynamic';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { deleteBilling, getAllBilling } from "@/services/billing";
 import { customFormatDate } from "@/services/common";
-import { getAllContracts } from "@/services/contract";
 
 const Header = dynamic(() => import('../../../components/header/index'));
 const ConfirmationDialogue = dynamic(() => import('../../../components/confirmation-pop/index'));
@@ -14,12 +13,13 @@ const ConfirmationDialogue = dynamic(() => import('../../../components/confirmat
 export default function Index() {
 
   const columns: GridColDef[] = [
-    { field: 'billDate', headerName: 'Date', width: 200, valueGetter: (params) => {return customFormatDate(new Date(params))} },    
     { field: 'contractReferenceNo', headerName: 'Reference No', width: 200 },    
-    { field: 'category', headerName: 'Category', width: 200 },    
+    { field: 'billDate', headerName: 'Date', width: 200, valueGetter: (params) => {return customFormatDate(new Date(params))} },    
+    { field: 'buyer', headerName: 'Buyer', width: 200 },    
+    { field: 'seller', headerName: 'Seller', width: 200 },    
     { field: 'quantity', headerName: 'Quantity', width: 200 },    
     { field: 'price', headerName: 'Price', width: 200 },    
-    { field: 'brokeragePrice', headerName: 'Price', width: 200 },    
+    { field: 'brokeragePrice', headerName: 'Brokerage Price', width: 200 },    
     { field: 'brokerageOn', headerName: 'Brokerage On', width: 200 },
     { field: 'sgst', headerName: 'SGST', width: 200 },
     { field: 'cgst', headerName: 'CGST', width: 200 },
@@ -69,13 +69,11 @@ export default function Index() {
     };
 
   useEffect(() => {
-
     const token = localStorage.getItem("token");
     if (!token) {
       router.push('/');
     }
     fetchData();
-
   }, []);
 
   const goToPage = (url: string) => {

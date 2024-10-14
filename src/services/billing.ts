@@ -78,3 +78,21 @@ export const getAllBilling = async (): Promise<ApiResponse<Billing>> => {
     }
 };
 
+export const generatePdf = async (contractData: any): Promise<any> => {
+
+    try {
+        const response = await apiClient.post<Billing>('/generate-pdf-only', { ...contractData, type: 'EMAIL-SEND' });
+        return response.data;
+    } catch (err: unknown) {
+        throw err;
+    }
+};
+
+export const sendContractOnEmail = async (contractData: any): Promise<any> => {
+    try {
+        const response = await apiClient.post<Billing>('/generate-pdf', { ...contractData, type: 'EMAIL-SEND' });
+        return response.data;
+    } catch (err: unknown) {
+        throw err;
+    }
+};

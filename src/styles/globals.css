@@ -471,7 +471,7 @@ header .css-2uchni {
 }
 
 .detail-btn-wrapper button {
-    width: 150px !important;
+    width: 180px !important;
     margin-right: 15px;
 }
 
@@ -560,4 +560,8 @@ header .css-2uchni {
 
 .css-1q39md6-MuiButtonBase-root-MuiButton-root:hover {
     text-decoration: underline;
+}
+
+.btn-wrapper {
+    padding: 15px 0;
 }

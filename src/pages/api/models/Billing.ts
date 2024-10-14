@@ -22,9 +22,13 @@ const billingSchema = new mongoose.Schema({
         required: true
     },
 
-    category: {
+    buyer: {
         type: String,
-        enum: ['Buyer', 'Seller'],
+        required: true
+    },
+
+    seller: {
+        type: String,
         required: true
     },
 
