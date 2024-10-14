@@ -25,16 +25,17 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
     const [sellerData, setSellerData] = React.useState<any>();
     const [logo, setLogo] = React.useState<string | null>('');
 
-    useEffect(() => {
-        const fetchBuyerData = async () => {
+    const fetchBuyerData = async () => {
             const resp: any = await getBuyer(contentData.selectedBuyer._id as string);
             setBuyerData(resp.data);
         };
 
-        const fetchSellerData = async () => {
-            const resp: any = await getSeller(contentData.selectedSeller._id as string);
-            setSellerData(resp.data);
-        };
+    const fetchSellerData = async () => {
+        const resp: any = await getSeller(contentData.selectedSeller._id as string);
+        setSellerData(resp.data);
+    };
+
+    useEffect(() => {
 
         if (contentData) {
             if (contentData.selectedBuyer !== null && contentData.selectedBuyer !== undefined) {
@@ -47,15 +48,12 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
             setLogo(getLocalStorage('appLogo'))
         }
 
-
         setOpen(isOpen);
     }, [isOpen, logo]);
 
 
     const handleClose = () => {
-        if (onClick) {
-            onClick(false);
-        }
+        onClick?.(false);
         setOpen(false);
     };
 
@@ -75,57 +73,26 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
 
                         <div className="preview-wrapper">
                             <div className="header">
-                                {(logo && logo === 'logo') && <Image src={require(`../../public/images/${logo}.svg`)} alt="Description of the image" className="responsive-img center" />}
-                                {(logo && logo !== 'logo') && <Image src={require(`../../public/images/${logo}.png`)} alt="Description of the image" className="responsive-img center" />}
-                            </div>
-
-
-                            {logo === 'logo' &&
-                                <div className="address">
-                                    <Typography variant="body2">B-3 GIRIRAJ CO OP H S LTD, 6 MAMLATDAR WADI RAOD NO. 6 MALAD (WEST), MUMBAI - 400 064.</Typography>
-                                    <Typography variant="body2">PHONE NO: 022 2880 2452 | MOBILE NO: +91 99200 10200 / 99200 90200</Typography>
-                                    <Typography variant="body2">Email: | Pan No. AFRPC6408E </Typography>
-                                    <Typography variant="body2"><b>GSTIN: 27AFRPC6408E1ZI</b></Typography>
-                                </div>
-                            }
-
-
-                            {logo === 'agro' &&
-                                <div className="address">
-                                    <Typography variant="body2">504, SYNERGY, KACH PADA RD NO. 2, NEAR MALAD IND. ESTATE, RAMCHANDRA LANE EXTENTION, MALAD (W), MUMBAI - 400 064.</Typography>
-                                    <Typography variant="body2">Tel. : 022 2880 2452</Typography>
-                                    <Typography variant="body2">Email : meghnaagrocommodities@gmail.com | PAN No. : ABRPC6999E</Typography>
-                                </div>
-                            }
-
-
-                            {logo === 'bombay' &&
-                                <div className="address">
-                                    <Typography variant="body2">504, SYNERGY, KACH PADA RD NO. 2, NEAR MALAD IND. ESTATE, RAMCHANDRA LANE EXTENTION, MALAD (W), MUMBAI - 400 064.</Typography>
-                                    <Typography variant="body2">Tel. : 022 2880 2683 / 2880 3920 | Cell : +91 98200 10200 / 93200 10200</Typography>
-                                    <Typography variant="body2">Email : meghnaagencies@gmail.com | PAN No. : AAAPC7200L</Typography>
-                                    <Typography variant="body2">GSTIN : 27AAAPC7200L1Z2</Typography>
-                                </div>
-                            }
-
-                            {logo === 'meghna' &&
-                                <div className="address">
-                                    <Typography variant="body2">504, SYNERGY, KACH PADA RD NO. 2, NEAR MALAD IND. ESTATE, RAMCHANDRA LANE EXTENTION, MALAD (W), MUMBAI - 400 064.</Typography>
-                                    <Typography variant="body2">Tel. : 022 2880 2452-Fax : 022 2881 5002</Typography>
-                                    <Typography variant="body2">Email : meghnaagencies@gmail.com | PAN No. : AFRPC6408E</Typography>
-                                    <Typography variant="body2">GSTIN : 27AFRPC6408E1ZI</Typography>
-                                </div>
-                            }
+                                <Image src={require(`../../public/images/logo.svg`)} alt="Description of the image" className="responsive-img center" />
+                        </div>
+                        
+                        <div className="address">
+                            <Typography variant="body2">B-3 GIRIRAJ CO OP H S LTD, 6 MAMLATDAR WADI RAOD NO. 6 MALAD (WEST), MUMBAI - 400 064.</Typography>
+                            <Typography variant="body2">PHONE NO: 022 2880 2452 | MOBILE NO: +91 99200 10200 / 99200 90200</Typography>
+                            <Typography variant="body2">Email: | Pan No. AFRPC6408E </Typography>
+                            <Typography variant="body2"><b>GSTIN: 27AFRPC6408E1ZI</b></Typography>
+                        </div>
+                            
 
                             <div className="contract-box">
                                 <div>
                                     <Typography variant="body2">
-                                        <b>CONTRACT NO : </b> <b>{contentData.contract_no}</b>
+                                        <b>Billing No : </b> <b>{contentData.billingNo}</b>
                                     </Typography>
                                 </div>
                                 <div>
                                     <Typography variant="body2">
-                                        <b>DATE : </b> <b>{customFormatDate(contentData.createdDate ? new Date(contentData.createdDate) : new Date())}</b>
+                                        <b>DATE : </b> <b>{customFormatDate(contentData.billDate ? new Date(contentData.billDate) : new Date())}</b>
                                     </Typography>
                                 </div>
                             </div>
@@ -134,76 +101,142 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                 <Typography variant="body2">
                                     Under your instruction and order, we hereby confirm on behalf and risk of the under mentioned Seller and Buyer the following transaction with terms & conditions.
                                 </Typography>
-                            </div>
-
+                        </div>
+                        
                             <div className="detail-wrapper contract-detail-wrapper">
-
-                                {
-                                    sellerData &&
-                                    <>
-                                        <div className="column"><Typography variant="body1" component="article"><b>Seller</b></Typography></div>
-                                        <div className="column">
-                                            <Typography variant="body2" component="article">
-                                                <b>{sellerData.name}</b> <br />
-                                                {sellerData.address}   <br />
-                                                PAN : {sellerData.pan} <br />
-                                                GSTIN : {sellerData.gstin} <br />
-                                            </Typography>
-                                        </div>
-                                    </>
+                                {contentData.contractReferenceNo &&
+                                        <>
+                                            <div className="column"><Typography variant="body1" component="article"><b>Contract Reference No</b></Typography></div>
+                                            <div className="column">
+                                                <Typography variant="body2" component="article">                                                   
+                                                    {contentData.contractReferenceNo}
+                                                </Typography>
+                                            </div>
+                                        </>
+                            }
+                            
+                            {contentData.billDate &&
+                                        <>
+                                            <div className="column"><Typography variant="body1" component="article"><b>Bill Date</b></Typography></div>
+                                            <div className="column">
+                                                <Typography variant="body2" component="article">                                                   
+                                                    {contentData.billDate}
+                                                </Typography>
+                                            </div>
+                                        </>
+                            }
+                            
+                            {contentData.buyer &&
+                                        <>
+                                            <div className="column"><Typography variant="body1" component="article"><b>Buyer</b></Typography></div>
+                                            <div className="column">
+                                                <Typography variant="body2" component="article">                                                   
+                                                    {contentData.buyer}
+                                                </Typography>
+                                            </div>
+                                        </>
+                            }
+                            
+                            {contentData.seller &&
+                                        <>
+                                            <div className="column"><Typography variant="body1" component="article"><b>Seller</b></Typography></div>
+                                            <div className="column">
+                                                <Typography variant="body2" component="article">                                                   
+                                                    {contentData.seller}
+                                                </Typography>
+                                            </div>
+                                        </>
+                            }
+                            
+                            {contentData.quantity &&
+                                        <>
+                                            <div className="column"><Typography variant="body1" component="article"><b>Quantity</b></Typography></div>
+                                            <div className="column">
+                                                <Typography variant="body2" component="article">                                                   
+                                                    {contentData.quantity}
+                                                </Typography>
+                                            </div>
+                                        </>
                                 }
 
-                                {
-                                    buyerData &&
-                                    <>
-                                        <div className="column"><Typography variant="body1" component="article"><b>Buyer</b></Typography></div>
-                                        <div className="column"><Typography variant="body2" component="article">
-                                            <b>{buyerData.name}</b> <br />
-                                            {buyerData.address} <br />
-                                            PAN : {buyerData.pan} <br />
-                                            GSTIN : {buyerData.gstin}
-                                        </Typography></div>
-                                    </>
-                                }
+                            
+                            {contentData.price &&
+                                        <>
+                                            <div className="column"><Typography variant="body1" component="article"><b>Price</b></Typography></div>
+                                            <div className="column">
+                                                <Typography variant="body2" component="article">                                                   
+                                                    {contentData.price}
+                                                </Typography>
+                                            </div>
+                                        </>
+                            }
+                            
+                            {contentData.brokeragePrice &&
+                                        <>
+                                            <div className="column"><Typography variant="body1" component="article"><b>Brokerage Price</b></Typography></div>
+                                            <div className="column">
+                                                <Typography variant="body2" component="article">                                                   
+                                                    {contentData.brokeragePrice}
+                                                </Typography>
+                                            </div>
+                                        </>
+                            }
+                            
+                            {contentData.brokerageOn &&
+                                        <>
+                                            <div className="column"><Typography variant="body1" component="article"><b>Brokerage On</b></Typography></div>
+                                            <div className="column">
+                                                <Typography variant="body2" component="article">                                                   
+                                                    {contentData.brokerageOn}
+                                                </Typography>
+                                            </div>
+                                        </>
+                            }
+                            
+                            {contentData.sgst &&
+                                        <>
+                                            <div className="column"><Typography variant="body1" component="article"><b>SGST</b></Typography></div>
+                                            <div className="column">
+                                                <Typography variant="body2" component="article">                                                   
+                                                    {contentData.sgst}
+                                                </Typography>
+                                            </div>
+                                        </>
+                            }
+                            
+                            {contentData.cgst &&
+                                        <>
+                                            <div className="column"><Typography variant="body1" component="article"><b>CGST</b></Typography></div>
+                                            <div className="column">
+                                                <Typography variant="body2" component="article">                                                   
+                                                    {contentData.cgst}
+                                                </Typography>
+                                            </div>
+                                        </>
+                            }
+                            
+                            {contentData.igst &&
+                                        <>
+                                            <div className="column"><Typography variant="body1" component="article"><b>IGST</b></Typography></div>
+                                            <div className="column">
+                                                <Typography variant="body2" component="article">                                                   
+                                                    {contentData.igst}
+                                                </Typography>
+                                            </div>
+                                        </>
+                            }
+                            
+                            {contentData.brokerageAmount &&
+                                        <>
+                                            <div className="column"><Typography variant="body1" component="article"><b>Brokerage Amount</b></Typography></div>
+                                            <div className="column">
+                                                <Typography variant="body2" component="article">                                                   
+                                                    {contentData.brokerageAmount}
+                                                </Typography>
+                                            </div>
+                                        </>
+                            }
 
-
-                                {
-                                    contentData.formikValues &&
-                                    <>
-                                        <div className="column"><Typography variant="body1" component="article"><b>Quantity</b></Typography></div>
-                                        <div className="column"><Typography variant="body2" component="article"><span>{contentData.formikValues.quantity}</span></Typography></div>
-                                    </>
-                                }
-
-
-                                {
-                                    contentData.formikValues &&
-                                    <>
-                                        <div className="column"><Typography variant="body1" component="article"><b>Price</b></Typography></div>
-                                        <div className="column"><Typography variant="body2" component="article"><span>{contentData.formikValues.price}</span></Typography></div>
-                                    </>
-                                }
-
-
-
-
-                                {contentData.selectedTemplate && Object.entries(contentData.selectedTemplate).filter(([key]) => key !== '_id' && key !== '__v' && key !== 'isDeleted' && key !== 'updatedDate' && key !== 'deletedDate' && key !== 'createdDate').map(([key, value]) => (
-                                    <React.Fragment key={key}>
-                                        <div className="column"><Typography variant="body1" component="article"><b>{key.charAt(0).toUpperCase() + key.slice(1)}</b></Typography></div>
-                                        <div className="column"><Typography variant="body2" component="article"><span>{value as string}</span></Typography></div>
-                                    </React.Fragment>
-                                ))}
-
-
-
-
-
-                                {contentData.labelFields && Object.entries(contentData.labelFields).filter(([key]) => key !== '_id' && key !== '__v' && key !== 'isDeleted' && key !== 'updatedDate' && key !== 'deletedDate' && key !== 'createdDate').map(([key, value]) => (
-                                    <React.Fragment key={key}>
-                                        <div className="column"><Typography variant="body1" component="article"><b>{key.charAt(0).toUpperCase() + key.slice(1)}</b></Typography></div>
-                                        <div className="column"><Typography variant="body2" component="article"><span>{value as string}</span></Typography></div>
-                                    </React.Fragment>
-                                ))}
                             </div>
 
 

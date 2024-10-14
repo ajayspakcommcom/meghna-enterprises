@@ -55,19 +55,8 @@ const Index: React.FC<compProps> = ({ detail }) => {
   };
 
    const previewHandler = () => {
-     setIsPreviewDialogOpen(true);
-     console.log(detailData);
-     
-    // const objectData: any = {
-    //   contract_no: detailData.contract_no,
-    //   createdDate: detailData.createdDate,
-    //   selectedSeller: { _id: detailData.seller_id._id as string, label: detailData.seller_id.name },
-    //   selectedBuyer: { _id: detailData.buyer_id._id as string, label: detailData.buyer_id.name },
-    //   selectedTemplate: { ...detailData.template },
-    //   labelFields: { ...detailData.label },
-    //   formikValues: { quantity: detailData.price, price: detailData.quantity }
-    // };
-    // setPreviewContent(objectData);
+     setIsPreviewDialogOpen(true);     
+     setPreviewContent(detailData);
    };
   
    const sendEmailHandler = async () => {
@@ -109,8 +98,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
     }
   };
 
-  const previewClickHandler = (val: boolean) => {
-     console.log(val);
+  const previewClickHandler = (val: boolean) => {     
     setIsPreviewDialogOpen(val)
   };
 
