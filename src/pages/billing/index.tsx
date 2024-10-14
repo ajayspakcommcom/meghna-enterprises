@@ -13,8 +13,9 @@ const ConfirmationDialogue = dynamic(() => import('../../../components/confirmat
 export default function Index() {
 
   const columns: GridColDef[] = [
+    { field: 'billingNo', headerName: 'Billing No', width: 200 },
     { field: 'contractReferenceNo', headerName: 'Reference No', width: 200 },    
-    { field: 'billDate', headerName: 'Date', width: 200, valueGetter: (params) => {return customFormatDate(new Date(params))} },    
+    { field: 'billDate', headerName: 'Date', width: 200, valueGetter: (params) => { return customFormatDate(new Date(params)) } },  
     { field: 'buyer', headerName: 'Buyer', width: 200 },    
     { field: 'seller', headerName: 'Seller', width: 200 },    
     { field: 'quantity', headerName: 'Quantity', width: 200 },    

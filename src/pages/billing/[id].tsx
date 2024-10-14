@@ -6,6 +6,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { generatePdf, getBilling, sendContractOnEmail } from "@/services/billing";
 
 const Header = dynamic(() => import('../../../components/header/index'));
+const BillingPreviewDialogue = dynamic(() => import('../../../components/billing-preview/index'));
 
 interface compProps {
   detail: { data: {} };
@@ -43,12 +44,10 @@ const Index: React.FC<compProps> = ({ detail }) => {
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
 
   useEffect(() => {
-
     const token = localStorage.getItem("token");
     if (!token) {
       router.push('/');
     }
-
   }, []);
 
   const goToPage = (url: string) => {
@@ -56,7 +55,9 @@ const Index: React.FC<compProps> = ({ detail }) => {
   };
 
    const previewHandler = () => {
-    //setIsPreviewDialogOpen(true);
+     setIsPreviewDialogOpen(true);
+     console.log(detailData);
+     
     // const objectData: any = {
     //   contract_no: detailData.contract_no,
     //   createdDate: detailData.createdDate,
@@ -106,6 +107,11 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
     } catch (error: any) {      
     }
+  };
+
+  const previewClickHandler = (val: boolean) => {
+     console.log(val);
+    setIsPreviewDialogOpen(val)
   };
 
 
@@ -166,6 +172,8 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
         </div>
       </Container>
+
+      <BillingPreviewDialogue isOpen={isPreviewDialogOpen} heading="Billing Preview" contentData={previewContent} onClick={previewClickHandler} />
 
     </>
   );

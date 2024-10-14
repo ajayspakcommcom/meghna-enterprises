@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -10,16 +10,17 @@ import { customFormatDate, getLocalStorage } from "@/services/common";
 import { getBuyer } from "@/services/buyer";
 import { getSeller } from "@/services/seller";
 
-interface ContractPreviewProps {
+interface BillingPreviewProps {
     isOpen: boolean;
     heading: string;
     contentData?: any;
     onClick?: (val: boolean) => void,
 }
 
-const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, onClick }) => {
+const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, onClick }) => {
 
     const [open, setOpen] = React.useState(false);
+
     const [buyerData, setBuyerData] = React.useState<any>();
     const [sellerData, setSellerData] = React.useState<any>();
     const [logo, setLogo] = React.useState<string | null>('');
@@ -45,6 +46,7 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
         if (getLocalStorage('appLogo')) {
             setLogo(getLocalStorage('appLogo'))
         }
+
 
         setOpen(isOpen);
     }, [isOpen, logo]);

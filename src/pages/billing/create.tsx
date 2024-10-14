@@ -13,10 +13,11 @@ import dynamic from "next/dynamic";
 import Billing from "../../../models/Billing";
 import { useFormik } from "formik";
 import ErrorMessage from "../../../components/error-message";
-import { createBilling, getContractIdName } from "@/services/billing";
+import { createBilling, getContractIdName, getLastBilling } from "@/services/billing";
 import billingSchema from "@/validation/billingSchema";
 import { getContractBuyerSellerDetail } from "@/services/contract";
 import { number } from "yup";
+import { getCurrentFinancialYear, incrementBillingNo } from "@/services/common";
 
 const Header = dynamic(() => import("../../../components/header/index"));
 const SuccessConfirmationDialogue = dynamic(
@@ -37,6 +38,7 @@ export default function Index() {
   const [contractList, setContractList] = useState<selectedAutoField[]>([]);
   const [selectedContract, setSelectedContract] = useState<Billing | null>(null);
   const [selectedBrokerage, setSelectedBrokerage] = useState<number>(0);
+  const [billingNo, setBillingNo] = useState<any>();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -119,8 +121,6 @@ export default function Index() {
 
   const handleSubmit = async (billing: Billing) => {  
     
-    
-
     const objData = {        
         "contractReferenceNo": selectedContract?.contract_no,
         "contractReferenceNo_Id": selectedContract?._id,
@@ -133,9 +133,10 @@ export default function Index() {
         "brokerageAmount": +(billing.brokerageAmount ?? 0),
         "sgst": +(billing.sgst ?? 0),
         "cgst": +(billing.cgst ?? 0),
-        "igst": +(billing.igst ?? 0)
+        "igst": +(billing.igst ?? 0),
+        "billDate": new Date(),
+        "billingNo": billingNo
     };
-    
 
     setLoading(true);
     try {
@@ -198,9 +199,7 @@ export default function Index() {
     formik.setFieldValue("grandTotal", selectedBrokerage + Math.round(grandTotal));
   }, [selectedBrokerage,formik.values.igst,formik.values.cgst,formik.values.sgst]);
 
-  const brockerageHandleChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const brockerageHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const brockerage = Number(event.target.value);
     const brokerageAmount =
       Number(selectedContract?.quantity) * Number(brockerage);
@@ -236,14 +235,37 @@ export default function Index() {
     formik.setFieldValue("grandTotal", selectedBrokerage);
   };
 
+const fetchLastBilling = async () => {
+  try {
+    const response = await getLastBilling();
+    if (response && (response as any).data) {
+      const billingNo = (response as any).data.billingNo;
+
+      if (billingNo !== null && billingNo !== undefined) {
+        setBillingNo(incrementBillingNo(billingNo, getCurrentFinancialYear(true)));
+      } else {        
+        setBillingNo(incrementBillingNo('', getCurrentFinancialYear(true)));
+      }
+    } else {
+      console.error('Response or data is null/undefined');
+      setBillingNo(incrementBillingNo('', getCurrentFinancialYear(true))); 
+    }
+  } catch (error) {
+    console.error('Error fetching seller data:', error);
+  }
+};
+
+
   useEffect(() => {
     fetchContractIdName();
     updateGrandTotal();
+    fetchLastBilling();
   }, [updateGrandTotal]);
 
   return (
     <>
       <Header />
+
       <Container maxWidth="xl">
         <div className="buyer-seller-form-wrapper">
           <div>

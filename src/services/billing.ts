@@ -96,3 +96,12 @@ export const sendContractOnEmail = async (contractData: any): Promise<any> => {
         throw err;
     }
 };
+
+export const getLastBilling = async (): Promise<Billing> => {
+    try {
+        const response = await apiClient.post<Billing>('/billing', { type: 'LAST' });
+        return response.data;
+    } catch (err: unknown) {
+        throw err;
+    }
+};

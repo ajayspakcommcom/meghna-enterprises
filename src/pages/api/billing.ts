@@ -50,7 +50,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             createdDate: req.body.createdDate || Date.now(),
             updatedDate: req.body.updatedDate || null,
             deletedDate: req.body.deletedDate || null,
-            isDeleted: req.body.isDeleted || false
+            isDeleted: req.body.isDeleted || false,
+            billingNo: req.body.billingNo
           });
           res.status(201).json({ message: 'Billing have been successfully created.' });
         } catch (error: any) {
@@ -130,6 +131,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           res.status(200).json({ message: 'Billing deleted successfully', data: deletedBuyer });
 
         } catch (error) {
+          res.status(500).json({ error: 'Internal Server Error' });
+        }
+        break;
+
+      case 'LAST':
+        try {
+          const dataList = await Billing.findOne({}).sort({ _id: -1 }).exec();
+          res.status(200).json({ data: dataList });
+        } catch (error: any) {
           res.status(500).json({ error: 'Internal Server Error' });
         }
         break;

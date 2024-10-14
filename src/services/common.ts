@@ -57,6 +57,33 @@ export const getCurrentFinancialYear = (isDashed: boolean = false): string => {
 
 };
 
+export const incrementBillingNo = (input: string | null | undefined, currentFinancialYear: string): string => {
+    // Check if the input is null or undefined
+    if (!input) {
+        return `00001/${currentFinancialYear}`;  // Return "00001" for null or undefined input
+    }
+
+    // Find the position of the first "/"
+    const indexOfSlash = input.indexOf('/');
+
+    // If "/" is found, take all characters before it; otherwise, take the whole input
+    const beforeSlash = indexOfSlash !== -1 ? input.substring(0, indexOfSlash) : input;
+
+    // Convert the extracted part to a number
+    const numericValue = parseInt(beforeSlash, 10);
+
+    // Check if the conversion to number is successful
+    if (isNaN(numericValue)) {
+        return `00001`;  // Return "00001" if the conversion fails
+    }
+
+    // Increment the numeric value by 1
+    const incrementedValue = numericValue + 1;
+
+    // Convert the incremented value back to a string and pad with leading zeros to ensure it is 5 characters long
+    return incrementedValue.toString().padStart(5, '0') + '/' + currentFinancialYear;
+}
+
 export const incrementContractNo = (inputString: string, currentFinancialYear: string): string => {
 
     const appLogo = getLocalStorage('appLogo');
@@ -116,7 +143,6 @@ export const incrementContractNo = (inputString: string, currentFinancialYear: s
                 default:
                     break;
             }
-
         }
 
         return '';
@@ -129,10 +155,8 @@ export const incrementContractNo = (inputString: string, currentFinancialYear: s
 export const generateContractNumber = (): string => {
     const today = new Date();
     const currentYear = today.getFullYear();
-
     // Generate a random 4-digit number between 1000 and 9999
     const randomNumber = Math.floor(Math.random() * 9000) + 1000;
-
     return `${randomNumber}/${getCurrentFinancialYear()}`;
 };
 

@@ -11,6 +11,11 @@ const billingSchema = new mongoose.Schema({
         default: Date.now
     },
 
+    billingNo: {
+        type: String,
+        required: true
+    },
+
     contractReferenceNo_Id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Contract',
