@@ -160,9 +160,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
         </div>
       </Container>
-
       <BillingPreviewDialogue isOpen={isPreviewDialogOpen} heading="Billing Preview" contentData={previewContent} onClick={previewClickHandler} />
-
     </>
   );
 }

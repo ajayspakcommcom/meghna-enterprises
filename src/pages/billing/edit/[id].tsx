@@ -1,102 +1,149 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, Button, Typography, TextField, Container, Autocomplete } from '@mui/material';
-import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
-import Seller from "../../../../models/Seller";
+import {Card, CardContent, Button, Typography, TextField, Container, Autocomplete} from "@mui/material";
+import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
+import Billing from "../../../../models/Billing";
 import { useFormik } from "formik";
 import ErrorMessage from "../../../../components/error-message";
-import buyerSchema from "@/validation/buyerSchema";
-import { createBuyer, getBuyer, updateBuyer } from "@/services/buyer";
+import { createBilling, getBilling, getContractIdName, getLastBilling } from "@/services/billing";
+import billingSchema from "@/validation/billingSchema";
+import { getContractBuyerSellerDetail } from "@/services/contract";
+import { getCurrentFinancialYear, incrementBillingNo } from "@/services/common";
+const Header = dynamic(() => import("../../../../components/header/index"));
+const SuccessConfirmationDialogue = dynamic(() => import("../../../../components/success-confirmation/index"));
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { getSeller, updateSeller } from "@/services/seller";
 
-const Header = dynamic(() => import('../../../../components/header/index'));
-const SuccessConfirmationDialogue = dynamic(() => import('../../../../components/success-confirmation/index'));
-
-interface compProps {
-  detail: { data: {} };
+interface selectedAutoField {
+  _id: string;
+  label: string;
 }
 
-interface DetailData {
-  _id: string;
-  name: string;
-  address: string;
-  telephone_no: string;
-  mobile_no: string;
-  fax: string;
-  pan: string;
-  gstin: string;
-  state_code: string;
-  email: string;
-  account_detail: string;
-  updatedDate: Date | null;
-  deletedDate: Date | null;
-  isDeleted: boolean;
-  createdDate: Date;
-  __v: number;
+interface compProps {
+  detail: { data: any };
 }
 
 const Index: React.FC<compProps> = ({ detail }) => {
 
   const router = useRouter();
-
-  const [detailData, setDetailData] = useState<DetailData>(detail.data as DetailData);
-
-  const [authData, setAuthData] = useState({ username: "", password: "" });
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setError] = useState<any>();
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
 
+  const [contractList, setContractList] = useState<selectedAutoField[]>([]);
+  const [selectedContract, setSelectedContract] = useState<Billing | null>(null);
+  const [selectedBrokerage, setSelectedBrokerage] = useState<number>(0);
+  const [billingNo, setBillingNo] = useState<any>();  
+  const [selectedContractLabel, setSelectedContractLabel] = useState<selectedAutoField | null>(null);
 
   useEffect(() => {
-
     const token = localStorage.getItem("token");
     if (!token) {
-      router.push('/');
+      router.push("/");
     }
-
   }, []);
 
   const goToPage = (url: string) => {
     router.push(`${url}`);
   };
 
-  const initialValues: Seller = {
-    name: detailData.name,
-    address: detailData.address,
-    telephone_no: detailData.telephone_no,
-    mobile_no: detailData.mobile_no,
-    fax: detailData.fax,
-    pan: detailData.pan,
-    gstin: detailData.gstin,
-    state_code: detailData.state_code,
-    email: detailData.email,
-    emails: [...detailData.email.split(', ')],
-    account_detail: detailData.account_detail
+  const initialValues: Billing = {
+    _id: "",
+    contract_no: "",
+    buyer_id: {
+      _id: "",
+      name: "",
+      address: "",
+      telephone_no: "",
+      mobile_no: "",
+      fax: "",
+      pan: "",
+      gstin: "",
+      state_code: "",
+      email: "",
+      updatedDate: null,
+      deletedDate: null,
+      isDeleted: false,
+      account_detail: "",
+      createdDate: new Date(),
+      __v: 0,
+    },
+    seller_id: {
+      _id: "",
+      name: "",
+      address: "",
+      telephone_no: "",
+      mobile_no: "",
+      fax: "",
+      pan: "",
+      gstin: "",
+      state_code: "",
+      email: "",
+      updatedDate: null,
+      deletedDate: null,
+      isDeleted: false,
+      account_detail: "",
+      createdDate: new Date(),
+      __v: 0,
+    },
+    template: {
+      COMMODITY: "",
+      PLACE_OF_DELIVERY: "",
+      PERIOD_OF_DELIVERY: "",
+      PAYMENT: "",
+      TERMS_AND_CONDITIONS: "",
+      BROKERAGE: "",
+      BROKERAGE_LIABILITY: "",
+    },
+    label: {},
+    quantity: 0,
+    price: "",
+    assessment_year: "",
+    template_id: "",
+    updatedDate: null,
+    deletedDate: null,
+    isDeleted: false,
+    company: "",
+    createdDate: new Date(),
+    __v: 0,
+    brokerageAmount: 0,
+    totalPurchasedAmount: 0,
+    brockerage: 0,
+    igst: 0,
+    cgst: 0,
+    sgst: 0,
+    grandTotal: 0,
   };
 
-  const handleSubmit = async (seller: Seller) => {
-
-    const data = { ...seller, id: detailData._id! };
-
-    if (Array.isArray(data.emails) && data.emails.length > 0) {
-      data.email = data.emails.join(', ');
-    } else {
-      data.email = '-----';
-    }
+  const handleSubmit = async (billing: Billing) => {  
+    
+    const objData = {        
+        "contractReferenceNo": selectedContract?.contract_no,
+        "contractReferenceNo_Id": selectedContract?._id,
+        "buyer": selectedContract?.buyer_id?.name,
+        "seller": selectedContract?.seller_id?.name,
+        "quantity": +(selectedContract?.quantity ?? 0),
+        "price": +(selectedContract?.price ?? 0),
+        "brokeragePrice": +(billing.brockerage ?? 0),
+        "brokerageOn": "Quantity",
+        "brokerageAmount": +(billing.brokerageAmount ?? 0),
+        "sgst": +(billing.sgst ?? 0),
+        "cgst": +(billing.cgst ?? 0),
+        "igst": +(billing.igst ?? 0),
+        "billDate": new Date(),
+        "billingNo": billingNo
+    };
 
     setLoading(true);
-
     try {
-      const response = await updateSeller(data);      
+      await createBilling(objData);
       setLoading(false);
       formik.resetForm();
       setIsSuccessDialogOpen(true);
     } catch (error: any) {
-      setLoading(false);      
+      setLoading(false);
       setError(error);
     }
-
+    
   };
 
   const handleReset = () => {
@@ -106,224 +153,316 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
   const formik = useFormik({
     initialValues,
-    validationSchema: buyerSchema,
+    validationSchema: billingSchema,
     onSubmit: handleSubmit,
-    onReset: handleReset
+    onReset: handleReset,
   });
 
+  const fetchContractIdName = async () => {
+    try {
+      const response = await getContractIdName();
+      const formattedData = response.data.map((contract: any) => {
+        return {...contract,label: contract.contract_no};
+      });
+      setContractList(formattedData);
+    } catch (error) {
+      console.error("Error fetching contract data:", error);
+    }
+  };
+
+  const handleContractChange = async (event: React.ChangeEvent<{}>, value: selectedAutoField | null) => {        
+    const contractId = (value as selectedAutoField)?._id;
+    if (contractId) {
+      const response = await getContractBuyerSellerDetail(contractId);
+      const contract = response.data as unknown as Billing;
+      const totalPurchasedAmount = Number(contract.quantity) * Number(contract.price);
+      setSelectedContract(contract as unknown as Billing);       
+      formik.setFieldValue("totalPurchasedAmount", totalPurchasedAmount);
+    } else {
+      console.log("No contract selected");
+    }
+  };
+
+  const fetchBillingDetailById = async () => {      
+      const contractId = (detail.data)?.contractReferenceNo_Id;
+      if (contractId) {
+        const response = await getContractBuyerSellerDetail(contractId);
+        const contract = response.data as unknown as Billing;
+        const totalPurchasedAmount = Number(contract.quantity) * Number(contract.price);
+        setSelectedContract(contract as unknown as Billing);     
+        setSelectedContractLabel({ _id: contract._id, label: contract.contract_no } as unknown as selectedAutoField);
+        formik.setFieldValue("totalPurchasedAmount", totalPurchasedAmount);
+      } else {
+        console.log("No contract selected");
+      }
+  };
+
+  const updateGrandTotal = React.useCallback(() => {
+    const igst = Number(formik.values.igst);
+    const cgst = Number(formik.values.cgst);
+    const sgst = Number(formik.values.sgst);
+    const grandTotal = selectedBrokerage * (igst / 100) + selectedBrokerage * (cgst / 100) + selectedBrokerage * (sgst / 100);
+    formik.setFieldValue("grandTotal", selectedBrokerage + Math.round(grandTotal));
+  }, [selectedBrokerage,formik.values.igst,formik.values.cgst,formik.values.sgst]);
+
+  const brockerageHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const brockerage = Number(event.target.value);
+    const brokerageAmount = Number(selectedContract?.quantity) * Number(brockerage);
+    formik.setFieldValue("brokerageAmount", brokerageAmount);
+    formik.setFieldValue("brockerage", brockerage);
+    setSelectedBrokerage(brokerageAmount);
+  };
+
+  const igstHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    formik.setFieldValue("igst", event.target.value);
+    const grandTotal = selectedBrokerage * (Number(event.target.value) / 100);
+    setSelectedBrokerage((prevSelectedBrokerage) => prevSelectedBrokerage + grandTotal);
+    formik.setFieldValue("grandTotal", selectedBrokerage);
+  };
+
+  const cgstHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    formik.setFieldValue("cgst", event.target.value);
+    const grandTotal = selectedBrokerage * (Number(event.target.value) / 100);
+    setSelectedBrokerage((prevSelectedBrokerage) => prevSelectedBrokerage + grandTotal);
+    formik.setFieldValue("grandTotal", selectedBrokerage);
+  };
+
+  const sgstHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    formik.setFieldValue("sgst", event.target.value);
+    const grandTotal = selectedBrokerage * (Number(event.target.value) / 100);
+    setSelectedBrokerage((prevSelectedBrokerage) => prevSelectedBrokerage + grandTotal);
+    formik.setFieldValue("grandTotal", selectedBrokerage);
+  };
+
+const fetchLastBilling = async () => {
+  try {
+    const response = await getLastBilling();
+    if (response && (response as any).data) {
+      const billingNo = (response as any).data.billingNo;
+      if (billingNo !== null && billingNo !== undefined) {
+        setBillingNo(incrementBillingNo(billingNo, getCurrentFinancialYear(true)));
+      } else {        
+        setBillingNo(incrementBillingNo('', getCurrentFinancialYear(true)));
+      }
+    } else {
+      console.error('Response or data is null/undefined');
+      setBillingNo(incrementBillingNo('', getCurrentFinancialYear(true))); 
+    }
+  } catch (error) {
+    console.error('Error fetching seller data:', error);
+  }
+};
+
+  useEffect(() => {
+    fetchContractIdName();
+    updateGrandTotal();
+    fetchLastBilling();    
+
+    setTimeout(() => {      
+      fetchBillingDetailById();
+    }, 2000);
+
+  }, [updateGrandTotal]);
 
   return (
     <>
       <Header />
-
       <Container maxWidth="xl">
-        <div className='buyer-seller-form-wrapper'>
-
+        <div className="buyer-seller-form-wrapper">
           <div>
             <div className="header-content">
-              <div>
-                <Typography variant="h5" component="article">Edit Seller</Typography>
-              </div>
-              <div className="btn-wrapper">
-                <Button variant="outlined" onClick={() => goToPage('/seller')}>Back</Button>
-              </div>
+              <div><Typography variant="h5" component="article">Edit Billing</Typography></div>
+              <div className="btn-wrapper"><Button variant="outlined" onClick={() => goToPage("/billing")}>Back</Button></div>
             </div>
           </div>
 
           <div>
             <Card>
               <CardContent>
-                <form onSubmit={formik.handleSubmit} onReset={formik.handleReset} className='form'>
-
-                  {errors && <div className="error"><ErrorMessage message={errors} /></div>}
-
-                  <div className="buyer-seller-forms-wrapper">
-                    <div>
-                      <TextField
-                        type="text"
-                        label="Name"
-                        name="name"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.name}
-                        onChange={formik.handleChange}
-                        error={formik.touched.name && Boolean(formik.errors.name)}
-                        helperText={formik.touched.name && formik.errors.name}
-                      />
+                <form
+                  onSubmit={formik.handleSubmit}
+                  onReset={formik.handleReset}
+                  className="form"
+                >
+                  {errors && (
+                    <div className="error">
+                      <ErrorMessage message={errors} />
                     </div>
-
-                    <div>
-                      <TextField
-                        type="text"
-                        label="Telephone No"
-                        name="telephone_no"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.telephone_no}
-                        onChange={formik.handleChange}
-                        error={formik.touched.telephone_no && Boolean(formik.errors.telephone_no)}
-                        helperText={formik.touched.telephone_no && formik.errors.telephone_no}
-                      />
-                    </div>
-
-                  </div>
-
-
-                  <div className="buyer-seller-forms-wrapper">
-
-                    <div>
-                      <TextField
-                        type="text"
-                        label="Mobile No"
-                        name="mobile_no"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.mobile_no}
-                        onChange={formik.handleChange}
-                        error={formik.touched.mobile_no && Boolean(formik.errors.mobile_no)}
-                        helperText={formik.touched.mobile_no && formik.errors.mobile_no}
-                      />
-                    </div>
-
-                    <div>
-                      <TextField
-                        type="text"
-                        label="Fax"
-                        name="fax"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.fax}
-                        onChange={formik.handleChange}
-                        error={formik.touched.fax && Boolean(formik.errors.fax)}
-                        helperText={formik.touched.fax && formik.errors.fax}
-                      />
-                    </div>
-
-                  </div>
-
-
-                  <div className="buyer-seller-forms-wrapper">
-
-                    <div>
-                      <TextField
-                        type="text"
-                        label="Pan"
-                        name="pan"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.pan}
-                        onChange={formik.handleChange}
-                        error={formik.touched.pan && Boolean(formik.errors.pan)}
-                        helperText={formik.touched.pan && formik.errors.pan}
-                      />
-                    </div>
-
-                    <div>
-                      <TextField
-                        type="text"
-                        label="gstin"
-                        name="gstin"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={formik.values.gstin}
-                        onChange={formik.handleChange}
-                        error={formik.touched.gstin && Boolean(formik.errors.gstin)}
-                        helperText={formik.touched.gstin && formik.errors.gstin}
-                      />
-                    </div>
-
-                  </div>
-
-
-
-                  <TextField
-                    type="text"
-                    label="State Code"
-                    name="state_code"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    value={formik.values.state_code}
-                    onChange={formik.handleChange}
-                    error={formik.touched.state_code && Boolean(formik.errors.state_code)}
-                    helperText={formik.touched.state_code && formik.errors.state_code}
-                  />
-
-                  <div className="autocomplete-email">
+                  )}
+                  <div>                    
                     <Autocomplete
-                      multiple
-                      id="emails"
-                      options={[]} // options array is empty as we are allowing free-form input
-                      freeSolo
-                      fullWidth
-                      value={formik.values.emails}
-                      onChange={(event, newValue) => {
-                        formik.setFieldValue('emails', newValue);
-                      }}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          name="emails"
-                          label="Enter multiple emails"
-                          variant="outlined"
-                          fullWidth
-                          error={formik.touched.emails && Boolean(formik.errors.emails)}
-                          helperText={formik.touched.emails && formik.errors.emails}
-                        />
-                      )}
+                      disablePortal
+                      options={contractList}
+                      value={selectedContractLabel}
+                      renderInput={(params) => ( <TextField {...params} label="Select Contract" required placeholder="Select Contract" />)}
+                      onChange={handleContractChange}
                     />
                   </div>
 
-                  <TextField
-                    type="text"
-                    label="Address"
-                    name="address"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    multiline
-                    rows={3}
-                    value={formik.values.address}
-                    onChange={formik.handleChange}
-                    error={formik.touched.address && Boolean(formik.errors.address)}
-                    helperText={formik.touched.address && formik.errors.address}
-                  />
+                  {selectedContract && (
+                    <>
+                      <div className="buyer-seller-forms-wrapper">
+                        <div>
+                          <TextField
+                            type="text"
+                            label="Buyer"
+                            name="buyer"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            value={selectedContract?.buyer_id?.name ?? ""}
+                            disabled={true}
+                          />
+                        </div>
 
-                  <TextField
-                    type="text"
-                    label="Account Detail"
-                    name="account_detail"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    multiline
-                    rows={3}
-                    value={formik.values.account_detail}
-                    onChange={formik.handleChange}
-                    error={formik.touched.address && Boolean(formik.errors.account_detail)}
-                    helperText={formik.touched.account_detail && formik.errors.account_detail}
-                  />
+                        <div>
+                          <TextField
+                            type="text"
+                            label="Seller"
+                            name="seller"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            value={selectedContract?.seller_id?.name ?? ""}
+                            disabled={true}
+                          />
+                        </div>
+                      </div>
 
+                      <div className="buyer-seller-forms-wrapper">
+                        <div>
+                          <TextField
+                            type="text"
+                            label="Quantity"
+                            name="quantity"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            value={selectedContract?.quantity ?? ""}
+                            disabled={true}
+                          />
+                        </div>
 
-                  <Button type='submit' variant="contained" fullWidth>{loading ? "Submit..." : "Submit"}</Button>
+                        <div>
+                          <TextField
+                            type="text"
+                            label="Price"
+                            name="price"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            value={selectedContract?.price ?? ""}
+                            disabled={true}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="buyer-seller-forms-wrapper">
+                        <div>
+                          <TextField
+                            type="text"
+                            label="Total Purchased Amount"
+                            name="totalPurchasedAmount"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            value={formik.values.totalPurchasedAmount}
+                            disabled={true}
+                          />
+                        </div>
+                        <div>
+                          <TextField
+                            type="text"
+                            label="Brokerage"
+                            name="brockerage"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            value={formik.values.brockerage}
+                            onChange={brockerageHandleChange}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="buyer-seller-forms-wrapper">
+                        <div>
+                          <TextField
+                            type="text"
+                            label="Brokerage Amount"
+                            name="brokerageAmount"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            value={formik.values.brokerageAmount}
+                            disabled={true}
+                          />
+                        </div>
+                        <div>
+                          <TextField
+                            type="text"
+                            label="IGST"
+                            name="igst"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            value={formik.values.igst}
+                            onChange={igstHandleChange}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="buyer-seller-forms-wrapper">
+                        <div>
+                          <TextField
+                            type="text"
+                            label="CGST"
+                            name="cgst"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            value={formik.values.cgst}
+                            onChange={cgstHandleChange}
+                          />
+                        </div>
+                        <div>
+                          <TextField
+                            type="text"
+                            label="SGST"
+                            name="sgst"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            value={formik.values.sgst}
+                            onChange={sgstHandleChange}
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <TextField
+                          type="text"
+                          label="Grand Total"
+                          name="grandTotal"
+                          variant="outlined"
+                          fullWidth
+                          margin="normal"
+                          value={formik.values.grandTotal}
+                          disabled={true}
+                        />
+                      </div>
+                    </>
+                  )}
+
+                  <div className="btn-wrapper">
+                  <Button type="submit" variant="contained" fullWidth>{loading ? "Submit..." : "Submit"}</Button>
+                  </div>
                 </form>
-
-
               </CardContent>
             </Card>
           </div>
-
         </div>
       </Container>
-
-      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Seller Updated Successfully" redirect="seller" />
-
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Billing Updated Successfully" redirect="billing" />
     </>
   );
 }
@@ -331,16 +470,12 @@ const Index: React.FC<compProps> = ({ detail }) => {
 export default Index;
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
-
   const { id } = context.query;
-  const detail = await getSeller(id as string);
-
+  const detail = await getBilling(id as string);
   return {
-    props: {
-      detail
-    }
+    props: { detail }
   };
 
-
 };
+
 
