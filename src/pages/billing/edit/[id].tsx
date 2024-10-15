@@ -197,41 +197,42 @@ const Index: React.FC<compProps> = ({ detail }) => {
       }
   };
 
-  const updateGrandTotal = React.useCallback(() => {
-    const igst = Number(formik.values.igst);
-    const cgst = Number(formik.values.cgst);
-    const sgst = Number(formik.values.sgst);
-    const grandTotal = selectedBrokerage * (igst / 100) + selectedBrokerage * (cgst / 100) + selectedBrokerage * (sgst / 100);
-    formik.setFieldValue("grandTotal", selectedBrokerage + Math.round(grandTotal));
-  }, [selectedBrokerage,formik.values.igst,formik.values.cgst,formik.values.sgst]);
-
-  const brockerageHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const brockerageHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {    
     const brockerage = Number(event.target.value);
     const brokerageAmount = Number(selectedContract?.quantity) * Number(brockerage);
     formik.setFieldValue("brokerageAmount", brokerageAmount);
     formik.setFieldValue("brockerage", brockerage);
     setSelectedBrokerage(brokerageAmount);
+    const igstTax = brokerageAmount * (Number(formik.values.igst) / 100);
+    const sgstTax = brokerageAmount * (Number(formik.values.sgst) / 100);
+    const cgstTax = brokerageAmount * (Number(formik.values.cgst) / 100);    
+    formik.setFieldValue("grandTotal", brokerageAmount + igstTax + sgstTax + cgstTax);
   };
 
-  const igstHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    formik.setFieldValue("igst", event.target.value);
-    const grandTotal = selectedBrokerage * (Number(event.target.value) / 100);
-    setSelectedBrokerage((prevSelectedBrokerage) => prevSelectedBrokerage + grandTotal);
-    formik.setFieldValue("grandTotal", selectedBrokerage);
+  const igstHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {    
+    formik.setFieldValue("igst", event.target.value);    
+    const igstTax = selectedBrokerage * (Number(event.target.value) / 100);
+    const sgstTax = selectedBrokerage * (Number(formik.values.sgst) / 100);
+    const cgstTax = selectedBrokerage * (Number(formik.values.cgst) / 100);
+    formik.setFieldValue("grandTotal", selectedBrokerage + igstTax + sgstTax + cgstTax);
+
   };
 
-  const cgstHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    formik.setFieldValue("cgst", event.target.value);
-    const grandTotal = selectedBrokerage * (Number(event.target.value) / 100);
-    setSelectedBrokerage((prevSelectedBrokerage) => prevSelectedBrokerage + grandTotal);
-    formik.setFieldValue("grandTotal", selectedBrokerage);
+  const cgstHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {    
+    formik.setFieldValue("cgst", event.target.value);    
+    const igstTax = selectedBrokerage * (Number(formik.values.igst) / 100);
+    const sgstTax = selectedBrokerage * (Number(formik.values.sgst) / 100);
+    const cgstTax = selectedBrokerage * (Number(event.target.value) / 100);  
+    formik.setFieldValue("grandTotal", selectedBrokerage + igstTax + sgstTax + cgstTax);
+
   };
 
-  const sgstHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const sgstHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {    
     formik.setFieldValue("sgst", event.target.value);
-    const grandTotal = selectedBrokerage * (Number(event.target.value) / 100);
-    setSelectedBrokerage((prevSelectedBrokerage) => prevSelectedBrokerage + grandTotal);
-    formik.setFieldValue("grandTotal", selectedBrokerage);
+    const igstTax = selectedBrokerage * (Number(formik.values.igst) / 100);
+    const sgstTax = selectedBrokerage * (Number(event.target.value) / 100);
+    const cgstTax = selectedBrokerage * (Number(formik.values.cgst) / 100);
+    formik.setFieldValue("grandTotal", selectedBrokerage + igstTax + sgstTax + cgstTax);
   };
 
 const fetchLastBilling = async () => {
@@ -259,12 +260,15 @@ const setBillingDetail = () => {
   formik.setFieldValue("sgst", detail.data.sgst);
   formik.setFieldValue("brokerageAmount", detail.data.brokerageAmount);
   formik.setFieldValue("brockerage", detail.data.brokeragePrice);
-  formik.setFieldValue("grandTotal", 50);
+
+  const igstTax = detail.data.brokerageAmount * (Number(formik.values.igst) / 100);
+  const sgstTax = detail.data.brokerageAmount * (Number(formik.values.sgst) / 100);
+  const cgstTax = detail.data.brokerageAmount * (Number(formik.values.cgst) / 100);    
+  formik.setFieldValue("grandTotal", detail.data.brokerageAmount + igstTax + sgstTax + cgstTax);
 }
 
   useEffect(() => {
-    fetchContractIdName();
-    updateGrandTotal();
+    fetchContractIdName();    
     fetchLastBilling();    
     setTimeout(() => {      
       fetchBillingDetailById();

@@ -189,14 +189,7 @@ export default function Index() {
 
     const igstTax = brokerageAmount * (Number(formik.values.igst) / 100);
     const sgstTax = brokerageAmount * (Number(formik.values.sgst) / 100);
-    const cgstTax = brokerageAmount * (Number(formik.values.cgst) / 100);
-    
-    console.clear();
-    console.log('igstTax', igstTax);
-    console.log('sgstTax', sgstTax);
-    console.log('cgstTax', cgstTax);
-    console.log('selectedBrokerage', brokerageAmount);
-    
+    const cgstTax = brokerageAmount * (Number(formik.values.cgst) / 100);    
     formik.setFieldValue("grandTotal", brokerageAmount + igstTax + sgstTax + cgstTax);
 
   };
