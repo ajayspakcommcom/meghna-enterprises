@@ -82,8 +82,6 @@ export default function Index() {
 
 
   return (
-    <>
-
       <div className='login-form-wrapper'>
 
         {
@@ -93,18 +91,18 @@ export default function Index() {
               <Card variant="outlined">
                 <Image src={require('../../public/images/logo.svg')} alt="Description of the image" className="responsive-img center" onClick={() => toggleLoginHandler('logo')} />
               </Card>
-              <Card variant="outlined">
+              {false && <Card variant="outlined">
                 <Image src={require('../../public/images/agro.png')} alt="Description of the image" className="responsive-img center" onClick={() => toggleLoginHandler('agro')} />
-              </Card>
+              </Card>}
             </div>
-            <div>
+            {false && <div>
               <Card variant="outlined">
                 <Image src={require('../../public/images/bombay.png')} alt="Description of the image" className="responsive-img center" onClick={() => toggleLoginHandler('bombay')} />
               </Card>
               <Card variant="outlined">
                 <Image src={require('../../public/images/meghna.png')} alt="Description of the image" className="responsive-img center" onClick={() => toggleLoginHandler('meghna')} />
               </Card>
-            </div>
+            </div>}
           </div>
         }
 
@@ -151,8 +149,6 @@ export default function Index() {
         }
 
       </div>
-
-    </>
   );
 }
 
