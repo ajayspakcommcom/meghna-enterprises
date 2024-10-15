@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Card,
-  CardContent,
-  Button,
-  Typography,
-  TextField,
-  Container,
-  Autocomplete,
-} from "@mui/material";
+import {Card,CardContent,Button,Typography,TextField,Container,Autocomplete} from "@mui/material";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import Billing from "../../../models/Billing";
@@ -16,13 +8,10 @@ import ErrorMessage from "../../../components/error-message";
 import { createBilling, getContractIdName, getLastBilling } from "@/services/billing";
 import billingSchema from "@/validation/billingSchema";
 import { getContractBuyerSellerDetail } from "@/services/contract";
-import { number } from "yup";
 import { getCurrentFinancialYear, incrementBillingNo } from "@/services/common";
 
 const Header = dynamic(() => import("../../../components/header/index"));
-const SuccessConfirmationDialogue = dynamic(
-  () => import("../../../components/success-confirmation/index")
-);
+const SuccessConfirmationDialogue = dynamic(() => import("../../../components/success-confirmation/index"));
 
 interface selectedAutoField {
   _id: string;
@@ -199,39 +188,33 @@ export default function Index() {
     formik.setFieldValue("grandTotal", selectedBrokerage + Math.round(grandTotal));
   }, [selectedBrokerage,formik.values.igst,formik.values.cgst,formik.values.sgst]);
 
-  const brockerageHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const brockerageHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {    
     const brockerage = Number(event.target.value);
-    const brokerageAmount =
-      Number(selectedContract?.quantity) * Number(brockerage);
+    const brokerageAmount = Number(selectedContract?.quantity) * Number(brockerage);
     formik.setFieldValue("brokerageAmount", brokerageAmount);
     formik.setFieldValue("brockerage", brockerage);
     setSelectedBrokerage(brokerageAmount);
   };
 
-  const igstHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const igstHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {    
     formik.setFieldValue("igst", event.target.value);
     const grandTotal = selectedBrokerage * (Number(event.target.value) / 100);
-    setSelectedBrokerage(
-      (prevSelectedBrokerage) => prevSelectedBrokerage + grandTotal
-    );
+    console.log("grandTotal", grandTotal);
+    setSelectedBrokerage((prevSelectedBrokerage) => prevSelectedBrokerage + grandTotal);
     formik.setFieldValue("grandTotal", selectedBrokerage);
   };
 
   const cgstHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     formik.setFieldValue("cgst", event.target.value);
     const grandTotal = selectedBrokerage * (Number(event.target.value) / 100);
-    setSelectedBrokerage(
-      (prevSelectedBrokerage) => prevSelectedBrokerage + grandTotal
-    );
+    setSelectedBrokerage((prevSelectedBrokerage) => prevSelectedBrokerage + grandTotal);
     formik.setFieldValue("grandTotal", selectedBrokerage);
   };
 
   const sgstHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     formik.setFieldValue("sgst", event.target.value);
     const grandTotal = selectedBrokerage * (Number(event.target.value) / 100);
-    setSelectedBrokerage(
-      (prevSelectedBrokerage) => prevSelectedBrokerage + grandTotal
-    );
+    setSelectedBrokerage((prevSelectedBrokerage) => prevSelectedBrokerage + grandTotal);
     formik.setFieldValue("grandTotal", selectedBrokerage);
   };
 
