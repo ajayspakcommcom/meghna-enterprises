@@ -197,25 +197,40 @@ export default function Index() {
   };
 
   const igstHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {    
+    
     formik.setFieldValue("igst", event.target.value);
-    const grandTotal = selectedBrokerage * (Number(event.target.value) / 100);
-    console.log("grandTotal", grandTotal);
-    setSelectedBrokerage((prevSelectedBrokerage) => prevSelectedBrokerage + grandTotal);
-    formik.setFieldValue("grandTotal", selectedBrokerage);
+    // const grandTotal = selectedBrokerage * (Number(event.target.value) / 100);    
+    // setSelectedBrokerage((prevSelectedBrokerage) => prevSelectedBrokerage + grandTotal);
+    // formik.setFieldValue("grandTotal", selectedBrokerage);
+
+    console.log('igst', event.target.value);
+    console.log('sgst', formik.values.sgst);
+    console.log('cgst', formik.values.cgst);
+
   };
 
   const cgstHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     formik.setFieldValue("cgst", event.target.value);
-    const grandTotal = selectedBrokerage * (Number(event.target.value) / 100);
-    setSelectedBrokerage((prevSelectedBrokerage) => prevSelectedBrokerage + grandTotal);
-    formik.setFieldValue("grandTotal", selectedBrokerage);
+    // const grandTotal = selectedBrokerage * (Number(event.target.value) / 100);
+    // setSelectedBrokerage((prevSelectedBrokerage) => prevSelectedBrokerage + grandTotal);
+    // formik.setFieldValue("grandTotal", selectedBrokerage);
+
+    console.log('igst', event.target.value);
+    console.log('sgst', formik.values.sgst);
+    console.log('cgst', formik.values.cgst);
+
   };
 
   const sgstHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     formik.setFieldValue("sgst", event.target.value);
-    const grandTotal = selectedBrokerage * (Number(event.target.value) / 100);
-    setSelectedBrokerage((prevSelectedBrokerage) => prevSelectedBrokerage + grandTotal);
-    formik.setFieldValue("grandTotal", selectedBrokerage);
+    // const grandTotal = selectedBrokerage * (Number(event.target.value) / 100);
+    // setSelectedBrokerage((prevSelectedBrokerage) => prevSelectedBrokerage + grandTotal);
+    // formik.setFieldValue("grandTotal", selectedBrokerage);
+
+    console.log('igst', event.target.value);
+    console.log('sgst', formik.values.sgst);
+    console.log('cgst', formik.values.cgst);
+
   };
 
 const fetchLastBilling = async () => {
