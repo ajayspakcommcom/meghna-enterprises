@@ -75,17 +75,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           const buyerId = req.body.id;
 
           const updatedData = {
-            name: req.body.name,
-            address: req.body.address,
-            telephone_no: req.body.telephone_no,
-            mobile_no: req.body.mobile_no,
-            fax: req.body.fax,
-            pan: req.body.pan,
-            gstin: req.body.gstin,
-            state_code: req.body.state_code,
-            email: req.body.email,
-            account_detail: req.body.account_detail,
-            updatedDate: Date.now(),
+            billDate: req.body.billDate,
+            contractReferenceNo: req.body.contractReferenceNo,
+            contractReferenceNo_Id: req.body.contractReferenceNo_Id,
+            buyer: req.body.buyer,
+            seller: req.body.seller,
+            quantity: req.body.quantity,
+            price: req.body.price,
+            brokeragePrice: req.body.brokeragePrice,
+            brokerageOn: req.body.brokerageOn || 'Quantity',
+            brokerageAmount: req.body.brokerageAmount,
+            sgst: req.body.sgst,
+            cgst: req.body.cgst,
+            igst: req.body.igst,
+            createdDate: req.body.createdDate,
+            updatedDate: req.body.updatedDate || new Date(),
+            deletedDate: req.body.deletedDate || null,
+            isDeleted: req.body.isDeleted || false,
+            billingNo: req.body.billingNo
           };
 
           const updatedBuyer = await Billing.findByIdAndUpdate(buyerId, updatedData, { new: true });

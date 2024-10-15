@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import Billing from "../../../../models/Billing";
 import { useFormik } from "formik";
 import ErrorMessage from "../../../../components/error-message";
-import { createBilling, getBilling, getContractIdName, getLastBilling } from "@/services/billing";
+import { createBilling, getBilling, getContractIdName, getLastBilling, updateBilling } from "@/services/billing";
 import billingSchema from "@/validation/billingSchema";
 import { getContractBuyerSellerDetail } from "@/services/contract";
 import { getCurrentFinancialYear, incrementBillingNo } from "@/services/common";
@@ -130,12 +130,13 @@ const Index: React.FC<compProps> = ({ detail }) => {
         "cgst": +(billing.cgst ?? 0),
         "igst": +(billing.igst ?? 0),
         "billDate": new Date(),
-        "billingNo": billingNo
+        "billingNo": billingNo,
+        "id": detail.data._id
     };
 
     setLoading(true);
     try {
-      await createBilling(objData);
+      await updateBilling(objData);
       setLoading(false);
       formik.resetForm();
       setIsSuccessDialogOpen(true);
@@ -143,7 +144,6 @@ const Index: React.FC<compProps> = ({ detail }) => {
       setLoading(false);
       setError(error);
     }
-    
   };
 
   const handleReset = () => {
@@ -252,17 +252,26 @@ const fetchLastBilling = async () => {
     console.error('Error fetching seller data:', error);
   }
 };
+  
+const setBillingDetail = () => {    
+  formik.setFieldValue("igst", detail.data.igst);
+  formik.setFieldValue("cgst", detail.data.cgst);
+  formik.setFieldValue("sgst", detail.data.sgst);
+  formik.setFieldValue("brokerageAmount", detail.data.brokerageAmount);
+  formik.setFieldValue("brockerage", detail.data.brokeragePrice);
+  formik.setFieldValue("grandTotal", 50);
+}
 
   useEffect(() => {
     fetchContractIdName();
     updateGrandTotal();
     fetchLastBilling();    
-
     setTimeout(() => {      
       fetchBillingDetailById();
-    }, 2000);
+      setBillingDetail();
+    }, 1000);
 
-  }, [updateGrandTotal]);
+  }, []);
 
   return (
     <>
@@ -296,6 +305,7 @@ const fetchLastBilling = async () => {
                       value={selectedContractLabel}
                       renderInput={(params) => ( <TextField {...params} label="Select Contract" required placeholder="Select Contract" />)}
                       onChange={handleContractChange}
+                      disabled={true}
                     />
                   </div>
 
@@ -446,8 +456,9 @@ const fetchLastBilling = async () => {
                           variant="outlined"
                           fullWidth
                           margin="normal"
-                          value={formik.values.grandTotal}
-                          disabled={true}
+                          value={formik.values.grandTotal}  
+                          onChange={formik.handleChange} 
+                          disabled={true}                          
                         />
                       </div>
                     </>
