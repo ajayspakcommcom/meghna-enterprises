@@ -72,9 +72,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
       labelFields: { ...detailData.label },
       formikValues: { quantity:  detailData.quantity, price: detailData.price }
     };
-
     setPreviewContent(objectData);
-
   };
 
   const sendEmailHandler = async () => {
