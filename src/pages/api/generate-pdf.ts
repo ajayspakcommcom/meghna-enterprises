@@ -154,11 +154,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     doc.fontSize(10).fillColor('#000').text('(AS BROKER)', 270, y);
                     y += doc.heightOfString('(AS BROKER)', { width: pageWidth, align: 'left' }) + heightIncrease;
 
-
-
-
-
-
                     doc.end();
 
                     const htmlContent = `<div>
