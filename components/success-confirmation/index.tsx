@@ -33,8 +33,7 @@ const Index: React.FC<SuccessConfirmationDialogProps> = ({ isOpen, heading, onCl
         router.push(`/${redirect}`);
     };
 
-    return (
-        <React.Fragment>
+    return (        
             <Dialog
                 open={open}
                 onClose={handleClose}
@@ -44,8 +43,7 @@ const Index: React.FC<SuccessConfirmationDialogProps> = ({ isOpen, heading, onCl
                 <DialogActions>
                     <Button onClick={handleClose}>Close</Button>
                 </DialogActions>
-            </Dialog>
-        </React.Fragment>
+            </Dialog>        
     );
 }
 
