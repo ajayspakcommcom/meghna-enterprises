@@ -83,7 +83,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
     setIsLoader(true);
     try {
-      const response = await sendContractOnEmail(detailData);      
+      await sendContractOnEmail(detailData);      
       setIsSuccessDialogOpen(true);
       setIsLoader(false);
     } catch (error: any) {      

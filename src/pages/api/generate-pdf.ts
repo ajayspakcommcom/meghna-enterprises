@@ -220,16 +220,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                     const sellerEmails = req.body.seller_id.email.split(',').map((email: any) => email.trim());
                     const buyerEmails = req.body.buyer_id.email.split(',').map((email: any) => email.trim());
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
                     if (Array.isArray(sellerEmails) && sellerEmails.length > 0) {
                         for (const email of sellerEmails) {
-                            await sendEmail({ recipient: `${email}`, subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
+                            if (email && emailRegex.test(email)) {
+                                await sendEmail({ recipient: `${email}`, subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
+                            } else {
+                                console.error("Seller email is invalid:", email);
+                            }
+
                         }
                     }
 
                     if (Array.isArray(buyerEmails) && buyerEmails.length > 0) {
                         for (const email of buyerEmails) {
-                            await sendEmail({ recipient: `${email}`, subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
+                            if (email && emailRegex.test(email)) {
+                                await sendEmail({ recipient: `${email}`, subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
+                            } else {
+                                console.error("Buyer email is invalid:", email);
+                            }
                         }
                     }
 
