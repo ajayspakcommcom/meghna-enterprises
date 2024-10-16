@@ -1,0 +1,9 @@
+if getting contract.pdf conflict 
+    Run the following commands on aws 
+        1) git status
+        2) git checkout --ours public/pdf/contract.pdf
+        3) git checkout --theirs public/pdf/contract.pdf
+        4) git add public/pdf/contract.pdf
+        5) git commit -m "Resolved PDF conflict"
+        6) git push
+
