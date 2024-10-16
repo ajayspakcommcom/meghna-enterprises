@@ -71,9 +71,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
       case 'UPDATE':
         try {
-
           const buyerId = req.body.id;
-
           const updatedData = {
             billDate: req.body.billDate,
             contractReferenceNo: req.body.contractReferenceNo,

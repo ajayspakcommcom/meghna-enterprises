@@ -70,7 +70,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
       selectedBuyer: { _id: detailData.buyer_id._id as string, label: detailData.buyer_id.name },
       selectedTemplate: { ...detailData.template },
       labelFields: { ...detailData.label },
-      formikValues: { quantity: detailData.price, price: detailData.quantity }
+      formikValues: { quantity:  detailData.quantity, price: detailData.price }
     };
 
     setPreviewContent(objectData);
@@ -186,10 +186,10 @@ const Index: React.FC<compProps> = ({ detail }) => {
           </div>
 
           <div className="column"><Typography variant="body1" component="article"><b>Quantity</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{JSON.stringify(detailData.quantity)}</span></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><span>{detailData.quantity}</span></Typography></div>
 
           <div className="column"><Typography variant="body1" component="article"><b>Price</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{JSON.stringify(detailData.price)}</span></Typography></div>
+          <div className="column"><Typography variant="body1" component="article"><span><pre>{detailData.price}</pre></span></Typography></div>          
 
           <div className="column"><Typography variant="body1" component="article"><b>Financial Year</b></Typography></div>
           <div className="column"><Typography variant="body1" component="article"><span>{detailData.assessment_year}</span></Typography></div>

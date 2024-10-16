@@ -565,3 +565,12 @@ header .css-2uchni {
 .btn-wrapper {
     padding: 15px 0;
 }
+
+pre {
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.43;
+    letter-spacing: 0.01071em;
+    text-transform: uppercase;
+}

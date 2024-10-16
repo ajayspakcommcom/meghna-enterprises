@@ -25,6 +25,7 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
     const [logo, setLogo] = React.useState<string | null>('');
 
     useEffect(() => {
+
         const fetchBuyerData = async () => {
             const resp: any = await getBuyer(contentData.selectedBuyer._id as string);
             setBuyerData(resp.data);
@@ -178,7 +179,7 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
                                     contentData.formikValues &&
                                     <>
                                         <div className="column"><Typography variant="body1" component="article"><b>Price</b></Typography></div>
-                                        <div className="column"><Typography variant="body2" component="article"><span>{contentData.formikValues.price}</span></Typography></div>
+                                        <div className="column"><Typography variant="body2" component="article"><span><pre>{contentData.formikValues.price}</pre></span></Typography></div>
                                     </>
                                 }
 
