@@ -104,7 +104,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                         </div>
                         
                             <div className="detail-wrapper contract-detail-wrapper">
-                                {contentData.contractReferenceNo &&
+                                {contentData &&
                                         <>
                                             <div className="column"><Typography variant="body1" component="article"><b>Contract Reference No</b></Typography></div>
                                             <div className="column">
@@ -115,7 +115,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                         </>
                             }
                             
-                            {contentData.billDate &&
+                            {contentData &&
                                         <>
                                             <div className="column"><Typography variant="body1" component="article"><b>Bill Date</b></Typography></div>
                                             <div className="column">
@@ -126,7 +126,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                         </>
                             }
                             
-                            {contentData.buyer &&
+                            {contentData &&
                                         <>
                                             <div className="column"><Typography variant="body1" component="article"><b>Buyer</b></Typography></div>
                                             <div className="column">
@@ -137,7 +137,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                         </>
                             }
                             
-                            {contentData.seller &&
+                            {contentData &&
                                         <>
                                             <div className="column"><Typography variant="body1" component="article"><b>Seller</b></Typography></div>
                                             <div className="column">
@@ -148,7 +148,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                         </>
                             }
                             
-                            {contentData.quantity &&
+                            {contentData &&
                                         <>
                                             <div className="column"><Typography variant="body1" component="article"><b>Quantity</b></Typography></div>
                                             <div className="column">
@@ -160,7 +160,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                 }
 
                             
-                            {contentData.price &&
+                            {contentData &&
                                         <>
                                             <div className="column"><Typography variant="body1" component="article"><b>Price</b></Typography></div>
                                             <div className="column">
@@ -171,7 +171,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                         </>
                             }
                             
-                            {contentData.brokeragePrice &&
+                            {contentData &&
                                         <>
                                             <div className="column"><Typography variant="body1" component="article"><b>Brokerage Price</b></Typography></div>
                                             <div className="column">
@@ -182,7 +182,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                         </>
                             }
                             
-                            {contentData.brokerageOn &&
+                            {contentData &&
                                         <>
                                             <div className="column"><Typography variant="body1" component="article"><b>Brokerage On</b></Typography></div>
                                             <div className="column">
@@ -193,7 +193,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                         </>
                             }
                             
-                            {contentData.sgst &&
+                            {contentData &&
                                         <>
                                             <div className="column"><Typography variant="body1" component="article"><b>SGST</b></Typography></div>
                                             <div className="column">
@@ -204,7 +204,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                         </>
                             }
                             
-                            {contentData.cgst &&
+                            {contentData &&
                                         <>
                                             <div className="column"><Typography variant="body1" component="article"><b>CGST</b></Typography></div>
                                             <div className="column">
@@ -215,7 +215,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                         </>
                             }
                             
-                            {contentData.igst &&
+                            {contentData &&
                                         <>
                                             <div className="column"><Typography variant="body1" component="article"><b>IGST</b></Typography></div>
                                             <div className="column">
@@ -226,7 +226,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                         </>
                             }
                             
-                            {contentData.brokerageAmount &&
+                            {contentData &&
                                         <>
                                             <div className="column"><Typography variant="body1" component="article"><b>Brokerage Amount</b></Typography></div>
                                             <div className="column">
