@@ -109,7 +109,7 @@ export default function Index() {
           </div>
           <div className="btn-wrapper">
             <Button variant="contained" color="success" onClick={() => goToPage('/billing/create')}>Create</Button>
-            <Button variant="outlined" onClick={() => goToPage('/master')}>Back</Button>
+            <Button variant="outlined" onClick={() => goToPage('/dashboard')}>Back</Button>
           </div>
         </div>
 
