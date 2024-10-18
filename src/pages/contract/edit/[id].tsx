@@ -303,6 +303,8 @@ const Index: React.FC<compProps> = ({ detail }) => {
       formikValues: formik.values
     };
 
+    previewData.formikValues.price = previewData.formikValues.price?.replace('Rs', '');
+
     setPreviewContent(previewData);
 
   };

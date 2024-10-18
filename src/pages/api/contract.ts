@@ -35,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             template: req.body.template,
             label: req.body.label,
             quantity: req.body.quantity,
-            price: req.body.price,
+            price: 'Rs ' + req.body.price,
             assessment_year: req.body.assessment_year,
             template_id: req.body.template_id,
             company: req.body.company

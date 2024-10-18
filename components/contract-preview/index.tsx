@@ -179,11 +179,9 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
                                     contentData.formikValues &&
                                     <>
                                         <div className="column"><Typography variant="body1" component="article"><b>Price</b></Typography></div>
-                                        <div className="column"><Typography variant="body2" component="article"><span><pre>{contentData.formikValues.price}</pre></span></Typography></div>
+                                        <div className="column"><Typography variant="body2" component="article"><span><pre>Rs {contentData.formikValues.price}</pre></span></Typography></div>
                                     </>
                                 }
-
-
 
 
                                 {contentData.selectedTemplate && Object.entries(contentData.selectedTemplate).filter(([key]) => key !== '_id' && key !== '__v' && key !== 'isDeleted' && key !== 'updatedDate' && key !== 'deletedDate' && key !== 'createdDate').map(([key, value]) => (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, Button, Typography, TextField, Container, Autocomplete, Select } from '@mui/material';
+import { Card, CardContent, Button, Typography, TextField, Container, Autocomplete, Select, InputAdornment } from '@mui/material';
 import { Formik, Form, Field } from 'formik';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
@@ -248,7 +248,6 @@ export default function Index() {
       return acc;
     }, {});
 
-
     let previewData = {
       contract_no: contractNo,
       selectedSeller: selectedSeller,
@@ -259,7 +258,6 @@ export default function Index() {
     };
 
     setPreviewContent(previewData);
-
   };
 
   const previewClickHandler = (val: boolean) => {
@@ -370,6 +368,7 @@ export default function Index() {
                       onChange={formik.handleChange}
                       error={formik.touched.price && Boolean(formik.errors.price)}
                       helperText={formik.touched.price && formik.errors.price}
+                      InputProps={{startAdornment: <InputAdornment position="start" className="adornmentPrefix">Rs</InputAdornment>}}
                     />
                   </div>
 
