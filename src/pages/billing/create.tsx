@@ -66,10 +66,14 @@ export default function Index() {
     formik.handleChange(event);   
     const selectedParty = partyList.find((party: Party) => party._id === selectedValue);        
     const partyData = selectedParty?.type === 'buyer' ? await getBuyer(selectedValue) : await getSeller(selectedValue);
-    console.log('partyData', partyData.data);
+
     formik.setFieldValue('email', ((partyData as any).data.email));
     formik.setFieldValue('mobile_no', ((partyData as any).data.mobile_no));
     formik.setFieldValue('address', ((partyData as any).data.address));
+
+    const contractData = selectedParty?.type === 'buyer' ? console.log('buyer') : console.log('seller');
+    console.log('contractData', contractData);
+
   };
 
   const fetchLastBilling = async () => {

@@ -105,6 +105,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }
         break;
 
+      case 'SELLER-CONTRACT':
+        try {
+          const dataList = await Contract.find({ isDeleted: false, seller_id: req.body.id }, 'contract_no seller_id quantity price').exec();
+          if (!dataList) {
+            return res.status(404).json({ error: 'Contract not found' });
+          }
+          res.status(200).json({ data: dataList });
+        } catch (error) {
+          res.status(500).json({ error: 'Internal Server Error' });
+        }
+        break;
+
+
+      case 'BUYER-CONTRACT':
+        try {
+          const dataList = await Contract.find({ isDeleted: false, buyer_id: req.body.id }, 'contract_no buyer_id quantity price').exec();
+          if (!dataList) {
+            return res.status(404).json({ error: 'Contract not found' });
+          }
+          res.status(200).json({ data: dataList });
+        } catch (error) {
+          res.status(500).json({ error: 'Internal Server Error' });
+        }
+        break;
+
       case 'DELETE':
         try {
 
