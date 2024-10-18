@@ -194,6 +194,10 @@ header .css-2uchni {
     margin-top: 30px;
 }
 
+.buyer-seller-form-wrapper.full-width {
+    max-width: 100%;
+}
+
 .full-width-template {
     max-width: 1440px;
 }
@@ -577,4 +581,12 @@ pre {
 
 .adornmentPrefix {
     margin-top: -21px;
+}
+
+.party-select {
+    margin-top: 15px;
+}
+
+.billing-form .MuiListItem-root {
+    display: block;
 }

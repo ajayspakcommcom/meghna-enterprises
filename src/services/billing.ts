@@ -105,3 +105,13 @@ export const getLastBilling = async (): Promise<Billing> => {
         throw err;
     }
 };
+
+
+export const getPartyList = async (): Promise<any> => {
+    try {
+        const response = await apiClient.post<any>('/billing', { type: 'PARTY-LIST' });
+        return response.data;
+    } catch (err: unknown) {
+        throw err;
+    }
+};
