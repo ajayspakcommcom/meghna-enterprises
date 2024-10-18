@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import Billing from "../../../models/Billing";
 import { useFormik } from "formik";
 import billingSchema from "@/validation/billingSchema";
-import { getLastBilling, getPartyList } from "@/services/billing";
+import { getBuyerContract, getLastBilling, getPartyList, getSellerContract } from "@/services/billing";
 import { getCurrentFinancialYear, incrementBillingNo } from "@/services/common";
 import { getSeller } from "@/services/seller";
 import { getBuyer } from "@/services/buyer";
@@ -71,8 +71,9 @@ export default function Index() {
     formik.setFieldValue('mobile_no', ((partyData as any).data.mobile_no));
     formik.setFieldValue('address', ((partyData as any).data.address));
 
-    const contractData = selectedParty?.type === 'buyer' ? console.log('buyer') : console.log('seller');
+    const contractData = selectedParty?.type === 'buyer' ? await getBuyerContract(selectedValue) : await getSellerContract(selectedValue);
     console.log('contractData', contractData);
+    
 
   };
 

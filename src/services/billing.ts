@@ -115,3 +115,22 @@ export const getPartyList = async (): Promise<any> => {
         throw err;
     }
 };
+
+
+export const getBuyerContract = async (id: string): Promise<any> => {
+    try {
+        const response = await apiClient.post<any>('/contract', { type: 'BUYER-CONTRACT' });
+        return response.data;
+    } catch (err: unknown) {
+        throw err;
+    }
+};
+
+export const getSellerContract = async (id: string): Promise<any> => {
+    try {
+        const response = await apiClient.post<any>('/contract', { type: 'SELLER-CONTRACT' });
+        return response.data;
+    } catch (err: unknown) {
+        throw err;
+    }
+};
