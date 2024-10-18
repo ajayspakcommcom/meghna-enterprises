@@ -1,6 +1,7 @@
 
 export default interface Billing {
-    brokerageAmount: number;
+    billingNo: string;
+    billingDate: Date | null;
 }
 
 

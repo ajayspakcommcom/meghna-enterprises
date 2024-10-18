@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {Card,CardContent,Button,Typography,TextField,Container,Autocomplete} from "@mui/material";
+import {Card,CardContent,Button,Typography, TextField, Container, Autocomplete} from "@mui/material";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import Billing from "../../../models/Billing";
@@ -12,7 +12,6 @@ const Header = dynamic(() => import("../../../components/header/index"));
 
 export default function Index() {
   const router = useRouter();
-  
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -26,13 +25,12 @@ export default function Index() {
   };
 
   const initialValues: Billing = {
-    brokerageAmount: 0,
+    billingNo: '',  
+    billingDate: null,    
   };
 
   const handleSubmit = async (billing: Billing) => {  
-    
-    
-    
+    console.log(billing);
   };
 
   const handleReset = () => {
@@ -77,6 +75,41 @@ export default function Index() {
             <Card>
               <CardContent>
                 <form onSubmit={formik.handleSubmit} onReset={formik.handleReset} className="form">
+
+                  <div className="buyer-seller-forms-wrapper">
+                        <div>
+                          <TextField
+                            type="text"
+                            label="Billing No"
+                            name="billingNo"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            value={formik.values.billingNo}                          
+                            onChange={formik.handleChange}
+                            error={formik.touched.billingNo && Boolean(formik.errors.billingNo)}
+                            helperText={formik.touched.billingNo && formik.errors.billingNo}
+                          />
+                        </div>
+
+                        <div>
+                          <TextField
+                            type="date"
+                            label="Billing Date"
+                            name="billingDate"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            InputLabelProps={{shrink: true }}
+                            value={formik.values.billingDate}
+                            onChange={formik.handleChange}
+                             onBlur={formik.handleBlur}
+                            error={formik.touched.billingDate && Boolean(formik.errors.billingDate)}
+                            helperText={formik.touched.billingDate && formik.errors.billingDate}
+                          />
+                        </div>
+                      </div>
+
                   <div className="btn-wrapper">
                     <Button type="submit" variant="contained" fullWidth>{"Submit"}</Button>
                   </div>
