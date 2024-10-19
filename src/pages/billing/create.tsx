@@ -36,6 +36,7 @@ export default function Index() {
   const router = useRouter();
   const [partyList, setPartyList] = useState<Party[]>([]);
   const [contractDataList, setContractDataList] = useState<any>(null);
+  const [netAmount, setNetAmount] = useState<number>(0);
 
 
   useEffect(() => {
@@ -86,12 +87,14 @@ export default function Index() {
 
     const { data: contractData } = selectedParty?.type === 'buyer' ? await getBuyerContract(selectedValue) : await getSellerContract(selectedValue);    
 
+
     const updatedContractData = contractData.map((contract: any) => ({
       ...contract, 
       brockerageAmt: 0 
     }));
 
     setContractDataList(updatedContractData);
+    setNetAmount(0);
   };
 
   const fetchLastBilling = async () => {
@@ -127,6 +130,9 @@ export default function Index() {
     if (field === 'brockerageAmt' || field === 'quantity') {
       updatedDataList[index].amount = price * quantity;
     }
+
+    const totalAmt = updatedDataList.reduce((total, item) => total + (item.amount || 0), 0);
+    setNetAmount(totalAmt);
 
     setContractDataList(updatedDataList);
     };
@@ -359,7 +365,14 @@ export default function Index() {
                     disabled={true}   
                 />
                 </div>
-            ))}
+                  ))}
+                  
+                  <div className="net-amount-wrapper">
+                    <div>
+                      <Typography variant="h6" component="article" className="label">Net Amount</Typography>
+                      <Typography variant="body1" component="article" className="value">{netAmount}</Typography>
+                    </div>
+                  </div>
 
                  
                   <div className="btn-wrapper">

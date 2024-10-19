@@ -595,3 +595,20 @@ pre {
     display: flex;
     justify-content: space-between;
 }
+
+.net-amount-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+}
+
+.net-amount-wrapper>div {
+    display: flex;
+    align-items: center;
+}
+
+.net-amount-wrapper>div>.label {
+    margin-right: 15px;
+}
+
+.net-amount-wrapper>div>.value {}
