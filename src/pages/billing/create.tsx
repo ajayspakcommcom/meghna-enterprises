@@ -9,6 +9,7 @@ import { getBuyerContract, getLastBilling, getPartyList, getSellerContract } fro
 import { customFormatDate, getCurrentFinancialYear, incrementBillingNo } from "@/services/common";
 import { getSeller } from "@/services/seller";
 import { getBuyer } from "@/services/buyer";
+const converter = require('number-to-words');
 
 const Header = dynamic(() => import("../../../components/header/index"));
 
@@ -474,7 +475,7 @@ export default function Index() {
                     <div className="net-amount-wrapper">                      
                     <div>
                       <Typography variant="h6" component="article" className="label">Grand Total Amount : </Typography>
-                      <Typography variant="body1" component="article" className="value">{grandTotalAmt}</Typography>
+                        <Typography variant="body1" component="article" className="value">{grandTotalAmt} ({converter.toWords(grandTotalAmt)})</Typography>
                     </div>
                   </div>
                   )}

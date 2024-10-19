@@ -12,7 +12,7 @@ export default function Index() {
     return (    
         <>
         <Header />
-            <h1>Test</h1>
+           <h1>Test</h1>
         </>
     );
 }
