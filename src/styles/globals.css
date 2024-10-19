@@ -594,6 +594,15 @@ pre {
 .billing-contract-form {
     display: flex;
     justify-content: space-between;
+    padding: 0 15px;
+}
+
+.billing-contract-form .MuiTextField-root {
+    margin-right: 15px;
+}
+
+.billing-contract-form .MuiTextField-root:last-child {
+    margin-right: 0;
 }
 
 .net-amount-wrapper {

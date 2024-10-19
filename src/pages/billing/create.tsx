@@ -6,11 +6,12 @@ import Billing from "../../../models/Billing";
 import { useFormik } from "formik";
 import billingSchema from "@/validation/billingSchema";
 import { getBuyerContract, getLastBilling, getPartyList, getSellerContract } from "@/services/billing";
-import { getCurrentFinancialYear, incrementBillingNo } from "@/services/common";
+import { customFormatDate, getCurrentFinancialYear, incrementBillingNo } from "@/services/common";
 import { getSeller } from "@/services/seller";
 import { getBuyer } from "@/services/buyer";
 
 const Header = dynamic(() => import("../../../components/header/index"));
+
 
 interface Party {
   _id: string;
@@ -37,6 +38,9 @@ export default function Index() {
   const [partyList, setPartyList] = useState<Party[]>([]);
   const [contractDataList, setContractDataList] = useState<any>(null);
   const [netAmount, setNetAmount] = useState<number>(0);
+  const [sgst, setSgst] = useState<number>(9);
+  const [cgst, setCgst] = useState<number>(9);
+  const [igst, setIgst] = useState<number>(18);
 
 
   useEffect(() => {
@@ -135,7 +139,19 @@ export default function Index() {
     setNetAmount(totalAmt);
 
     setContractDataList(updatedDataList);
-    };
+  };
+  
+  const handleSgstChange = (event: SelectChangeEvent) => {    
+    const value = parseInt(event.target.value);
+    setSgst(value);
+    setIgst(cgst + value);
+  };
+
+  const handleCgstChange = (event: SelectChangeEvent) => {   
+    const value = parseInt(event.target.value);
+    setCgst(value);
+    setIgst(sgst + value);
+ };
 
 
   useEffect(() => {
@@ -275,33 +291,27 @@ export default function Index() {
                     </Grid>
                   </Grid>
 
-                  <Grid container spacing={1}>
+                  {contractDataList && contractDataList.length > 0 && (
+                    <Grid container spacing={1}>
+                    <Grid item xs={12}>
+                      <ListItem><hr /></ListItem>
+                    </Grid>
                     <Grid item xs={12}>
                       <ListItem>
-                        <hr />
+                        <Typography variant="h6" component="article" className="label">Contract Details</Typography>
                       </ListItem>
-                    </Grid>                    
+                    </Grid>                        
                   </Grid>
+                  )}
 
-
-                  {/* <Grid container spacing={1}>
-                    <Grid item xs={6}>
-                      <ListItem>Left</ListItem>
-                    </Grid>                    
-                    <Grid item xs={6}>
-                      <ListItem>Right</ListItem>
-                    </Grid>                    
-                  </Grid> */}
-
-                  {contractDataList && contractDataList.length > 0 && contractDataList.map((contract:DataListItem, index:number) => (
-                
-                <div key={contract._id} className="billing-contract-form">
+                  {contractDataList && contractDataList.length > 0 && contractDataList.map((contract: DataListItem, index: number) => (
+                        <div key={contract._id} className="billing-contract-form">
                 <TextField
                     label="Date"
                     type="text"
                     fullWidth
                     margin="normal"
-                    value={contract.createdDate}
+                    value={customFormatDate(new Date(contract.createdDate))}
                     onChange={(e) => contractHandleInputChange(index, 'createdDate', e.target.value)}
                     disabled={true}    
                 />
@@ -367,14 +377,45 @@ export default function Index() {
                 </div>
                   ))}
                   
-                  <div className="net-amount-wrapper">
+                  {contractDataList && contractDataList.length > 0 && (
+                    <div className="net-amount-wrapper">
+                      <div>
+                      <FormControl sx={{ m: 1 }}>
+                      <InputLabel id="demo-simple-select-autowidth-label">Sgst</InputLabel>
+                      <Select labelId="demo-simple-select-autowidth-label" id="demo-simple-select-autowidth"  onChange={handleSgstChange} autoWidth label="Sgst" value={sgst.toString()}>                                          
+                          {Array.from({ length: 29 }, (_, index) => index).map((value) => (
+                          <MenuItem key={value} value={value}>{value === 0 ? 'None' : `${value} ${value === 1 ? '%' : '%'}`}</MenuItem>
+                        ))}
+                      </Select>
+                      </FormControl>
+                      
+                      <FormControl sx={{ m: 1 }}>
+                      <InputLabel id="demo-simple-select-autowidth-label">Cgst</InputLabel>
+                      <Select labelId="demo-simple-select-autowidth-label" id="demo-simple-select-autowidth" onChange={handleCgstChange} autoWidth label="Cgst" value={cgst.toString()}>                    
+                        {Array.from({ length: 29 }, (_, index) => index).map((value) => (
+                          <MenuItem key={value} value={value}>{value === 0 ? 'None' : `${value} ${value === 1 ? '%' : '%'}`}</MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                    
+                    <FormControl sx={{ m: 1 }} disabled={true}>
+                      <InputLabel id="demo-simple-select-autowidth-label">Igst</InputLabel>
+                      <Select labelId="demo-simple-select-autowidth-label" id="demo-simple-select-autowidth" onChange={handleCgstChange} autoWidth label="Cgst" value={igst.toString()}>                    
+                        {Array.from({ length: 29 }, (_, index) => index).map((value) => (
+                          <MenuItem key={value} value={value}>{value === 0 ? 'None' : `${value} ${value === 1 ? '%' : '%'}`}</MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </div>
                     <div>
                       <Typography variant="h6" component="article" className="label">Net Amount</Typography>
                       <Typography variant="body1" component="article" className="value">{netAmount}</Typography>
                     </div>
                   </div>
+                  )}
 
-                 
+                  
+                  
                   <div className="btn-wrapper">
                     <Button type="submit" variant="contained" fullWidth>{"Submit"}</Button>
                   </div>
