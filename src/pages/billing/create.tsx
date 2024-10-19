@@ -18,12 +18,25 @@ interface Party {
   name: string;
 }
 
+type DataListItem = {
+    _id: string;
+    contract_no: string;
+    seller_id: string;
+    quantity: number;
+    price: string;
+    category: string;
+    createdDate: string;    
+    amount: number;
+    brockerageAmt: number;
+};
+
 
 export default function Index() {
 
   const router = useRouter();
   const [partyList, setPartyList] = useState<Party[]>([]);
-  
+  const [contractDataList, setContractDataList] = useState<any>(null);
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -71,10 +84,14 @@ export default function Index() {
     formik.setFieldValue('mobile_no', ((partyData as any).data.mobile_no));
     formik.setFieldValue('address', ((partyData as any).data.address));
 
-    const contractData = selectedParty?.type === 'buyer' ? await getBuyerContract(selectedValue) : await getSellerContract(selectedValue);
-    console.log('contractData', contractData);
-    
+    const { data: contractData } = selectedParty?.type === 'buyer' ? await getBuyerContract(selectedValue) : await getSellerContract(selectedValue);    
 
+    const updatedContractData = contractData.map((contract: any) => ({
+      ...contract, 
+      brockerageAmt: 0 
+    }));
+
+    setContractDataList(updatedContractData);
   };
 
   const fetchLastBilling = async () => {
@@ -99,6 +116,20 @@ export default function Index() {
       console.log('Error fetching seller data:', error);
     }
   };
+
+  const contractHandleInputChange = (index: number,field: keyof DataListItem, value: string | number): void => {
+    const updatedDataList = [...contractDataList];
+    updatedDataList[index][field] = value as never;
+        
+    const price = parseFloat(updatedDataList[index].brockerageAmt) || 0;  
+    const quantity = updatedDataList[index].quantity || 0;   
+        
+    if (field === 'brockerageAmt' || field === 'quantity') {
+      updatedDataList[index].amount = price * quantity;
+    }
+
+    setContractDataList(updatedDataList);
+    };
 
 
   useEffect(() => {
@@ -132,7 +163,7 @@ export default function Index() {
                 <form onSubmit={formik.handleSubmit} onReset={formik.handleReset} className="form billing-form">
 
                   
-                      <Grid container spacing={1}>
+                  <Grid container spacing={1}>
                     <Grid item xs={3}>
                       <ListItem>
                         <TextField
@@ -237,6 +268,98 @@ export default function Index() {
                       </ListItem>
                     </Grid>
                   </Grid>
+
+                  <Grid container spacing={1}>
+                    <Grid item xs={12}>
+                      <ListItem>
+                        <hr />
+                      </ListItem>
+                    </Grid>                    
+                  </Grid>
+
+
+                  {/* <Grid container spacing={1}>
+                    <Grid item xs={6}>
+                      <ListItem>Left</ListItem>
+                    </Grid>                    
+                    <Grid item xs={6}>
+                      <ListItem>Right</ListItem>
+                    </Grid>                    
+                  </Grid> */}
+
+                  {contractDataList && contractDataList.length > 0 && contractDataList.map((contract:DataListItem, index:number) => (
+                
+                <div key={contract._id} className="billing-contract-form">
+                <TextField
+                    label="Date"
+                    type="text"
+                    fullWidth
+                    margin="normal"
+                    value={contract.createdDate}
+                    onChange={(e) => contractHandleInputChange(index, 'createdDate', e.target.value)}
+                    disabled={true}    
+                />
+
+                <TextField
+                    label="Contract No"
+                    type="text"
+                    fullWidth
+                    margin="normal"
+                    value={contract.contract_no}
+                    onChange={(e) => contractHandleInputChange(index, 'contract_no', e.target.value)}
+                    disabled={true}    
+                    />
+                    
+                <TextField
+                    label="Category"
+                    type="text"
+                    fullWidth
+                    margin="normal"
+                    value={contract.category}
+                    onChange={(e) => contractHandleInputChange(index, 'category', e.target.value)}
+                    disabled={true}    
+                />
+
+                <TextField
+                    label="Quantity"
+                    type="number"
+                    fullWidth
+                    margin="normal"
+                    value={contract.quantity}
+                    onChange={(e) => contractHandleInputChange(index, 'quantity', e.target.value)}
+                    disabled={true}    
+                />
+
+                <TextField
+                    label="Price"
+                    type="text"
+                    fullWidth
+                    margin="normal"
+                    value={contract.price}                    
+                    disabled={true}    
+                      />
+                      
+
+                <TextField
+                    type="number"
+                    label="Brokerage"
+                    fullWidth
+                    margin="normal"
+                    value={contract.brockerageAmt}
+                    onChange={(e) => contractHandleInputChange(index, 'brockerageAmt', e.target.value)}                    
+                />
+
+
+                <TextField
+                    label="Amount"
+                    type="text"
+                    fullWidth
+                    margin="normal"
+                    value={contract.amount || 0}                    
+                    disabled={true}   
+                />
+                </div>
+            ))}
 
                  
                   <div className="btn-wrapper">

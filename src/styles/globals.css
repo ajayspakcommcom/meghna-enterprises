@@ -590,3 +590,8 @@ pre {
 .billing-form .MuiListItem-root {
     display: block;
 }
+
+.billing-contract-form {
+    display: flex;
+    justify-content: space-between;
+}
