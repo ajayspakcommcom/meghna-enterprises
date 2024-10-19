@@ -41,7 +41,8 @@ export default function Index() {
   const [sgst, setSgst] = useState<number>(9);
   const [cgst, setCgst] = useState<number>(9);
   const [igst, setIgst] = useState<number>(18);
-  const [grossAmount, setGrossAmount] = useState<number>(0);
+  const [brokerageAmt, setBrokerageAmt] = useState<number>(0);
+  const [grandTotalAmt, setGrandTotalAmt] = useState<number>(0);
 
 
   useEffect(() => {
@@ -100,6 +101,8 @@ export default function Index() {
 
     setContractDataList(updatedContractData);
     setNetAmount(0);
+    setGrandTotalAmt(0);
+    setBrokerageAmt(0);
   };
 
   const fetchLastBilling = async () => {
@@ -141,7 +144,7 @@ export default function Index() {
 
     setNetAmount(totalAmt);
     setContractDataList(updatedDataList);
-    setGrossAmount(grossAmt);
+    setBrokerageAmt(grossAmt);
   };
   
   const handleSgstChange = (event: SelectChangeEvent) => {    
@@ -151,7 +154,7 @@ export default function Index() {
 
     const totalAmt = contractDataList.reduce((total: number, item: any) => total + (item.amount || 0), 0);
     const grossAmt = totalAmt * (cgst + value) / 100;
-    setGrossAmount(grossAmt);
+    setBrokerageAmt(grossAmt);
 
   };
 
@@ -162,8 +165,13 @@ export default function Index() {
     
     const totalAmt = contractDataList.reduce((total: number, item: any) => total + (item.amount || 0), 0);
     const grossAmt = totalAmt * (sgst + value) / 100;
-    setGrossAmount(grossAmt);
- };
+    setBrokerageAmt(grossAmt);
+  };
+  
+  
+  useEffect(() => {     
+    setGrandTotalAmt(netAmount + brokerageAmt);
+  }, [igst, netAmount, setNetAmount]);
 
 
   useEffect(() => {
@@ -398,7 +406,9 @@ export default function Index() {
                   </div>
                   )}
 
-                  <div className="gross-amount-wrapper">
+                  {contractDataList && contractDataList.length > 0 &&
+                    (
+                    <div className="gross-amount-wrapper">
                       <div>
                       <FormControl sx={{ m: 1 }} className="billing-tax-select">
                       <InputLabel id="demo-simple-select-autowidth-label">Sgst</InputLabel>
@@ -428,10 +438,25 @@ export default function Index() {
                      </FormControl>
                     </div>
                     <div>
-                      <Typography variant="h6" component="article" className="label">Gross Amount</Typography>
-                      <Typography variant="body1" component="article" className="value">{grossAmount}</Typography>
+                      <Typography variant="h6" component="article" className="label">Brokerage Amount</Typography>
+                      <Typography variant="body1" component="article" className="value">{brokerageAmt}</Typography>
+                    </div>
+                      
+                    </div>
+                    )
+                  }
+
+
+                   {contractDataList && contractDataList.length > 0 && (
+                    <div className="net-amount-wrapper">                      
+                    <div>
+                      <Typography variant="h6" component="article" className="label">Grand Total Amount</Typography>
+                      <Typography variant="body1" component="article" className="value">{grandTotalAmt}</Typography>
                     </div>
                   </div>
+                  )}
+
+                  
 
                   <div className="btn-wrapper">
                     <Button type="submit" variant="contained" fullWidth>{"Submit"}</Button>
