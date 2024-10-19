@@ -605,18 +605,27 @@ pre {
     margin-right: 0;
 }
 
-.net-amount-wrapper {
+.net-amount-wrapper,
+.gross-amount-wrapper {
     display: flex;
     justify-content: flex-end;
     margin-top: 15px;
+    padding-right: 15px;
 }
 
-.net-amount-wrapper>div {
+.net-amount-wrapper .billing-tax-select,
+.gross-amount-wrapper .billing-tax-select {
+    width: 120px;
+}
+
+.net-amount-wrapper>div,
+.gross-amount-wrapper>div {
     display: flex;
     align-items: center;
 }
 
-.net-amount-wrapper>div>.label {
+.net-amount-wrapper>div>.label,
+.gross-amount-wrapper>div>.label {
     margin-right: 15px;
 }
 

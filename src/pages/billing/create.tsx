@@ -41,6 +41,7 @@ export default function Index() {
   const [sgst, setSgst] = useState<number>(9);
   const [cgst, setCgst] = useState<number>(9);
   const [igst, setIgst] = useState<number>(18);
+  const [grossAmount, setGrossAmount] = useState<number>(0);
 
 
   useEffect(() => {
@@ -136,21 +137,32 @@ export default function Index() {
     }
 
     const totalAmt = updatedDataList.reduce((total, item) => total + (item.amount || 0), 0);
-    setNetAmount(totalAmt);
+    const grossAmt = totalAmt * igst/100;
 
+    setNetAmount(totalAmt);
     setContractDataList(updatedDataList);
+    setGrossAmount(grossAmt);
   };
   
   const handleSgstChange = (event: SelectChangeEvent) => {    
     const value = parseInt(event.target.value);
     setSgst(value);
     setIgst(cgst + value);
+
+    const totalAmt = contractDataList.reduce((total: number, item: any) => total + (item.amount || 0), 0);
+    const grossAmt = totalAmt * (cgst + value) / 100;
+    setGrossAmount(grossAmt);
+
   };
 
-  const handleCgstChange = (event: SelectChangeEvent) => {   
+  const handleCgstChange = (event: SelectChangeEvent) => {     
     const value = parseInt(event.target.value);
     setCgst(value);
     setIgst(sgst + value);
+    
+    const totalAmt = contractDataList.reduce((total: number, item: any) => total + (item.amount || 0), 0);
+    const grossAmt = totalAmt * (sgst + value) / 100;
+    setGrossAmount(grossAmt);
  };
 
 
@@ -378,9 +390,17 @@ export default function Index() {
                   ))}
                   
                   {contractDataList && contractDataList.length > 0 && (
-                    <div className="net-amount-wrapper">
+                    <div className="net-amount-wrapper">                      
+                    <div>
+                      <Typography variant="h6" component="article" className="label">Net Amount</Typography>
+                      <Typography variant="body1" component="article" className="value">{netAmount}</Typography>
+                    </div>
+                  </div>
+                  )}
+
+                  <div className="gross-amount-wrapper">
                       <div>
-                      <FormControl sx={{ m: 1 }}>
+                      <FormControl sx={{ m: 1 }} className="billing-tax-select">
                       <InputLabel id="demo-simple-select-autowidth-label">Sgst</InputLabel>
                       <Select labelId="demo-simple-select-autowidth-label" id="demo-simple-select-autowidth"  onChange={handleSgstChange} autoWidth label="Sgst" value={sgst.toString()}>                                          
                           {Array.from({ length: 29 }, (_, index) => index).map((value) => (
@@ -389,33 +409,30 @@ export default function Index() {
                       </Select>
                       </FormControl>
                       
-                      <FormControl sx={{ m: 1 }}>
+                      <FormControl sx={{ m: 1 }} className="billing-tax-select">
                       <InputLabel id="demo-simple-select-autowidth-label">Cgst</InputLabel>
                       <Select labelId="demo-simple-select-autowidth-label" id="demo-simple-select-autowidth" onChange={handleCgstChange} autoWidth label="Cgst" value={cgst.toString()}>                    
                         {Array.from({ length: 29 }, (_, index) => index).map((value) => (
                           <MenuItem key={value} value={value}>{value === 0 ? 'None' : `${value} ${value === 1 ? '%' : '%'}`}</MenuItem>
                         ))}
                       </Select>
-                    </FormControl>
+                     </FormControl>
                     
-                    <FormControl sx={{ m: 1 }} disabled={true}>
+                     <FormControl sx={{ m: 1 }} disabled={true} className="billing-tax-select">
                       <InputLabel id="demo-simple-select-autowidth-label">Igst</InputLabel>
                       <Select labelId="demo-simple-select-autowidth-label" id="demo-simple-select-autowidth" onChange={handleCgstChange} autoWidth label="Cgst" value={igst.toString()}>                    
                         {Array.from({ length: 29 }, (_, index) => index).map((value) => (
                           <MenuItem key={value} value={value}>{value === 0 ? 'None' : `${value} ${value === 1 ? '%' : '%'}`}</MenuItem>
                         ))}
                       </Select>
-                    </FormControl>
-                  </div>
+                     </FormControl>
+                    </div>
                     <div>
-                      <Typography variant="h6" component="article" className="label">Net Amount</Typography>
-                      <Typography variant="body1" component="article" className="value">{netAmount}</Typography>
+                      <Typography variant="h6" component="article" className="label">Gross Amount</Typography>
+                      <Typography variant="body1" component="article" className="value">{grossAmount}</Typography>
                     </div>
                   </div>
-                  )}
 
-                  
-                  
                   <div className="btn-wrapper">
                     <Button type="submit" variant="contained" fullWidth>{"Submit"}</Button>
                   </div>
