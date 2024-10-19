@@ -629,4 +629,6 @@ pre {
     margin-right: 15px;
 }
 
-.net-amount-wrapper>div>.value {}
+.gross-amount-wrapper>div:first-child {
+    margin-right: 50px;
+}

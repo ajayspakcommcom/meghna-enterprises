@@ -67,6 +67,29 @@ export default function Index() {
 
   const handleSubmit = async (billing: Billing) => {  
     console.log(billing);
+    console.log('grandTotalAmt', grandTotalAmt);
+
+
+    const objData = {
+      billingNo: billing.billingNo,
+      billingDate: billing.billingDate,
+      partyId: billing.partyId,
+      contracts: [...contractDataList],
+      netAmount: netAmount,
+      brokerageAmt: brokerageAmt,
+      igst: igst,
+      sgst: sgst,
+      cgst: cgst,
+      grandTotalAmt: grandTotalAmt,
+    }
+
+    // Object.entries(objData).forEach(([key, value]) => {
+    //   console.log(`${key}: ${value}`);
+    // });
+
+    //console.log('objData', objData);
+    
+    
   };
 
   const handleReset = () => {
@@ -378,7 +401,7 @@ export default function Index() {
 
                 <TextField
                     type="number"
-                    label="Brokerage"
+                    label="Brokerage on Qty"
                     fullWidth
                     margin="normal"
                     value={contract.brockerageAmt}
@@ -400,7 +423,7 @@ export default function Index() {
                   {contractDataList && contractDataList.length > 0 && (
                     <div className="net-amount-wrapper">                      
                     <div>
-                      <Typography variant="h6" component="article" className="label">Net Amount</Typography>
+                      <Typography variant="h6" component="article" className="label">Net Amount : </Typography>
                       <Typography variant="body1" component="article" className="value">{netAmount}</Typography>
                     </div>
                   </div>
@@ -438,7 +461,7 @@ export default function Index() {
                      </FormControl>
                     </div>
                     <div>
-                      <Typography variant="h6" component="article" className="label">Brokerage Amount</Typography>
+                      <Typography variant="h6" component="article" className="label">Brokerage Amount : </Typography>
                       <Typography variant="body1" component="article" className="value">{brokerageAmt}</Typography>
                     </div>
                       
@@ -450,7 +473,7 @@ export default function Index() {
                    {contractDataList && contractDataList.length > 0 && (
                     <div className="net-amount-wrapper">                      
                     <div>
-                      <Typography variant="h6" component="article" className="label">Grand Total Amount</Typography>
+                      <Typography variant="h6" component="article" className="label">Grand Total Amount : </Typography>
                       <Typography variant="body1" component="article" className="value">{grandTotalAmt}</Typography>
                     </div>
                   </div>
