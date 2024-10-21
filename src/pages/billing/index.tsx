@@ -42,12 +42,33 @@ export default function Index() {
     {field: 'sgst', headerName: 'Sgst', width: 50},
     {field: 'cgst', headerName: 'Cgst', width: 50},
     {field: 'igst', headerName: 'Igst', width: 50},
-    {field: 'grandTotalAmt', headerName: 'Grand Total', width: 100},
+    { field: 'grandTotalAmt', headerName: 'Grand Total', width: 100 },
+    {
+      field: 'action',
+      headerName: 'Action',
+      width: 400,
+      renderCell: (params) => (
+        <div className="action-btn-wrapper">
+          <Button variant="contained" color="success" onClick={() => handleEdit(params.id)}>Edit</Button>
+          <Button variant="contained" color="inherit" onClick={() => handleDetail(params.id)}>Detail</Button>
+          <Button variant="contained" color="error" onClick={() => handleDelete(params.id)}>Delete</Button>
+        </div>
+      ),
+    }
   ];
   
 
   const handleEdit = (id: any) => {
     router.push(`/billing/edit/${id}`);
+  };
+
+  const handleDetail = (id: any) => {
+    router.push(`/billing/${id}`);
+  };
+
+    const handleDelete = async (id: any) => {
+    //setDialogOpen(true);
+    //setItemId(id);
   };
 
   const fetchData = async () => {
