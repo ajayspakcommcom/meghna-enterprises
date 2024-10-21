@@ -69,7 +69,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       case 'LIST':
         try {
           const dataList = await Billing.find({ isDeleted: false }).sort({ _id: -1 }).exec();
-          res.status(200).json({ data: dataList });
+
+          const formattedData = await Promise.all(
+            dataList.map(async (billing: any) => {
+              const partyData = billing.partyType.toLowerCase() === 'buyer' ? await Buyer.findById(billing.partyId).exec() : await Seller.findById(billing.partyId).exec();
+              console.log('partyData', partyData);
+              return {
+                ...billing._doc,
+                //stateCode: partyData?.state_code || 'Unknown',
+                //partyName: partyData?.name || 'Unknown' // Handle case where partyData might be null
+                partyDetail: partyData
+              };
+            })
+          );
+
+          console.log(formattedData);
+
+          console.clear();
+          console.log('formattedData', formattedData);
+
+          res.status(200).json({ data: formattedData });
         } catch (error: any) {
           res.status(500).json({ error: 'Internal Server Error' });
         }
