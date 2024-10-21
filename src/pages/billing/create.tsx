@@ -135,17 +135,17 @@ export default function Index() {
     let updatedContractData = contractData.map((contract: any) => ({ ...contract, brockerageAmt: 0 }));
     let createdContractListResponse = (await getBillCreatedContractList(selectedValue)).data;
 
-    const unmatchedUpdatedContracts = [...updatedContractData];
+    
 
-    const comparisonResults = createdContractListResponse.map((createdContract: any, index: number) => {
+    createdContractListResponse.map((createdContract: any, index: number) => {
           
           const contractId = createdContract.contracts.contractId;    
           const updatedContract = updatedContractData.find((updated: any) => updated._id === contractId);
                   
           if (updatedContract) {
-              const indexToRemove = unmatchedUpdatedContracts.findIndex((updated: any) => updated._id === contractId);
+              const indexToRemove = updatedContractData.findIndex((updated: any) => updated._id === contractId);
                   if (indexToRemove > -1) {
-                      unmatchedUpdatedContracts.splice(indexToRemove, 1); 
+                      updatedContractData.splice(indexToRemove, 1); 
                   }
               return {
                 ...updatedContract,
@@ -153,12 +153,13 @@ export default function Index() {
               };
               }
               else {
-                  return {                    
+            return {    
+                    ...updatedContract,                
                       isBillCreated: false
                   };
               }
     }); 
-    
+
     setContractDataList(updatedContractData);
     setNetAmount(0);
     setGrandTotalAmt(0);
@@ -516,11 +517,25 @@ export default function Index() {
                   </div>
                   )}
 
-                  
 
-                  <div className="btn-wrapper">
-                    <Button type="submit" variant="contained" fullWidth>{"Submit"}</Button>
-                  </div>
+                  {contractDataList && contractDataList.length === 0 && (                    
+                      <div className="no-contract-found">
+                      <hr />                      
+                      <Typography variant="body1" component="article" className="label"><b>No Contract Found</b></Typography>
+                      </div>                      
+                  )}
+
+
+                  {contractDataList && contractDataList.length > 0 && (
+                    <div className="btn-wrapper">
+                        <Button type="submit" variant="contained" fullWidth>Submit</Button>
+                    </div>
+                  )}
+                      
+                    
+
+
+                  
                 </form>
               </CardContent>
             </Card>
