@@ -185,13 +185,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
       case 'BILL-CREATED-CONTRACT-LIST':
         try {
-          const { partyId } = req.body; // Extract partyId from the request body
+          const { partyId } = req.body;
 
           const contractsList = await Billing.aggregate([
-            { $unwind: '$contracts' }, // Unwind the contracts array
+            { $unwind: '$contracts' },
             {
               $match: {
-                'contracts.isBillCreated': true, // Match contracts that are marked as bill created
+                'contracts.isBillCreated': true,
                 $or: [{ 'contracts.partyId': new mongoose.Types.ObjectId(partyId) }]
               }
             },

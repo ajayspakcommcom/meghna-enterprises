@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import Billing from "../../../models/Billing";
 import { useFormik } from "formik";
 import billingSchema from "@/validation/billingSchema";
-import { createBilling, getBuyerContract, getLastBilling, getPartyList, getSellerContract } from "@/services/billing";
+import { createBilling, getBillCreatedContractList, getBuyerContract, getLastBilling, getPartyList, getSellerContract } from "@/services/billing";
 import { customFormatDate, getCurrentFinancialYear, incrementBillingNo } from "@/services/common";
 import { getSeller } from "@/services/seller";
 import { getBuyer } from "@/services/buyer";
@@ -132,13 +132,47 @@ export default function Index() {
 
     const { data: contractData } = selectedParty?.type === 'buyer' ? await getBuyerContract(selectedValue) : await getSellerContract(selectedValue);    
 
+    let updatedContractData = contractData.map((contract: any) => ({ ...contract, brockerageAmt: 0 }));
+    let createdContractListResponse = (await getBillCreatedContractList(selectedValue)).data;
 
-    const updatedContractData = contractData.map((contract: any) => ({
-      ...contract, 
-      brockerageAmt: 0 
-    }));
+    const unmatchedUpdatedContracts = [...updatedContractData];
 
-    setContractDataList(updatedContractData);
+    const comparisonResults = createdContractListResponse.map((createdContract: any, index: number) => {
+          
+          const contractId = createdContract.contracts.contractId;    
+          const updatedContract = updatedContractData.find((updated: any) => updated._id === contractId);
+                  
+          if (updatedContract) {
+              const indexToRemove = unmatchedUpdatedContracts.findIndex((updated: any) => updated._id === contractId);
+                  if (indexToRemove > -1) {
+                      unmatchedUpdatedContracts.splice(indexToRemove, 1); 
+                  }
+              return {
+                ...updatedContract,
+                isBillCreated: true
+              };
+              }
+              else {
+                  return {                    
+                      isBillCreated: false
+                  };
+              }
+      }); 
+        
+      console.log('updatedContractData', updatedContractData);
+      console.log('createdContractListResponse', createdContractListResponse);
+      console.log('Comparison Results:', comparisonResults);
+      console.log('Unmatched Updated Contracts:', unmatchedUpdatedContracts);
+
+    if(unmatchedUpdatedContracts.length > 0) {
+      setContractDataList(unmatchedUpdatedContracts);
+    }
+    else {
+      
+      setContractDataList(updatedContractData);
+    }
+
+    //setContractDataList(updatedContractData);
     setNetAmount(0);
     setGrandTotalAmt(0);
     setBrokerageAmt(0);

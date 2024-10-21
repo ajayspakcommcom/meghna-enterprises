@@ -134,3 +134,13 @@ export const getSellerContract = async (id: string): Promise<any> => {
         throw err;
     }
 };
+
+
+export const getBillCreatedContractList = async (id: string): Promise<any> => {
+    try {
+        const response = await apiClient.post<any>('/billing', { partyId: id, type: 'BILL-CREATED-CONTRACT-LIST' });
+        return response.data;
+    } catch (err: unknown) {
+        throw err;
+    }
+};
