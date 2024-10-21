@@ -30,30 +30,41 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     switch (req.body.type) {
       case 'CREATE':
         try {
+
+          console.log('req.body', req.body);
+
           await Billing.create({
-            billDate: req.body.billDate || Date.now(),
-            contractReferenceNo: req.body.contractReferenceNo,
-            contractReferenceNo_Id: req.body.contractReferenceNo_Id,
-            buyer: req.body.buyer,
-            seller: req.body.seller,
-            quantity: req.body.quantity,
-            price: req.body.price,
-            brokeragePrice: req.body.brokeragePrice,
-            brokerageOn: req.body.brokerageOn || 'Quantity',
-            brokerageAmount: req.body.brokerageAmount,
-            sgst: req.body.sgst,
-            cgst: req.body.cgst,
-            igst: req.body.igst,
+            billingNo: req.body.billingNo,
+            billingDate: req.body.billingDate || Date.now(),
+            partyType: req.body.partyType,
+            partyId: req.body.partyId,
+            contracts: req.body.contracts.map((contract: any) => ({
+              contractId: contract.contractId,
+              quantity: contract.quantity,
+              price: contract.price,
+              brokerageQty: contract.brokerageQty,
+              brokerageAmt: contract.brokerageAmt,
+              partyId: req.body.partyId,
+              isBillCreated: true
+            })),
+            sgst: req.body.sgst || 0,
+            cgst: req.body.cgst || 0,
+            igst: req.body.igst || 18,
+            netAmount: req.body.netAmount,
+            brokerage: req.body.brokerage,
+            grandTotalAmt: req.body.grandTotalAmt,
+            outstandingAmount: req.body.outstandingAmount || 0,
             createdDate: req.body.createdDate || Date.now(),
             updatedDate: req.body.updatedDate || null,
             deletedDate: req.body.deletedDate || null,
-            isDeleted: req.body.isDeleted || false,
-            billingNo: req.body.billingNo
+            isDeleted: req.body.isDeleted || false
           });
-          res.status(201).json({ message: 'Billing have been successfully created.' });
+
+          res.status(201).json({ message: 'Billing has been successfully created.' });
         } catch (error: any) {
-          res.status(500).json({ error: `Internal Error`, errorDetail: `An unexpected error occurred ${error}` });
+          res.status(500).json({ error: 'Internal Error', errorDetail: `An unexpected error occurred: ${error}` });
         }
+
 
         break;
       case 'LIST':

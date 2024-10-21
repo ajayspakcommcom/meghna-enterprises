@@ -15,10 +15,26 @@ const billingSchema = new mongoose.Schema({
         required: true,
         default: Date.now
     },
+    partyType: {
+        type: String,
+        enum: ['Seller', 'Buyer'],
+        required: true
+    },
     partyId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Seller',
-        required: true
+        required: true,
+        validate: {
+            validator: function (value: any) {
+                const partyType = (this as any).partyType
+                if (partyType === 'Seller') {
+                    return mongoose.model('Seller').exists({ _id: value });
+                } else if (partyType === 'Buyer') {
+                    return mongoose.model('Buyer').exists({ _id: value });
+                }
+                return false;
+            },
+            message: (props: { value: any }) => `${props.value} is not a valid reference for the selected party type.`
+        }
     },
     contracts: [{
         contractId: {
@@ -33,6 +49,22 @@ const billingSchema = new mongoose.Schema({
         price: {
             type: String,
             required: true
+        },
+        brokerageQty: {
+            type: Number,
+            required: true
+        },
+        brokerageAmt: {
+            type: Number,
+            required: true
+        },
+        partyId: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true
+        },
+        isBillCreated: {
+            type: Boolean,
+            default: false
         }
     }],
     sgst: {
@@ -50,9 +82,20 @@ const billingSchema = new mongoose.Schema({
         required: true,
         default: 18
     },
-    totalAmount: {
+    netAmount: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
+    },
+    brokerage: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    grandTotalAmt: {
+        type: Number,
+        required: true,
+        default: 0
     },
     outstandingAmount: {
         type: Number,

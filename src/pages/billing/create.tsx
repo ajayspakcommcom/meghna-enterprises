@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import Billing from "../../../models/Billing";
 import { useFormik } from "formik";
 import billingSchema from "@/validation/billingSchema";
-import { getBuyerContract, getLastBilling, getPartyList, getSellerContract } from "@/services/billing";
+import { createBilling, getBuyerContract, getLastBilling, getPartyList, getSellerContract } from "@/services/billing";
 import { customFormatDate, getCurrentFinancialYear, incrementBillingNo } from "@/services/common";
 import { getSeller } from "@/services/seller";
 import { getBuyer } from "@/services/buyer";
@@ -67,30 +67,43 @@ export default function Index() {
   };
 
   const handleSubmit = async (billing: Billing) => {  
-    console.log(billing);
-    console.log('grandTotalAmt', grandTotalAmt);
-
+    
+    const contractData = contractDataList.map((contract: any) => ({
+      contractId: contract._id,
+      quantity: contract.quantity,
+      price: contract.price,
+      brokerageQty: contract.brockerageAmt ? parseInt(contract.brockerageAmt) : 0,
+      brokerageAmt: contract.amount ? contract.amount : 0,
+      category: contract.category,
+      partyType: contract.category.toLowerCase() === 'seller' ? 'Seller' : 'Buyer'
+    }));
 
     const objData = {
       billingNo: billing.billingNo,
       billingDate: billing.billingDate,
       partyId: billing.partyId,
-      contracts: [...contractDataList],
-      netAmount: netAmount,
-      brokerageAmt: brokerageAmt,
-      igst: igst,
+      contracts: [...contractData],
       sgst: sgst,
       cgst: cgst,
+      igst: igst,
+      netAmount: netAmount,
+      brokerage: brokerageAmt,
       grandTotalAmt: grandTotalAmt,
+      outstandingAmount: 0,
+      partyType: contractData[0].category.toLowerCase() === 'seller' ? 'Seller' : 'Buyer'
     }
 
-    // Object.entries(objData).forEach(([key, value]) => {
-    //   console.log(`${key}: ${value}`);
-    // });
+    console.log('contractData', contractData);
+    console.log('objData', objData);
+        
+    const response = await createBilling(objData);
+    
+    // if (response && (response as any).data) {
+    //   //goToPage('/billing');
+    // } else {
+    //   //console.log('Error creating billing:', response);
+    // }
 
-    //console.log('objData', objData);
-    
-    
   };
 
   const handleReset = () => {
