@@ -157,22 +157,9 @@ export default function Index() {
                       isBillCreated: false
                   };
               }
-      }); 
-        
-      console.log('updatedContractData', updatedContractData);
-      console.log('createdContractListResponse', createdContractListResponse);
-      console.log('Comparison Results:', comparisonResults);
-      console.log('Unmatched Updated Contracts:', unmatchedUpdatedContracts);
-
-    if(unmatchedUpdatedContracts.length > 0) {
-      setContractDataList(unmatchedUpdatedContracts);
-    }
-    else {
-      
-      setContractDataList(updatedContractData);
-    }
-
-    //setContractDataList(updatedContractData);
+    }); 
+    
+    setContractDataList(updatedContractData);
     setNetAmount(0);
     setGrandTotalAmt(0);
     setBrokerageAmt(0);
