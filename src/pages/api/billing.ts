@@ -192,10 +192,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             {
               $match: {
                 'contracts.isBillCreated': true, // Match contracts that are marked as bill created
-                $or: [
-                  { 'contracts.partyId': new mongoose.Types.ObjectId(partyId) }, // Match if partyId matches in contracts
-                  //{ 'partyId': mongoose.Types.ObjectId(partyId) } // Also match if partyId is the same as the main partyId
-                ]
+                $or: [{ 'contracts.partyId': new mongoose.Types.ObjectId(partyId) }]
               }
             },
             {

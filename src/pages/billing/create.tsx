@@ -97,12 +97,14 @@ export default function Index() {
     console.log('objData', objData);
         
     const response = await createBilling(objData);
+    console.log('response', response);
     
-    // if (response && (response as any).data) {
-    //   //goToPage('/billing');
-    // } else {
-    //   //console.log('Error creating billing:', response);
-    // }
+    if (response?.message) {
+      //goToPage('/billing');
+      console.log('Billing has been successfully created.');
+    } else {
+      console.log('Error creating billing:', response);
+    }
 
   };
 
