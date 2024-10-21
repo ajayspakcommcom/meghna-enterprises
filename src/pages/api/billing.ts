@@ -8,12 +8,14 @@ import { Billing } from './models/Billing';
 import { Contract } from './models/Contract';
 import { Buyer } from './models/Buyer';
 import { Seller } from './models/Seller';
+import mongoose from 'mongoose';
 
 interface ApiResponse {
   message?: string;
   error?: string;
   errorDetail?: any;
   data?: any;
+  total?: number;
 }
 
 const cors = Cors({
@@ -30,9 +32,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     switch (req.body.type) {
       case 'CREATE':
         try {
-
-          console.log('req.body', req.body);
-
           await Billing.create({
             billingNo: req.body.billingNo,
             billingDate: req.body.billingDate || Date.now(),
@@ -181,6 +180,42 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           res.status(200).json({ data: dataList });
         } catch (error: any) {
           res.status(500).json({ error: 'Internal Server Error' });
+        }
+        break;
+
+      case 'BILL-CREATED-CONTRACT-LIST':
+        try {
+          const { partyId } = req.body; // Extract partyId from the request body
+
+          const contractsList = await Billing.aggregate([
+            { $unwind: '$contracts' }, // Unwind the contracts array
+            {
+              $match: {
+                'contracts.isBillCreated': true, // Match contracts that are marked as bill created
+                $or: [
+                  { 'contracts.partyId': new mongoose.Types.ObjectId(partyId) }, // Match if partyId matches in contracts
+                  //{ 'partyId': mongoose.Types.ObjectId(partyId) } // Also match if partyId is the same as the main partyId
+                ]
+              }
+            },
+            {
+              $project: {
+                _id: 0,
+                billingNo: 1,
+                billingDate: 1,
+                'contracts.contractId': 1,
+                'contracts.quantity': 1,
+                'contracts.price': 1,
+                'contracts.brokerageQty': 1,
+                'contracts.brokerageAmt': 1,
+                'contracts.isBillCreated': 1
+              }
+            }
+          ]);
+
+          res.status(200).json({ total: contractsList.length, data: contractsList });
+        } catch (error: any) {
+          res.status(500).json({ error: 'Internal Server Error', errorDetail: error.message });
         }
         break;
     }
