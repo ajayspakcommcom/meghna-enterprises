@@ -55,8 +55,9 @@ export default function Index() {
   };
 
   const handleDelete = async (id: any) => {
-    setDialogOpen(true);
-    setItemId(id);
+    console.log('handleDelete', id);
+    //setDialogOpen(true);
+    //setItemId(id);
   };
 
     const fetchData = async () => {

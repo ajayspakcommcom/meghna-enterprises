@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Typography, Container } from '@mui/material';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { getAllBilling } from "@/services/billing";
+import { deleteBilling, getAllBilling } from "@/services/billing";
 import { customFormatDate } from "@/services/common";
 
 
@@ -16,6 +16,8 @@ export default function Index() {
   const router = useRouter();
 
   const [rowData, setRowData] = React.useState<any[]>([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [itemId, setItemId] = useState();
 
   const columns: GridColDef[] = [
     { field: 'billingDate', headerName: 'Date', width: 95, valueGetter: (params) => { return customFormatDate(new Date(params)) } },  
@@ -66,9 +68,24 @@ export default function Index() {
     router.push(`/billing/${id}`);
   };
 
-    const handleDelete = async (id: any) => {
-    //setDialogOpen(true);
-    //setItemId(id);
+  const handleDelete = async (id: any) => {      
+      setDialogOpen(true);
+      setItemId(id);
+  };
+
+  
+  const handleAgree = async () => {
+    try {
+      await deleteBilling(itemId!);
+      setRowData((prevRowData) => prevRowData.filter((billing) => billing.id !== itemId));
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+    setDialogOpen(false);
+  };
+
+  const handleDisagree = () => {
+    setDialogOpen(false);
   };
 
   const fetchData = async () => {
@@ -125,6 +142,7 @@ export default function Index() {
         </div>
 
       </Container>      
+      <ConfirmationDialogue isOpen={dialogOpen} onAgree={handleAgree} onDisagree={handleDisagree} heading="Are you sure want to delete?" />
     </>
   );
 }
