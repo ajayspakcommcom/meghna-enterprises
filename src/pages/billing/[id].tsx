@@ -78,7 +78,10 @@ const Index: React.FC<compProps> = ({ detail }) => {
     return (partyData as any).data;
   }
 
-  
+
+   const goToPage = (url: string) => {
+    router.push(`${url}`);
+  };
 
   useEffect(() => {
     console.log('detail', detail.data);
@@ -109,7 +112,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
             <Button variant="outlined">Preview</Button>
             <Button variant="outlined">Send Mail</Button>
             <Button variant="outlined">Download Pdf</Button>
-            <Button variant="outlined">Back</Button>
+            <Button variant="outlined" onClick={() => goToPage("/billing")}>Back</Button>
           </div>
         </div>
 

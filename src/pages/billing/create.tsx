@@ -546,9 +546,7 @@ export default function Index() {
           </div>
         </div>
       </Container>      
-
       <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Billing Created Successfully" redirect="billing" onClick={successDialogCloseHandler} />
-
     </>
   );
 }
