@@ -41,9 +41,27 @@ export default function Index() {
       },
     },
     { field: 'netAmount', headerName: 'Net Amount', width: 100 },
-    {field: 'sgst', headerName: 'Sgst', width: 50},
-    {field: 'cgst', headerName: 'Cgst', width: 50},
-    {field: 'igst', headerName: 'Igst', width: 50},
+    {
+      field: 'sgst', headerName: 'Sgst', width: 50, 
+      valueGetter: (value, row) => {
+        console.log('row', row);
+        return `${row.sgst}%`
+      }
+    },
+    {
+      field: 'cgst', headerName: 'Cgst', width: 50, 
+      valueGetter: (value, row) => {
+        console.log('row', row);
+        return `${row.cgst}%`
+      }
+    },
+    {
+      field: 'igst', headerName: 'Igst', width: 50, 
+      valueGetter: (value, row) => {
+        console.log('row', row);
+        return `${row.igst}%`
+      }
+    },
     { field: 'grandTotalAmt', headerName: 'Grand Total', width: 100 },
     {
       field: 'action',
