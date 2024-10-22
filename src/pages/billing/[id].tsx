@@ -1,33 +1,45 @@
 import React, { useState, useEffect } from "react";
-import { Button, Typography, Container } from '@mui/material';
+import {Card,CardContent,Button,Typography, TextField, Container, Autocomplete, FormControl, Select, InputLabel, MenuItem, FormHelperText, SelectChangeEvent, Grid, ListItem } from "@mui/material";
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { generatePdf, getBilling, sendContractOnEmail } from "@/services/billing";
+import {getBilling} from "@/services/billing";
+import { customFormatDate } from "@/services/common";
+const converter = require('number-to-words');
 
 const Header = dynamic(() => import('../../../components/header/index'));
-const BillingPreviewDialogue = dynamic(() => import('../../../components/billing-preview/index'));
+
 
 interface compProps {
   detail: { data: {} };
 }
 
+interface Contract {
+  contractId: string;
+  quantity: number;
+  price: string; // Assuming the price is a string based on the provided data
+  brokerageQty: number;
+  brokerageAmt: number;
+  partyId: string;
+  isBillCreated: boolean;
+  _id: string;
+}
+
 interface DetailData {
   _id: string;
-  billDate: string;  // ISO date string
-  contractReferenceNo_Id: string;
-  contractReferenceNo: string;
-  buyer: string;
-  seller: string;
-  quantity: number;
-  price: number;
-  brokeragePrice: number;
-  brokerageOn: 'Price' | 'Quantity';
-  brokerageAmount: number;
+  billingNo: string;
+  billingDate: string; // Use `Date` if it is converted to a Date object during parsing
+  partyType: 'Buyer' | 'Seller'; // Assuming it can only be 'Buyer' or 'Seller'
+  partyId: string;
+  contracts: Contract[];
   sgst: number;
   cgst: number;
   igst: number;
-  createdDate: string;  // ISO date string
+  netAmount: number;
+  brokerage: number;
+  grandTotalAmt: number;
+  outstandingAmount: number;
+  createdDate: string; // Use `Date` if needed
   updatedDate: string | null;
   deletedDate: string | null;
   isDeleted: boolean;
@@ -38,71 +50,11 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
   const router = useRouter();
   const [detailData, setDetailData] = useState<DetailData>(detail.data as DetailData);
-  const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
-  const [previewContent, setPreviewContent] = useState<any>();
-  const [isLoader, setIsLoader] = useState<boolean>(false);
-  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      router.push('/');
-    }
-  }, []);
-
-  const goToPage = (url: string) => {
-    router.push(`${url}`);
-  };
-
-   const previewHandler = () => {
-     setIsPreviewDialogOpen(true);     
-     setPreviewContent(detailData);
-   };
-  
-   const sendEmailHandler = async () => {
-
-    setDetailData((prevDetailData: any) => ({...prevDetailData}));
-    setIsLoader(true);
-    try {
-      await sendContractOnEmail(detailData);      
-      setIsSuccessDialogOpen(true);
-      setIsLoader(false);
-    } catch (error: any) {      
-    }
-   };
-  
-  const generatePdfHandler = async () => {    
-    try {
-      const response = await generatePdf(detailData);      
-
-      if (response.message) {
-        const blob = new Blob([response], { type: 'application/pdf' });
-        const blobUrl = URL.createObjectURL(blob);
-
-        const tempLink = document.createElement('a');
-        tempLink.href = '/pdf/contract.pdf';
-        tempLink.target = '_blank';
-        tempLink.rel = 'noopener noreferrer';
-        tempLink.download = '/pdf/contract.pdf';
-
-        document.body.appendChild(tempLink);
-        tempLink.click();
-        document.body.removeChild(tempLink);
-
-        setTimeout(() => {
-          URL.revokeObjectURL(blobUrl);
-        }, 1000);
-      }
-
-    } catch (error: any) {      
-    }
-  };
-
-  const previewClickHandler = (val: boolean) => {     
-    setIsPreviewDialogOpen(val)
-  };
-
-
+    console.log('detail', detail.data);
+  }, [detail]);
+ 
   return (
     <>
       <Header />
@@ -113,54 +65,268 @@ const Index: React.FC<compProps> = ({ detail }) => {
             <Typography variant="h5" component="article">Billing Detail</Typography>
           </div>
           <div className="btn-wrapper detail-btn-wrapper">
-            <Button variant="outlined" onClick={() => previewHandler()}>Preview</Button>
-            <Button variant="outlined" onClick={() => sendEmailHandler()}>Send Mail</Button>
-            <Button variant="outlined" onClick={() => generatePdfHandler()}>Download Pdf</Button>
-            <Button variant="outlined" onClick={() => goToPage('/billing')}>Back</Button>
+            <Button variant="outlined">Preview</Button>
+            <Button variant="outlined">Send Mail</Button>
+            <Button variant="outlined">Download Pdf</Button>
+            <Button variant="outlined">Back</Button>
           </div>
         </div>
 
-        <div className="detail-wrapper">
+        <div>
+            <Card>
+              <CardContent>
+                <form  className="form billing-form">
 
-          <div className="column"><Typography variant="body1" component="article"><b>Contract Reference No</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{detailData.contractReferenceNo}</span></Typography></div>
+                  <Grid container spacing={1}>
+                    <Grid item xs={3}>
+                      <ListItem>
+                        <TextField
+                            type="text"
+                            label="Billing No"
+                            name="billingNo"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            value={detailData.billingNo}                                                      
+                            disabled={true}
+                          />
+                      </ListItem>
+                    </Grid>
+                    <Grid item xs={3}>
+                      <ListItem>
+                        <TextField   
+                            type="text"
+                            label="Billing Date"
+                            name="billingDate"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            InputLabelProps={{shrink: true }}
+                          value={customFormatDate(new Date(detailData.billingDate))}
+                        disabled={true}
+                          />
+                      </ListItem>
+                    </Grid>
+                    <Grid item xs={3}>
+                      <ListItem>
+                        <TextField   
+                            type="text"
+                            label="Billing Date"
+                            name="billingDate"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            InputLabelProps={{shrink: true }}
+                            value={'Name'}
+                            disabled={true}
+                          />                      
+                      </ListItem>
+                    </Grid>
+                    <Grid item xs={3}>
+                      <ListItem>
+                        <TextField
+                            type="text"
+                            label="Email"
+                            name="email"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            value={'Email'}                                                      
+                            disabled={true}
+                          />
+                      </ListItem>
 
-          <div className="column"><Typography variant="body1" component="article"><b>Billing Date</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{detailData.billDate}</span></Typography></div>
+                    </Grid>
+                  </Grid>
 
-          <div className="column"><Typography variant="body1" component="article"><b>Buyer</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{detailData.buyer}</span></Typography></div>
+                  <Grid container spacing={1}>
+                    <Grid item xs={2}>
+                      <ListItem>
+                        <TextField
+                            type="text"
+                            label="Mobile"
+                            name="mobile_no"
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            value={'Mobile'}                                                      
+                            disabled={true}
+                        />
+                      </ListItem>
+                    </Grid>
+                    <Grid item xs={10}>
+                      <ListItem>
+                        <TextField
+                          label="Address"
+                          name="address"
+                          variant="outlined"
+                          fullWidth
+                          margin="normal"
+                          value={'Address'}                          
+                          disabled={true}
+                          multiline  
+                          rows={2}  
+                        />
+                      </ListItem>
+                    </Grid>
+                  </Grid>
 
-          <div className="column"><Typography variant="body1" component="article"><b>Seller</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{detailData.seller}</span></Typography></div>
+                  {detailData.contracts && detailData.contracts.length > 0 && (
+                    <Grid container spacing={1}>
+                    <Grid item xs={12}>
+                      <ListItem><hr /></ListItem>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <ListItem>
+                        <Typography variant="h6" component="article" className="label">Contract Details</Typography>
+                      </ListItem>
+                    </Grid>                        
+                  </Grid>
+                  )}
 
-          <div className="column"><Typography variant="body1" component="article"><b>Quantity</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{detailData.quantity}</span></Typography></div>
+                  {detailData.contracts && detailData.contracts.length > 0 && detailData.contracts.map((contract: any, index: number) => (
+                    <div key={contract._id} className="billing-contract-form">
+                    <TextField
+                        label="Date"
+                        type="text"
+                        fullWidth
+                        margin="normal"
+                        value={customFormatDate(new Date(contract.createdDate))}                    
+                        disabled={true}    
+                    />
 
-          <div className="column"><Typography variant="body1" component="article"><b>Price</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{detailData.price}</span></Typography></div>
+                    <TextField
+                        label="Contract No"
+                        type="text"
+                        fullWidth
+                        margin="normal"
+                        value={contract.contractNo}                    
+                        disabled={true}    
+                        />
+                        
+                    <TextField
+                        label="Category"
+                        type="text"
+                        fullWidth
+                        margin="normal"
+                        value={contract.partyType}                    
+                        disabled={true}    
+                    />
 
-          <div className="column"><Typography variant="body1" component="article"><b>Brokerage Price</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{detailData.brokeragePrice}</span></Typography></div>
+                    <TextField
+                        label="Quantity"
+                        type="number"
+                        fullWidth
+                        margin="normal"
+                        value={contract.quantity || 0}                    
+                        disabled={true}    
+                    />
 
-          <div className="column"><Typography variant="body1" component="article"><b>Brokerga On</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{detailData.brokerageOn}</span></Typography></div>
+                    <TextField
+                        label="Price"
+                        type="text"
+                        fullWidth
+                        margin="normal"
+                        value={contract.price}                    
+                        disabled={true}    
+                          />
+                          
 
-          <div className="column"><Typography variant="body1" component="article"><b>SGST</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{detailData.sgst}</span></Typography></div>
+                    <TextField
+                        type="number"
+                        label="Brokerage on Qty"
+                        fullWidth
+                        margin="normal"
+                        value={contract.brokerageQty || 0}     
+                        disabled={true}
+                    />
 
-          <div className="column"><Typography variant="body1" component="article"><b>CGST</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{detailData.cgst}</span></Typography></div>
 
-          <div className="column"><Typography variant="body1" component="article"><b>IGST</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{detailData.igst}</span></Typography></div>
+                    <TextField
+                        label="Amount"
+                        type="text"
+                        fullWidth
+                        margin="normal"
+                        value={contract.brokerageAmt || 0}                    
+                        disabled={true}   
+                    />
+                    </div>
+                  ))}
+                  
+                  {detailData.contracts && detailData.contracts.length > 0 && (
+                    <div className="net-amount-wrapper">                      
+                    <div>
+                      <Typography variant="h6" component="article" className="label">Net Amount : </Typography>
+                      <Typography variant="body1" component="article" className="value">{detailData.netAmount}</Typography>
+                    </div>
+                  </div>
+                  )}
 
-          <div className="column"><Typography variant="body1" component="article"><b>Brokerage Amount</b></Typography></div>
-          <div className="column"><Typography variant="body1" component="article"><span>{detailData.brokerageAmount}</span></Typography></div>
+                  {detailData.contracts && detailData.contracts.length > 0 &&
+                    (
+                    <div className="gross-amount-wrapper">
+                      <div>
+                      <FormControl sx={{ m: 1 }} className="billing-tax-select" disabled={true}>
+                      <InputLabel id="demo-simple-select-autowidth-label">Sgst</InputLabel>
+                      <Select labelId="demo-simple-select-autowidth-label" id="demo-simple-select-autowidth"  autoWidth label="Sgst" value={detailData.sgst.toString()}>                                          
+                          {Array.from({ length: 29 }, (_, index) => index).map((value) => (
+                          <MenuItem key={value} value={value}>{value === 0 ? 'None' : `${value} ${value === 1 ? '%' : '%'}`}</MenuItem>
+                        ))}
+                      </Select>
+                      </FormControl>
+                      
+                      <FormControl sx={{ m: 1 }} className="billing-tax-select" disabled={true}>
+                      <InputLabel id="demo-simple-select-autowidth-label">Cgst</InputLabel>
+                      <Select labelId="demo-simple-select-autowidth-label" id="demo-simple-select-autowidth" autoWidth label="Cgst" value={detailData.cgst.toString()}>                    
+                        {Array.from({ length: 29 }, (_, index) => index).map((value) => (
+                          <MenuItem key={value} value={value}>{value === 0 ? 'None' : `${value} ${value === 1 ? '%' : '%'}`}</MenuItem>
+                        ))}
+                      </Select>
+                     </FormControl>
+                    
+                     <FormControl sx={{ m: 1 }} disabled={true} className="billing-tax-select">
+                      <InputLabel id="demo-simple-select-autowidth-label">Igst</InputLabel>
+                      <Select labelId="demo-simple-select-autowidth-label" id="demo-simple-select-autowidth" autoWidth label="Cgst" value={detailData.igst.toString()}>                    
+                        {Array.from({ length: 29 }, (_, index) => index).map((value) => (
+                          <MenuItem key={value} value={value}>{value === 0 ? 'None' : `${value} ${value === 1 ? '%' : '%'}`}</MenuItem>
+                        ))}
+                      </Select>
+                     </FormControl>
+                    </div>
+                    <div>
+                      <Typography variant="h6" component="article" className="label">Brokerage Amount : </Typography>
+                      <Typography variant="body1" component="article" className="value">{detailData.brokerage}</Typography>
+                    </div>
+                      
+                    </div>
+                    )
+                  }
 
-        </div>
-      </Container>
-      <BillingPreviewDialogue isOpen={isPreviewDialogOpen} heading="Billing Preview" contentData={previewContent} onClick={previewClickHandler} />
+
+                   {detailData.contracts && detailData.contracts.length > 0 && (
+                    <div className="net-amount-wrapper">                      
+                    <div>
+                      <Typography variant="h6" component="article" className="label">Grand Total Amount : </Typography>
+                        <Typography variant="body1" component="article" className="value">{detailData.grandTotalAmt} ({converter.toWords(detailData.grandTotalAmt)})</Typography>
+                    </div>
+                  </div>
+                  )}
+
+
+                  {detailData.contracts && detailData.contracts.length === 0 && (                    
+                      <div className="no-contract-found">
+                      <hr />                      
+                      <Typography variant="body1" component="article" className="label"><b>No Contract Found</b></Typography>
+                      </div>                      
+                  )}
+
+
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        
+      </Container>      
     </>
   );
 }
@@ -176,7 +342,5 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
       detail
     }
   };
-
-
 };
 

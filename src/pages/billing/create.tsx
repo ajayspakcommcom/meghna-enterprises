@@ -69,6 +69,8 @@ export default function Index() {
   };
 
   const handleSubmit = async (billing: Billing) => {  
+
+    console.log('contractDataList', contractDataList);
     
     const contractData = contractDataList.map((contract: any) => ({
       contractId: contract._id,
@@ -77,7 +79,9 @@ export default function Index() {
       brokerageQty: contract.brockerageAmt ? parseInt(contract.brockerageAmt) : 0,
       brokerageAmt: contract.amount ? contract.amount : 0,
       category: contract.category,
-      partyType: contract.category.toLowerCase() === 'seller' ? 'Seller' : 'Buyer'
+      partyType: contract.category.toLowerCase() === 'seller' ? 'Seller' : 'Buyer',
+      contractNo: contract.contract_no,
+      createdDate: contract.createdDate      
     }));
 
     const objData = {
@@ -103,7 +107,6 @@ export default function Index() {
     } else {
       console.log('Error creating billing:', response);
     }
-
     } catch (error: any) {
       console.log('Error creating billing:', error);
     }

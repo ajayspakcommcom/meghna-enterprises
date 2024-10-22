@@ -65,6 +65,21 @@ const billingSchema = new mongoose.Schema({
         isBillCreated: {
             type: Boolean,
             default: false
+        },
+        partyType: {
+            type: String,
+            required: true,
+            default: ''
+        },
+        contractNo: {
+            type: String,
+            required: true,
+            default: ''
+        },
+        createdDate: {
+            type: Date,
+            required: true,
+            default: Date.now
         }
     }],
     sgst: {

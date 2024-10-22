@@ -44,7 +44,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
               brokerageQty: contract.brokerageQty,
               brokerageAmt: contract.brokerageAmt,
               partyId: req.body.partyId,
-              isBillCreated: true
+              isBillCreated: true,
+              partyType: contract.partyType,
+              contractNo: contract.contractNo,
+              createdDate: contract.createdDate
             })),
             sgst: req.body.sgst || 0,
             cgst: req.body.cgst || 0,
@@ -76,18 +79,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
               console.log('partyData', partyData);
               return {
                 ...billing._doc,
-                //stateCode: partyData?.state_code || 'Unknown',
-                //partyName: partyData?.name || 'Unknown' // Handle case where partyData might be null
                 partyDetail: partyData
               };
             })
           );
-
-          console.log(formattedData);
-
-          console.clear();
-          console.log('formattedData', formattedData);
-
           res.status(200).json({ data: formattedData });
         } catch (error: any) {
           res.status(500).json({ error: 'Internal Server Error' });
