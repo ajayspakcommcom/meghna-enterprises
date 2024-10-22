@@ -30,7 +30,9 @@ const Index: React.FC<SuccessConfirmationDialogProps> = ({ isOpen, heading, onCl
             onClick(false);
         }
         setOpen(false);
-        router.push(`/${redirect}`);
+        if (redirect) {
+            router.push(`/${redirect}`);
+        }
     };
 
     return (        

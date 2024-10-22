@@ -12,6 +12,7 @@ import { getBuyer } from "@/services/buyer";
 const converter = require('number-to-words');
 
 const Header = dynamic(() => import("../../../components/header/index"));
+const SuccessConfirmationDialogue = dynamic(() => import('../../../components/success-confirmation/index'));
 
 
 interface Party {
@@ -44,6 +45,7 @@ export default function Index() {
   const [igst, setIgst] = useState<number>(18);
   const [brokerageAmt, setBrokerageAmt] = useState<number>(0);
   const [grandTotalAmt, setGrandTotalAmt] = useState<number>(0);
+  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
 
 
   useEffect(() => {
@@ -93,20 +95,23 @@ export default function Index() {
       partyType: contractData[0].category.toLowerCase() === 'seller' ? 'Seller' : 'Buyer'
     }
 
-    console.log('contractData', contractData);
-    console.log('objData', objData);
-        
-    const response = await createBilling(objData);
-    console.log('response', response);
-    
-    if (response?.message) {
-      //goToPage('/billing');
-      console.log('Billing has been successfully created.');
+     try {
+      const response = await createBilling(objData);      
+      formik.resetForm();       
+      if (response?.message) {
+        setIsSuccessDialogOpen(true);   
     } else {
       console.log('Error creating billing:', response);
     }
 
+    } catch (error: any) {
+      console.log('Error creating billing:', error);
+    }
   };
+
+   const successDialogCloseHandler = (val: boolean) => {      
+      console.log('successDialogCloseHandler', val);
+    }
 
   const handleReset = () => {
     formik.setValues(initialValues);
@@ -531,10 +536,6 @@ export default function Index() {
                         <Button type="submit" variant="contained" fullWidth>Submit</Button>
                     </div>
                   )}
-                      
-                    
-
-
                   
                 </form>
               </CardContent>
@@ -542,6 +543,9 @@ export default function Index() {
           </div>
         </div>
       </Container>      
+
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Billing Created Successfully" redirect="billing" onClick={successDialogCloseHandler} />
+
     </>
   );
 }
