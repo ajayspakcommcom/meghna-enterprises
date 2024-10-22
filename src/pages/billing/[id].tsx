@@ -5,6 +5,8 @@ import dynamic from 'next/dynamic';
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import {getBilling} from "@/services/billing";
 import { customFormatDate } from "@/services/common";
+import { getBuyer } from "@/services/buyer";
+import { getSeller } from "@/services/seller";
 const converter = require('number-to-words');
 
 const Header = dynamic(() => import('../../../components/header/index'));
@@ -46,13 +48,52 @@ interface DetailData {
   __v: number;
 }
 
+interface UserDetail {
+  _id: string;
+  name: string;
+  address: string;
+  telephone_no: string;
+  mobile_no: string;
+  fax: string;
+  pan: string;
+  gstin: string;
+  state_code: string;
+  email: string;
+  updatedDate: string | null;
+  deletedDate: string | null;
+  isDeleted: boolean;
+  account_detail: string;
+  createdDate: string;
+  __v: number;
+}
+
 const Index: React.FC<compProps> = ({ detail }) => {
 
   const router = useRouter();
   const [detailData, setDetailData] = useState<DetailData>(detail.data as DetailData);
+  const [userData, setUserData] = useState<UserDetail>();
+
+  const getUserPartyData = async (partyType: string) => {
+    const partyData = partyType.toLowerCase() === 'buyer' ? await getBuyer(detailData.partyId) : await getSeller(detailData.partyId);       
+    return (partyData as any).data;
+  }
+
+  
 
   useEffect(() => {
     console.log('detail', detail.data);
+    
+    const fetchPartyData = async () => {      
+    try {
+      const respPartyData = await getUserPartyData(detailData.partyType);      
+      setUserData(respPartyData);
+    } catch (error) {
+      console.log('Failed to fetch party data:', error);      
+    }
+    };
+
+  fetchPartyData();
+
   }, [detail]);
  
   return (
@@ -102,7 +143,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
                             fullWidth
                             margin="normal"
                             InputLabelProps={{shrink: true }}
-                          value={customFormatDate(new Date(detailData.billingDate))}
+                            value={customFormatDate(new Date(detailData.billingDate))}
                         disabled={true}
                           />
                       </ListItem>
@@ -111,13 +152,13 @@ const Index: React.FC<compProps> = ({ detail }) => {
                       <ListItem>
                         <TextField   
                             type="text"
-                            label="Billing Date"
+                            label="Name"
                             name="billingDate"
                             variant="outlined"
                             fullWidth
                             margin="normal"
                             InputLabelProps={{shrink: true }}
-                            value={'Name'}
+                            value={userData?.name}
                             disabled={true}
                           />                      
                       </ListItem>
@@ -130,8 +171,9 @@ const Index: React.FC<compProps> = ({ detail }) => {
                             name="email"
                             variant="outlined"
                             fullWidth
-                            margin="normal"
-                            value={'Email'}                                                      
+                           margin="normal"
+                        InputLabelProps={{shrink: true }}
+                            value={userData?.email ?? ''}                                                      
                             disabled={true}
                           />
                       </ListItem>
@@ -149,7 +191,8 @@ const Index: React.FC<compProps> = ({ detail }) => {
                             variant="outlined"
                             fullWidth
                             margin="normal"
-                            value={'Mobile'}                                                      
+                            InputLabelProps={{shrink: true }}
+                            value={userData?.mobile_no ?? ''}                                                      
                             disabled={true}
                         />
                       </ListItem>
@@ -162,7 +205,8 @@ const Index: React.FC<compProps> = ({ detail }) => {
                           variant="outlined"
                           fullWidth
                           margin="normal"
-                          value={'Address'}                          
+                          InputLabelProps={{shrink: true }}
+                          value={userData?.address ?? ''}                          
                           disabled={true}
                           multiline  
                           rows={2}  
