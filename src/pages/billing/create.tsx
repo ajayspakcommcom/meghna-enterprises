@@ -10,6 +10,7 @@ import { customFormatDate, getCurrentFinancialYear, incrementBillingNo } from "@
 import { getSeller } from "@/services/seller";
 import { getBuyer } from "@/services/buyer";
 const converter = require('number-to-words');
+import { debounce } from 'lodash';
 
 const Header = dynamic(() => import("../../../components/header/index"));
 const SuccessConfirmationDialogue = dynamic(() => import('../../../components/success-confirmation/index'));
@@ -250,6 +251,11 @@ export default function Index() {
     updatedDataList.splice(index, 1);
     setContractDataList(updatedDataList);
   };
+
+  const handleBillNoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    formik.setFieldValue('billingNo', event.target.value);
+    console.log('handleBillNoChange', event.target.value);
+  };
   
   
   useEffect(() => {     
@@ -299,10 +305,7 @@ export default function Index() {
                             fullWidth
                             margin="normal"
                             value={formik.values.billingNo}                          
-                            onChange={formik.handleChange}
-                            error={formik.touched.billingNo && Boolean(formik.errors.billingNo)}
-                            helperText={formik.touched.billingNo && formik.errors.billingNo}
-                            disabled={true}
+                            onChange={handleBillNoChange}                            
                           />
                       </ListItem>
                     </Grid>

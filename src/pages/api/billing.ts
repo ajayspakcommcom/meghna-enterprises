@@ -229,6 +229,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           res.status(500).json({ error: 'Internal Server Error', errorDetail: error.message });
         }
         break;
+
+      case 'BILL-NO-CHECK':
+        try {
+          const { billingNo } = req.body;
+          const data = await Billing.findOne({ billingNo: billingNo }).exec();
+          res.status(200).json({ data: data });
+        } catch (error: any) {
+          res.status(500).json({ error: 'Internal Server Error', errorDetail: error.message });
+        }
+        break;
     }
 
   } else {
