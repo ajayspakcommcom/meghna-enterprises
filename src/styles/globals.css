@@ -595,10 +595,22 @@ pre {
     display: flex;
     justify-content: space-between;
     padding: 0 15px;
+    align-items: center;
+}
+
+.billing-contract-form>button {
+    margin-top: 7px;
+    background: transparent;
+    outline: 0;
+    border: 0;
+    border: 1px solid #000;
+    border-radius: 4px;
+    min-width: 50px;
+    cursor: pointer;
 }
 
 .billing-contract-form .MuiTextField-root {
-    margin-right: 15px;
+    margin-right: 10px;
 }
 
 .billing-contract-form .MuiTextField-root:last-child {

@@ -40,9 +40,9 @@ export default function Index() {
   const [partyList, setPartyList] = useState<Party[]>([]);
   const [contractDataList, setContractDataList] = useState<any>(null);
   const [netAmount, setNetAmount] = useState<number>(0);
-  const [sgst, setSgst] = useState<number>(9);
-  const [cgst, setCgst] = useState<number>(9);
-  const [igst, setIgst] = useState<number>(18);
+  const [sgst, setSgst] = useState<number>(0);
+  const [cgst, setCgst] = useState<number>(0);
+  const [igst, setIgst] = useState<number>(0);
   const [brokerageAmt, setBrokerageAmt] = useState<number>(0);
   const [grandTotalAmt, setGrandTotalAmt] = useState<number>(0);
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
@@ -219,10 +219,9 @@ export default function Index() {
   const handleSgstChange = (event: SelectChangeEvent) => {    
     const value = parseInt(event.target.value);
     setSgst(value);
-    setIgst(cgst + value);
-
+    
     const totalAmt = contractDataList.reduce((total: number, item: any) => total + (item.amount || 0), 0);
-    const grossAmt = totalAmt * (cgst + value) / 100;
+    const grossAmt = totalAmt * (cgst + value + igst) / 100;
     setBrokerageAmt(grossAmt);
 
   };
@@ -230,11 +229,26 @@ export default function Index() {
   const handleCgstChange = (event: SelectChangeEvent) => {     
     const value = parseInt(event.target.value);
     setCgst(value);
-    setIgst(sgst + value);
+  
+    const totalAmt = contractDataList.reduce((total: number, item: any) => total + (item.amount || 0), 0);
+    const grossAmt = totalAmt * (sgst + value + igst) / 100;
+    setBrokerageAmt(grossAmt);
+  };
+
+
+  const handleIgstChange = (event: SelectChangeEvent) => {     
+    const value = parseInt(event.target.value);
+    setIgst(value);    
     
     const totalAmt = contractDataList.reduce((total: number, item: any) => total + (item.amount || 0), 0);
-    const grossAmt = totalAmt * (sgst + value) / 100;
+    const grossAmt = totalAmt * (cgst + sgst + value) / 100;
     setBrokerageAmt(grossAmt);
+  };
+
+  const handleContractRemove = (index: number) => {
+    const updatedDataList = [...contractDataList];
+    updatedDataList.splice(index, 1);
+    setContractDataList(updatedDataList);
   };
   
   
@@ -462,7 +476,10 @@ export default function Index() {
                     margin="normal"
                     value={contract.amount || 0}                    
                     disabled={true}   
-                />
+                      />
+                      
+                  <button type="button" onClick={() => handleContractRemove(index)}>x</button>
+
                 </div>
                   ))}
                   
@@ -483,7 +500,7 @@ export default function Index() {
                       <InputLabel id="demo-simple-select-autowidth-label">Sgst</InputLabel>
                       <Select labelId="demo-simple-select-autowidth-label" id="demo-simple-select-autowidth"  onChange={handleSgstChange} autoWidth label="Sgst" value={sgst.toString()}>                                          
                           {Array.from({ length: 29 }, (_, index) => index).map((value) => (
-                          <MenuItem key={value} value={value}>{value === 0 ? 'None' : `${value} ${value === 1 ? '%' : '%'}`}</MenuItem>
+                          <MenuItem key={value} value={value}>{value === 0 ? '0%' : `${value} ${value === 1 ? '%' : '%'}`}</MenuItem>
                         ))}
                       </Select>
                       </FormControl>
@@ -492,16 +509,16 @@ export default function Index() {
                       <InputLabel id="demo-simple-select-autowidth-label">Cgst</InputLabel>
                       <Select labelId="demo-simple-select-autowidth-label" id="demo-simple-select-autowidth" onChange={handleCgstChange} autoWidth label="Cgst" value={cgst.toString()}>                    
                         {Array.from({ length: 29 }, (_, index) => index).map((value) => (
-                          <MenuItem key={value} value={value}>{value === 0 ? 'None' : `${value} ${value === 1 ? '%' : '%'}`}</MenuItem>
+                          <MenuItem key={value} value={value}>{value === 0 ? '0%' : `${value} ${value === 1 ? '%' : '%'}`}</MenuItem>
                         ))}
                       </Select>
                      </FormControl>
                     
-                     <FormControl sx={{ m: 1 }} disabled={true} className="billing-tax-select">
+                     <FormControl sx={{ m: 1 }} className="billing-tax-select">
                       <InputLabel id="demo-simple-select-autowidth-label">Igst</InputLabel>
-                      <Select labelId="demo-simple-select-autowidth-label" id="demo-simple-select-autowidth" onChange={handleCgstChange} autoWidth label="Cgst" value={igst.toString()}>                    
+                      <Select labelId="demo-simple-select-autowidth-label" id="demo-simple-select-autowidth" onChange={handleIgstChange} autoWidth label="Cgst" value={igst.toString()}>                    
                         {Array.from({ length: 29 }, (_, index) => index).map((value) => (
-                          <MenuItem key={value} value={value}>{value === 0 ? 'None' : `${value} ${value === 1 ? '%' : '%'}`}</MenuItem>
+                          <MenuItem key={value} value={value}>{value === 0 ? '0%' : `${value} ${value === 1 ? '%' : '%'}`}</MenuItem>
                         ))}
                       </Select>
                      </FormControl>
