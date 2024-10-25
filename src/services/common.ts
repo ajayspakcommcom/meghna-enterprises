@@ -1,6 +1,12 @@
+import { debounce } from 'lodash';
 import moment from 'moment';
 import { getTemplate } from './template';
 import { getContract } from './contract';
+
+export const debouncedHandleChange = debounce((value) => {
+    console.log('Debounced Billing No:', value);
+    return value;
+}, 1000);
 
 export const getUserData = (): { [key: string]: any } => {
     const userDataString = localStorage.getItem('userData');

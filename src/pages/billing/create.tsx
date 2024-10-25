@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import {Card,CardContent,Button,Typography, TextField, Container, Autocomplete, FormControl, Select, InputLabel, MenuItem, FormHelperText, SelectChangeEvent, Grid, ListItem } from "@mui/material";
+import {Card,CardContent,Button,Typography, TextField, Container, Autocomplete, FormControl, Select, InputLabel, MenuItem, FormHelperText, SelectChangeEvent, Grid, ListItem, debounce } from "@mui/material";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import Billing from "../../../models/Billing";
 import { useFormik } from "formik";
 import billingSchema from "@/validation/billingSchema";
 import { createBilling, getBillCreatedContractList, getBuyerContract, getLastBilling, getPartyList, getSellerContract } from "@/services/billing";
-import { customFormatDate, getCurrentFinancialYear, incrementBillingNo } from "@/services/common";
+import { customFormatDate, debouncedHandleChange, getCurrentFinancialYear, incrementBillingNo } from "@/services/common";
 import { getSeller } from "@/services/seller";
 import { getBuyer } from "@/services/buyer";
 const converter = require('number-to-words');
-import { debounce } from 'lodash';
+
 
 const Header = dynamic(() => import("../../../components/header/index"));
 const SuccessConfirmationDialogue = dynamic(() => import('../../../components/success-confirmation/index'));
@@ -254,9 +254,10 @@ export default function Index() {
 
   const handleBillNoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     formik.setFieldValue('billingNo', event.target.value);
-    console.log('handleBillNoChange', event.target.value);
+    const billingNo = debouncedHandleChange(event.target.value);    
+    console.log('billingNo', billingNo);
   };
-  
+
   
   useEffect(() => {     
     setGrandTotalAmt(netAmount + brokerageAmt);
