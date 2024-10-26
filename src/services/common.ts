@@ -352,7 +352,10 @@ export const getBillingHtmlTemplate = (data?: any) => {
                             <tr>
                                 <td
                                     style="width: 50%; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd; padding: 10px 10px;">
-                                    GST @18%</td>
+                                        ${data?.billingData?.cgst > 0 && `CGST @${data?.billingData?.cgst}%,`}
+                                        ${data?.billingData?.sgst > 0 && `SGST @${data?.billingData?.sgst}%,`}
+                                        ${data?.billingData?.igst > 0 && `IGST @${data?.billingData?.igst}%`}
+                                    </td>
                             </tr>
                             <tr>
                                 <td
