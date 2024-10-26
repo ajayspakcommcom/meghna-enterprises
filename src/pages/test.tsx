@@ -1,3 +1,4 @@
+import { convertHtmlToPdf } from "@/services/billing";
 import React, { useEffect, useState } from "react";
 
 const htmlContent = `
@@ -88,25 +89,21 @@ const htmlContent = `
 
 export default function Index() {
 
-    const downloadPdf = async (htmlContent:any) => {
-        const response = await fetch('/api/html-to-pdf', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ html: htmlContent, type: 'HTML-TO-PDF' }),
-        });
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'generated.pdf';
-        a.click();
-        };
+    const downloadBillingPdf = async () => {
+        const billingData = {html: htmlContent};
+        try {
+            await convertHtmlToPdf(billingData);
+            console.log("PDF generated and download triggered");
+        } catch (error) {
+            console.error("Error generating PDF:", error);
+        }
+    };
+    
+
  
     const handleClick = () => {
         console.log('clicked');
-        downloadPdf(htmlContent);
+        downloadBillingPdf();
     }
 
     return (    

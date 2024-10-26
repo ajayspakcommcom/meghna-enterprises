@@ -144,3 +144,21 @@ export const getBillCreatedContractList = async (id: string): Promise<any> => {
         throw err;
     }
 };
+
+export const convertHtmlToPdf = async (billingData: any): Promise<any> => {
+    try {
+        const response = await apiClient.post('/html-to-pdf', { ...billingData, type: 'HTML-TO-PDF' }, {
+            responseType: 'blob'
+        });
+
+        const url = window.URL.createObjectURL(response.data);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'generated.pdf';
+        a.click();
+
+        return response;
+    } catch (err: unknown) {
+        throw err;
+    }
+};
