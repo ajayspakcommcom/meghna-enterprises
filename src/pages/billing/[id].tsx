@@ -102,8 +102,6 @@ const Index: React.FC<compProps> = ({ detail }) => {
     const partyData = detailData.partyType.toLowerCase() === 'buyer' ? await getBuyer(detailData.partyId) : await getSeller(detailData.partyId);    
     const htmlData = { billingData: detailData, partyData: (partyData as any).data };
 
-    console.log('htmlData', htmlData);
-
     const billingData = { html: getBillingHtmlTemplate(htmlData) };
     try {
           await convertHtmlToPdf(billingData);            
