@@ -1,3 +1,4 @@
+
 Contract
     1) Contract no can be editable
     2) Add one more field deliveryDate
@@ -5,6 +6,10 @@ Contract
     4) Email validation
     5) Contract download check the pdf design is not correct
     6) Editing the billing contract number increament automatically  
+
+
+Billing 
+    1) While creating billing the commodity also
 
 
     
