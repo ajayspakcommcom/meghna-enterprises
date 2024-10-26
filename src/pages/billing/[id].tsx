@@ -3,8 +3,8 @@ import {Card,CardContent,Button,Typography, TextField, Container, Autocomplete, 
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import {getBilling} from "@/services/billing";
-import { customFormatDate } from "@/services/common";
+import {convertHtmlToPdf, getBilling} from "@/services/billing";
+import { customFormatDate, getBillingHtmlTemplate } from "@/services/common";
 import { getBuyer } from "@/services/buyer";
 import { getSeller } from "@/services/seller";
 const converter = require('number-to-words');
@@ -83,9 +83,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
     router.push(`${url}`);
   };
 
-  useEffect(() => {
-    console.log('detail', detail.data);
-    
+  useEffect(() => {    
     const fetchPartyData = async () => {      
     try {
       const respPartyData = await getUserPartyData(detailData.partyType);      
@@ -98,6 +96,21 @@ const Index: React.FC<compProps> = ({ detail }) => {
   fetchPartyData();
 
   }, [detail]);
+
+  const downloadBillingPdf = async () => {
+
+    const partyData = detailData.partyType.toLowerCase() === 'buyer' ? await getBuyer(detailData.partyId) : await getSeller(detailData.partyId);    
+    const htmlData = { billingData: detailData, partyData: (partyData as any).data };
+
+    console.log('htmlData', htmlData);
+
+    const billingData = { html: getBillingHtmlTemplate(htmlData) };
+    try {
+          await convertHtmlToPdf(billingData);            
+        } catch (error) {
+            console.error("Error generating PDF:", error);
+        }
+  }
  
   return (
     <>
@@ -111,7 +124,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
           <div className="btn-wrapper detail-btn-wrapper">
             <Button variant="outlined">Preview</Button>
             <Button variant="outlined">Send Mail</Button>
-            <Button variant="outlined">Download Pdf</Button>
+            <Button variant="outlined" onClick={downloadBillingPdf}>Download Pdf</Button>
             <Button variant="outlined" onClick={() => goToPage("/billing")}>Back</Button>
           </div>
         </div>
