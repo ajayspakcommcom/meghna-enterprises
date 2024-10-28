@@ -37,6 +37,10 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
 
     useEffect(() => {
 
+        console.log('contentData', contentData);
+        console.log('buyerData', buyerData);
+        console.log('sellerData', sellerData);
+
         if (contentData) {
             if (contentData.selectedBuyer !== null && contentData.selectedBuyer !== undefined) {
                 fetchBuyerData();
@@ -69,203 +73,98 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                 {false && <DialogTitle id="alert-dialog-title">{heading}</DialogTitle>}
 
                 {contentData &&
-                    <DialogContent>
+                    <DialogContent className="preview-dialogue-content">
 
                         <div className="preview-wrapper">
                             <div className="header">
-                                <Image src={require(`../../public/images/logo.svg`)} alt="Description of the image" className="responsive-img center" />
+                                <Image src={require(`../../public/images/seedsnfeeds.png`)} alt="seedsnfeeds" className="responsive-img center" />
                         </div>
                         
                         <div className="address">
-                            <Typography variant="body2">B-3 GIRIRAJ CO OP H S LTD, 6 MAMLATDAR WADI RAOD NO. 6 MALAD (WEST), MUMBAI - 400 064.</Typography>
-                            <Typography variant="body2">PHONE NO: 022 2880 2452 | MOBILE NO: +91 99200 10200 / 99200 90200</Typography>
-                            <Typography variant="body2">Email: | Pan No. AFRPC6408E </Typography>
-                            <Typography variant="body2"><b>GSTIN: 27AFRPC6408E1ZI</b></Typography>
+                            <Typography variant="body2">504, SYNERGY, KACH PADA RD NO. 2, NEAR MALAD IND. ESTATE, RAMCHANDRA LANE EXTENTION, MALAD (W), MUMBAI - 400 064.</Typography>
+                            <Typography variant="body2">Tel. : 022 2880 2452-Fax : 022 2881 5002</Typography>
+                            <Typography variant="body2">Email : meghnaagencies@gmail.com</Typography>
+                            <Typography variant="body2"><b>TAX-INVOICE</b></Typography>
                         </div>
                             
 
-                            <div className="contract-box">
-                                <div>
-                                    <Typography variant="body2">
-                                        <b>Billing No : </b> <b>{contentData.billingNo}</b>
-                                    </Typography>
-                                </div>
-                                <div>
-                                    <Typography variant="body2">
-                                        <b>DATE : </b> <b>{customFormatDate(contentData.billDate ? new Date(contentData.billDate) : new Date())}</b>
-                                    </Typography>
-                                </div>
-                            </div>
-
-                            <div className="under-paragraph">
-                                <Typography variant="body2">
-                                    Under your instruction and order, we hereby confirm on behalf and risk of the under mentioned Seller and Buyer the following transaction with terms & conditions.
-                                </Typography>
-                        </div>
-                        
-                            <div className="detail-wrapper contract-detail-wrapper">
-                                {contentData &&
-                                        <>
-                                            <div className="column"><Typography variant="body1" component="article"><b>Contract Reference No</b></Typography></div>
-                                            <div className="column">
-                                                <Typography variant="body2" component="article">                                                   
-                                                    {contentData.contractReferenceNo}
-                                                </Typography>
-                                            </div>
-                                        </>
-                            }
-                            
-                            {contentData &&
-                                        <>
-                                            <div className="column"><Typography variant="body1" component="article"><b>Bill Date</b></Typography></div>
-                                            <div className="column">
-                                                <Typography variant="body2" component="article">                                                   
-                                                    {contentData.billDate}
-                                                </Typography>
-                                            </div>
-                                        </>
-                            }
-                            
-                            {contentData &&
-                                        <>
-                                            <div className="column"><Typography variant="body1" component="article"><b>Buyer</b></Typography></div>
-                                            <div className="column">
-                                                <Typography variant="body2" component="article">                                                   
-                                                    {contentData.buyer}
-                                                </Typography>
-                                            </div>
-                                        </>
-                            }
-                            
-                            {contentData &&
-                                        <>
-                                            <div className="column"><Typography variant="body1" component="article"><b>Seller</b></Typography></div>
-                                            <div className="column">
-                                                <Typography variant="body2" component="article">                                                   
-                                                    {contentData.seller}
-                                                </Typography>
-                                            </div>
-                                        </>
-                            }
-                            
-                            {contentData &&
-                                        <>
-                                            <div className="column"><Typography variant="body1" component="article"><b>Quantity</b></Typography></div>
-                                            <div className="column">
-                                                <Typography variant="body2" component="article">                                                   
-                                                    {contentData.quantity}
-                                                </Typography>
-                                            </div>
-                                        </>
-                                }
-
-                            
-                            {contentData &&
-                                        <>
-                                            <div className="column"><Typography variant="body1" component="article"><b>Price</b></Typography></div>
-                                            <div className="column">
-                                                <Typography variant="body2" component="article">                                                   
-                                                    {contentData.price}
-                                                </Typography>
-                                            </div>
-                                        </>
-                            }
-                            
-                            {contentData &&
-                                        <>
-                                            <div className="column"><Typography variant="body1" component="article"><b>Brokerage Price</b></Typography></div>
-                                            <div className="column">
-                                                <Typography variant="body2" component="article">                                                   
-                                                    {contentData.brokeragePrice}
-                                                </Typography>
-                                            </div>
-                                        </>
-                            }
-                            
-                            {contentData &&
-                                        <>
-                                            <div className="column"><Typography variant="body1" component="article"><b>Brokerage On</b></Typography></div>
-                                            <div className="column">
-                                                <Typography variant="body2" component="article">                                                   
-                                                    {contentData.brokerageOn}
-                                                </Typography>
-                                            </div>
-                                        </>
-                            }
-                            
-                            {contentData &&
-                                        <>
-                                            <div className="column"><Typography variant="body1" component="article"><b>SGST</b></Typography></div>
-                                            <div className="column">
-                                                <Typography variant="body2" component="article">                                                   
-                                                    {contentData.sgst}
-                                                </Typography>
-                                            </div>
-                                        </>
-                            }
-                            
-                            {contentData &&
-                                        <>
-                                            <div className="column"><Typography variant="body1" component="article"><b>CGST</b></Typography></div>
-                                            <div className="column">
-                                                <Typography variant="body2" component="article">                                                   
-                                                    {contentData.cgst}
-                                                </Typography>
-                                            </div>
-                                        </>
-                            }
-                            
-                            {contentData &&
-                                        <>
-                                            <div className="column"><Typography variant="body1" component="article"><b>IGST</b></Typography></div>
-                                            <div className="column">
-                                                <Typography variant="body2" component="article">                                                   
-                                                    {contentData.igst}
-                                                </Typography>
-                                            </div>
-                                        </>
-                            }
-                            
-                            {contentData &&
-                                        <>
-                                            <div className="column"><Typography variant="body1" component="article"><b>Brokerage Amount</b></Typography></div>
-                                            <div className="column">
-                                                <Typography variant="body2" component="article">                                                   
-                                                    {contentData.brokerageAmount}
-                                                </Typography>
-                                            </div>
-                                        </>
-                            }
-
-                            </div>
-
-
-                            <div className="footer-subject">
-                                <Typography variant="body2">
-                                    Subject to Mumbai Jurisdiction
-                                </Typography>
-                            </div>
-
-                            <div className="footer-seed-feed">
-                                <Typography variant="body2">
-                                    <b>For SEEDS & FEEDS INDIA</b>
-                                </Typography>
-                            </div>
-
-                            <div className="footer-buyer-seller">
-                                <div>
-                                    <Typography variant="body2"><b>FOR SELLER</b></Typography>
-                                </div>
-                                <div>
-                                    <Typography variant="body2"><b>FOR BUYER</b></Typography>
-                                </div>
-                            </div>
-
-                            <div className="footer-seed-feed">
-                                <Typography variant="body2">
-                                    <b>(AS BROKER)</b>
-                                </Typography>
-                            </div>
+                             <table className="invoice-table">
+                                <thead>
+                                    <tr>
+                                    <th>SAUDA DATE</th>
+                                    <th>CONTRACT #</th>
+                                    <th>BUYER/SELLER NAME</th>
+                                    <th>COMMODITY</th>
+                                    <th>QTY</th>
+                                    <th>RATE/TON</th>
+                                    <th>PER TON</th>
+                                    <th>BROKERAGE AMOUNT (RS.)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {[...Array(3)].map((_, index) => (
+                                    <tr key={index}>
+                                        <td>31/05/2024</td>
+                                        <td>MEC/L/00040/24-25</td>
+                                        <td>SACHIN INTERNATIONAL PROTEINS PVT. LTD.</td>
+                                        <td>SOYA EXT.</td>
+                                        <td>200.000</td>
+                                        <td>44100.00</td>
+                                        <td>25.00</td>
+                                        <td>5000.00</td>
+                                    </tr>
+                                    ))}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                    <td colSpan={3} className="amount-in-words-td">
+                                        <span className="amount-in-words">AMOUNT IN WORD(S)</span>
+                                        <p>RUPEES TWENTY THOUSAND SIX HUNDRED FIFTY ONLY.</p>
+                                    </td>
+                                    <td colSpan={4} className="totals">
+                                        <table>
+                                            <tbody>
+                                                <tr><td>Total</td></tr>
+                                                <tr><td>GST @18%</td></tr>
+                                                <tr><td></td></tr>
+                                                <tr><td>ROUNDOFF AMOUNT</td></tr>
+                                                <tr><td>GRAND TOTAL</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                    <td className="totals-amount">
+                                        <table>
+                                        <tbody>
+                                            <tr><td><b>17500.00</b></td></tr>
+                                            <tr><td><b>3150.00</b></td></tr>
+                                            <tr><td></td></tr>
+                                            <tr><td><b>0.00</b></td></tr>
+                                            <tr><td><b>20650.00</b></td></tr>
+                                        </tbody>
+                                        </table>
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                    <td colSpan={3} className="additional-info">
+                                        <div>
+                                        <div className="info-row">
+                                            <span>PAN No</span><b>: AFRPC6408E</b>
+                                        </div>
+                                        <div className="info-row">
+                                            <span>GSTIN</span><b>: 27AFRPC6408E1ZI</b>
+                                        </div>
+                                        </div>
+                                    </td>
+                                    <td colSpan={5} className="signature">
+                                        <b>for MEGHNA ENTERPRISE</b>
+                                        <br />
+                                        <img src="http://localhost:3000/images/signature.jpg" alt="Signature" className="signature-img" />
+                                        <br />
+                                        <span>(AS BROKER)</span>
+                                    </td>
+                                    </tr>
+                                </tfoot>
+                                </table>
 
                         </div>
 

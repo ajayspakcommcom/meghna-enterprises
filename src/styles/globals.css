@@ -653,3 +653,184 @@ pre {
     margin: 50px 0;
     text-align: center;
 }
+
+.preview-dialogue-content .preview-wrapper {
+    border: 0;
+}
+
+.preview-dialogue-content {
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+.billing-preview-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    border: 1px solid #dddddd;
+}
+
+.billing-preview-header>div {
+    padding: 10px;
+}
+
+.billing-preview-header>div:last-child {
+    padding: 10px 10px 10px 50px;
+    border-left: 1px solid #dddddd;
+}
+
+.invoice-details {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    padding-left: 15px;
+    font-size: 14px;
+}
+
+.invoice-details>p {
+    margin: 0 0 5px 0;
+}
+
+.invoice-details>div {
+    margin-left: 30px;
+    line-height: 20px;
+    font-size: 12px;
+}
+
+.invoice-details>div>p {
+    margin: 0;
+    width: 300px;
+}
+
+.invoice-details>div>div {
+    width: 400px;
+    margin-top: 15px;
+}
+
+.invoice-details>div>div>div {
+    display: flex;
+}
+
+.invoice-details>div>div>div>p:first-child {
+    margin: 0;
+    width: 200px;
+}
+
+.invoice-details>div>div>div>p:last-child {
+    margin: 0;
+}
+
+.invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.invoice-table>thead>tr>th {
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #f7f7f7;
+    text-align: left;
+}
+
+.invoice-table>tbody {
+    border: 1px solid #ddd;
+}
+
+.invoice-table>tbody>tr>td {
+    padding: 10px 10px;
+    border-right: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+}
+
+.amount-in-words-td {
+    border-right: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+}
+
+.amount-in-words-td>span {
+    text-decoration: underline;
+    font-weight: 300;
+    font-size: 13px;
+    padding: 0 10px;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.amount-in-words-td>p {
+    padding: 0 10px;
+}
+
+.totals {
+    vertical-align: top;
+    text-align: right;
+}
+
+.totals>table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.totals>table>tbody>tr>td {
+    width: 50%;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    padding: 10px 10px;
+}
+
+.totals-amount {
+    border-right: 1px solid #ddd;
+    vertical-align: top;
+}
+
+.totals-amount>table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.totals-amount>table>tbody>tr>td {
+    width: 50%;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 10px;
+    text-align: right;
+}
+
+.additional-info {
+    border-right: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+}
+
+.additional-info>div {
+    border-top: 1px solid #ddd;
+    margin-top: 50px;
+    line-height: 20px;
+    padding: 10px 10px;
+}
+
+.additional-info>div>div {
+    display: flex;
+}
+
+.additional-info>div>div>span {
+    width: 100px;
+}
+
+.signature {
+    border-right: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    text-align: right;
+    vertical-align: top;
+    padding: 50px 10px 10px 10px;
+}
+
+.signature>b {
+    font-size: 16px;
+}
+
+.signature>img {
+    width: 100px;
+    height: 31px;
+}
+
+.signature>span {
+    font-size: 14px;
+}

@@ -10,6 +10,9 @@ import { getSeller } from "@/services/seller";
 const converter = require('number-to-words');
 
 const Header = dynamic(() => import('../../../components/header/index'));
+const SuccessConfirmationDialogue = dynamic(() => import('../../../components/success-confirmation/index'));
+const BillingPreviewDialogue = dynamic(() => import('../../../components/billing-preview/index'));
+const CircularProgressLoader = dynamic(() => import('../../../components/loader/index'));
 
 
 interface compProps {
@@ -72,6 +75,10 @@ const Index: React.FC<compProps> = ({ detail }) => {
   const router = useRouter();
   const [detailData, setDetailData] = useState<DetailData>(detail.data as DetailData);
   const [userData, setUserData] = useState<UserDetail>();
+  const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
+  const [previewContent, setPreviewContent] = useState<any>();
+  const [isLoader, setIsLoader] = useState<boolean>(false);  
+   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
 
   const getUserPartyData = async (partyType: string) => {
     const partyData = partyType.toLowerCase() === 'buyer' ? await getBuyer(detailData.partyId) : await getSeller(detailData.partyId);       
@@ -109,6 +116,19 @@ const Index: React.FC<compProps> = ({ detail }) => {
             console.error("Error generating PDF:", error);
         }
   }
+
+  const previewHandler = () => {
+    setIsPreviewDialogOpen(true);
+    setPreviewContent(detailData);
+  };
+
+  const previewClickHandler = (val: boolean) => {
+    setIsPreviewDialogOpen(val)
+  };
+
+  const onSuccessConfirmationHandler = (val: boolean) => {    
+    setIsSuccessDialogOpen(val);
+  };
  
   return (
     <>
@@ -120,8 +140,8 @@ const Index: React.FC<compProps> = ({ detail }) => {
             <Typography variant="h5" component="article">Billing Detail</Typography>
           </div>
           <div className="btn-wrapper detail-btn-wrapper">
-            <Button variant="outlined">Preview</Button>
-            <Button variant="outlined">Send Mail</Button>
+            <Button variant="outlined" onClick={() => previewHandler()}>Preview</Button>
+            {/* <Button variant="outlined">Send Mail</Button> */}
             <Button variant="outlined" onClick={downloadBillingPdf}>Download Pdf</Button>
             <Button variant="outlined" onClick={() => goToPage("/billing")}>Back</Button>
           </div>
@@ -384,7 +404,12 @@ const Index: React.FC<compProps> = ({ detail }) => {
             </Card>
           </div>
         
-      </Container>      
+      </Container>     
+      
+      <BillingPreviewDialogue isOpen={isPreviewDialogOpen} heading="Contract Preview" contentData={previewContent} onClick={previewClickHandler} />
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Contract sent successfully" onClick={onSuccessConfirmationHandler} redirect="contract" />
+      {isLoader && <CircularProgressLoader />}
+
     </>
   );
 }
