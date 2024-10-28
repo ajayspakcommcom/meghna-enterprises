@@ -11,7 +11,7 @@ import { getSellerIdName } from "@/services/seller";
 import { getBuyerIdName } from "@/services/buyer";
 import { getTemplate, getTemplateIdName } from "@/services/template";
 import { createContract, getLastContract } from "@/services/contract";
-import { getCurrentFinancialYear, getLocalStorage, incrementContractNo } from "@/services/common";
+import { debounceContractNoCheck, getCurrentFinancialYear, getLocalStorage, incrementContractNo } from "@/services/common";
 
 
 
@@ -56,6 +56,7 @@ export default function Index() {
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
   const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
   const [previewContent, setPreviewContent] = useState<any>();
+  const [isContractNoExists, setIsContractNoExists] = useState(false);
 
   const handleAddLabelField = () => {
     setLabelFields([...labelFields, { property: '', value: '' }]);
@@ -119,8 +120,10 @@ export default function Index() {
         const response: any = await getLastContract();
         if (response.data !== null) {
           setContractNo(incrementContractNo(response.data.contract_no, getCurrentFinancialYear(true)))
+          formik.setFieldValue('contract_no', incrementContractNo(response.data.contract_no, getCurrentFinancialYear(true)));
         } else {
           setContractNo(incrementContractNo('', getCurrentFinancialYear(true)));
+          formik.setFieldValue('contract_no', incrementContractNo('', getCurrentFinancialYear(true)));
         }
       } catch (error) {
         console.error('Error fetching seller data:', error);
@@ -182,7 +185,8 @@ export default function Index() {
 
   const initialValues: Contract = {
     quantity: '',
-    price: ''
+    price: '',
+    contract_no: ''
   };
 
   const handleSubmit = async (contract: Contract) => {
@@ -199,7 +203,7 @@ export default function Index() {
 
     const submittedData = {
       ...contract,
-      contract_no: contractNo,
+      contract_no: formik.values.contract_no,
       buyer_id: selectedBuyer?._id,
       seller_id: selectedSeller?._id,
       template: transformedFeildData,
@@ -249,7 +253,7 @@ export default function Index() {
     }, {});
 
     let previewData = {
-      contract_no: contractNo,
+      contract_no: formik.values.contract_no,
       selectedSeller: selectedSeller,
       selectedBuyer: selectedBuyer,
       selectedTemplate: transformedFeildData,
@@ -262,6 +266,16 @@ export default function Index() {
 
   const previewClickHandler = (val: boolean) => {
     setIsPreviewDialogOpen(val)
+  };
+
+  const handleContractNoChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    formik.setFieldValue('contract_no', event.target.value);
+    const contractNo = await debounceContractNoCheck(event.target.value);    
+    if (contractNo?.data) {            
+      setIsContractNoExists(true);
+    } else {      
+      setIsContractNoExists(false);
+    }
   };
 
   return (
@@ -286,8 +300,21 @@ export default function Index() {
             <Card>
               <CardContent>
                 <form onSubmit={formik.handleSubmit} onReset={formik.handleReset} className='form'>
-
                   {errors && <div className="error"><ErrorMessage message={errors} /></div>}
+
+
+                  <TextField
+                    type="text"
+                    label="Contract No"
+                    name="contract_no"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    value={formik.values.contract_no}
+                    onChange={handleContractNoChange}
+                    error={formik.touched.contract_no && Boolean(formik.errors.contract_no)}
+                    helperText={ isContractNoExists && <span style={{ color: 'red' }}>Contract No already exists.</span>}
+                  />
 
                   <div className="buyer-seller-forms-wrapper contract-form-wrapper">
                     <div>

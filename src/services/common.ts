@@ -1,12 +1,17 @@
 import { debounce } from 'lodash';
 import moment from 'moment';
 import { getTemplate } from './template';
-import { getContract } from './contract';
+import { checkContractNo, getContract } from './contract';
 import { checkBillNo } from './billing';
 const converter = require('number-to-words');
 
-export const debouncedHandleChange = async (value: string) => {
+export const debounceBillingNoCheck = async (value: string) => {
     const response = await checkBillNo(value);
+    return response;
+};
+
+export const debounceContractNoCheck = async (value: string) => {
+    const response = await checkContractNo(value);
     return response;
 };
 

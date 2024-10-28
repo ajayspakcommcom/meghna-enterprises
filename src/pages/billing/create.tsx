@@ -6,7 +6,7 @@ import Billing from "../../../models/Billing";
 import { useFormik } from "formik";
 import billingSchema from "@/validation/billingSchema";
 import { createBilling, getBillCreatedContractList, getBuyerContract, getLastBilling, getPartyList, getSellerContract } from "@/services/billing";
-import { customFormatDate, debouncedHandleChange, getCurrentFinancialYear, incrementBillingNo } from "@/services/common";
+import { customFormatDate, debounceBillingNoCheck, getCurrentFinancialYear, incrementBillingNo } from "@/services/common";
 import { getSeller } from "@/services/seller";
 import { getBuyer } from "@/services/buyer";
 const converter = require('number-to-words');
@@ -257,7 +257,7 @@ export default function Index() {
 
   const handleBillNoChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     formik.setFieldValue('billingNo', event.target.value);
-    const billingNo = await debouncedHandleChange(event.target.value);    
+    const billingNo = await debounceBillingNoCheck(event.target.value);    
     if (billingNo?.data) {            
       setIsBillNoExists(true);
     } else {      
