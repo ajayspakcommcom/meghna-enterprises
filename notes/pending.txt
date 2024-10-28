@@ -1,11 +1,11 @@
 
 Contract
     1) Contract no increament issue -> Done
-    2) Add one more field deliveryDate
+    2) Add one more field deliveryDate -> No Need
     3) Rs problem when updating the contract 
-    4) Email validation
-    5) Contract download check the pdf design is not correct
-    6) Editing the billing contract number increament automatically  
+    4) Email validation => Done
+    5) Contract download check the pdf design is not correct 
+    6) Editing the billing contract number increament automatically  => Done
 
 
 Billing 
