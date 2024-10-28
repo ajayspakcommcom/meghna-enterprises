@@ -141,7 +141,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
     const fetchLastContract = async () => {
       try {
         const response: any = await getLastContract();
-        setContractNo(incrementContractNo(response.data.contract_no, getCurrentFinancialYear(true)))
+        //setContractNo(incrementContractNo(response.data.contract_no, getCurrentFinancialYear(true)))
       } catch (error) {
         console.error('Error fetching seller data:', error);
       }
@@ -242,7 +242,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
     const submittedData = {
       ...contract,
-      contract_no: contractNo,
+      contract_no: detailedData.contract_no,
       buyer_id: selectedBuyer?._id,
       seller_id: selectedSeller?._id,
       template: transformedFeildData,
@@ -252,7 +252,6 @@ const Index: React.FC<compProps> = ({ detail }) => {
       id: detailedData._id,
       company: detailedData.company
     };
-
 
     setLoading(true);
     try {
