@@ -9,6 +9,7 @@ import { Typography } from "@mui/material";
 import { customDateFormatter, customFormatDate, getLocalStorage } from "@/services/common";
 import { getBuyer } from "@/services/buyer";
 import { getSeller } from "@/services/seller";
+const converter = require('number-to-words');
 
 interface BillingPreviewProps {
     isOpen: boolean;
@@ -28,8 +29,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
     const fetchPartyData = async () => {        
         const partyData = contentData?.partyType.toLowerCase() === 'buyer' ? await getBuyer(contentData.partyId) : await getSeller(contentData.partyId);
         const respData = (partyData as any).data;
-        contentData?.partyType.toLowerCase() === 'buyer' ? setBuyerData(respData) : setSellerData(respData);    
-        console.log('contentData', contentData);
+        contentData?.partyType.toLowerCase() === 'buyer' ? setBuyerData(respData) : setSellerData(respData);            
     };
 
     useEffect(() => {
@@ -157,8 +157,8 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                 <tfoot>
                                     <tr>
                                     <td colSpan={3} className="amount-in-words-td">
-                                        <span className="amount-in-words">AMOUNT IN WORD(S)</span>
-                                        <p>RUPEES TWENTY THOUSAND SIX HUNDRED FIFTY ONLY.</p>
+                                        <span className="amount-in-words">AMOUNT IN WORD(S)</span>                                        
+                                        <p>{converter.toWords(contentData?.grandTotalAmt)}</p>
                                     </td>
                                     <td colSpan={4} className="totals">
                                         <table>

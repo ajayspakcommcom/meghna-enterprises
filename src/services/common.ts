@@ -2,6 +2,7 @@ import { debounce } from 'lodash';
 import moment from 'moment';
 import { getTemplate } from './template';
 import { getContract } from './contract';
+const converter = require('number-to-words');
 
 export const debouncedHandleChange = debounce((value) => {
     console.log('Debounced Billing No:', value);
@@ -339,7 +340,7 @@ export const getBillingHtmlTemplate = (data?: any) => {
                             style="text-decoration: underline; font-weight: 300; font-size: 13px; padding: 0 10px; display: inline-block; margin-top: 10px;">AMOUNT
                             IN
                             WORD(S)</span>
-                        <p style="padding: 0 10px;">RUPEES TWENTY THOUSAND SIX HUNDRED FIFTY ONLY.</p>
+                        <p style="padding: 0 10px;">${converter.toWords(data?.billingData?.grandTotalAmt)}</p>
                     </td>
                     <td colspan="4" style=" vertical-align: top; text-align: right;">
                         <table style="width: 100%; border-collapse: collapse;">

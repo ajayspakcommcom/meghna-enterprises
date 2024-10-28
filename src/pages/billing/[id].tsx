@@ -7,12 +7,13 @@ import {convertHtmlToPdf, getBilling} from "@/services/billing";
 import { customFormatDate, getBillingHtmlTemplate } from "@/services/common";
 import { getBuyer } from "@/services/buyer";
 import { getSeller } from "@/services/seller";
-const converter = require('number-to-words');
+
 
 const Header = dynamic(() => import('../../../components/header/index'));
 const SuccessConfirmationDialogue = dynamic(() => import('../../../components/success-confirmation/index'));
 const BillingPreviewDialogue = dynamic(() => import('../../../components/billing-preview/index'));
 const CircularProgressLoader = dynamic(() => import('../../../components/loader/index'));
+const converter = require('number-to-words');
 
 
 interface compProps {
