@@ -54,9 +54,6 @@ export default function Index({detail}: {detail: Billing}) {
     if (!token) {
       router.push("/");
     }
-      
-    console.log('detail', detail);
-
   }, []);
 
   const goToPage = (url: string) => {
@@ -146,8 +143,6 @@ export default function Index({detail}: {detail: Billing}) {
 
     let updatedContractData = contractData.map((contract: any) => ({ ...contract, brockerageAmt: 0 }));
     let createdContractListResponse = (await getBillCreatedContractList(selectedValue)).data;
-
-    
 
     createdContractListResponse.map((createdContract: any, index: number) => {
           
@@ -250,6 +245,7 @@ export default function Index({detail}: {detail: Billing}) {
   useEffect(() => {
     fetchLastBilling();
     fetchPartyList();
+    console.log('detail', detail);
   }, []);
 
   return (
