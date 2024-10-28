@@ -442,3 +442,15 @@ export const getBillingHtmlTemplate = (data?: any) => {
     `;
     return template;
 }
+
+
+export const getDateFromString = (string = "") => {
+    // Check if the input is a valid string
+    if (typeof string !== "string") {
+        return null;
+    }
+    // Regular expression to find date in DD/MM/YYYY format
+    const dateMatch = string.match(/\b\d{2}\/\d{2}\/\d{4}\b/);
+    // Return the matched date or null if no match is found
+    return dateMatch ? dateMatch[0] : null;
+};
