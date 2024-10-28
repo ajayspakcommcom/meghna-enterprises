@@ -106,10 +106,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         break;
 
       case 'SELLER-CONTRACT':
-        console.log('id', req.body.id);
-        console.log('type', 'SELLER-CONTRACT');
         try {
-          const dataList = await Contract.find({ isDeleted: false, seller_id: req.body.id }, 'contract_no seller_id quantity price createdDate').exec();
+          const dataList = await Contract.find({ isDeleted: false, seller_id: req.body.id }, 'template contract_no seller_id quantity price createdDate').exec();
+
           if (!dataList) {
             return res.status(404).json({ error: 'Contract not found' });
           }
@@ -120,7 +119,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             return {
               ...item.toObject(),
               category: 'Seller',
-              price: isNaN(price) ? 0 : price
+              price: isNaN(price) ? 0 : price,
+              template: item.template ? Object.fromEntries(item.template) : {},
+              label: item.label ? Object.fromEntries(item.label) : {}
             }
 
           });

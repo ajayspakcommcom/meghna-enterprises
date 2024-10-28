@@ -130,6 +130,7 @@ export default function Index() {
   });
 
   const handlePartySelectChange = async (event: SelectChangeEvent<string>) => {
+
     const selectedValue = event.target.value;
     formik.handleChange(event);   
     const selectedParty = partyList.find((party: Party) => party._id === selectedValue);        
@@ -139,12 +140,11 @@ export default function Index() {
     formik.setFieldValue('mobile_no', ((partyData as any).data.mobile_no));
     formik.setFieldValue('address', ((partyData as any).data.address));
 
-    const { data: contractData } = selectedParty?.type === 'buyer' ? await getBuyerContract(selectedValue) : await getSellerContract(selectedValue);    
-
+    const { data: contractData } = selectedParty?.type === 'buyer' ? await getBuyerContract(selectedValue) : await getSellerContract(selectedValue);  
+    
     let updatedContractData = contractData.map((contract: any) => ({ ...contract, brockerageAmt: 0 }));
     let createdContractListResponse = (await getBillCreatedContractList(selectedValue)).data;
 
-    
 
     createdContractListResponse.map((createdContract: any, index: number) => {
           
