@@ -104,3 +104,11 @@ export const getContractBuyerSellerDetail = async (id: string): Promise<ApiRespo
     }
 };
 
+export const checkContractNo = async (contractNo: string): Promise<any> => {
+    try {
+        const response = await apiClient.post<any>('/contract', { contractNo: contractNo, type: 'CONTRACT-NO-CHECK' });
+        return response.data;
+    } catch (err: unknown) {
+        throw err;
+    }
+};
