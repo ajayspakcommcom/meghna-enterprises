@@ -2,12 +2,13 @@ import { debounce } from 'lodash';
 import moment from 'moment';
 import { getTemplate } from './template';
 import { getContract } from './contract';
+import { checkBillNo } from './billing';
 const converter = require('number-to-words');
 
-export const debouncedHandleChange = debounce((value) => {
-    console.log('Debounced Billing No:', value);
-    return value;
-}, 1000);
+export const debouncedHandleChange = async (value: string) => {
+    const response = await checkBillNo(value);
+    return response;
+};
 
 export const getUserData = (): { [key: string]: any } => {
     const userDataString = localStorage.getItem('userData');

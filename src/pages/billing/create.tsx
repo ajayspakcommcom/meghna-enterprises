@@ -47,6 +47,7 @@ export default function Index() {
   const [brokerageAmt, setBrokerageAmt] = useState<number>(0);
   const [grandTotalAmt, setGrandTotalAmt] = useState<number>(0);
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
+  const [isBillNoExists, setIsBillNoExists] = useState(false);
 
 
   useEffect(() => {
@@ -71,8 +72,6 @@ export default function Index() {
 
   const handleSubmit = async (billing: Billing) => {  
 
-    console.log('contractDataList', contractDataList);
-    
     const contractData = contractDataList.map((contract: any) => ({
       contractId: contract._id,
       quantity: contract.quantity,
@@ -135,10 +134,12 @@ export default function Index() {
     formik.handleChange(event);   
     const selectedParty = partyList.find((party: Party) => party._id === selectedValue);        
     const partyData = selectedParty?.type === 'buyer' ? await getBuyer(selectedValue) : await getSeller(selectedValue);
+    
 
     formik.setFieldValue('email', ((partyData as any).data.email));
     formik.setFieldValue('mobile_no', ((partyData as any).data.mobile_no));
     formik.setFieldValue('address', ((partyData as any).data.address));
+
 
     const { data: contractData } = selectedParty?.type === 'buyer' ? await getBuyerContract(selectedValue) : await getSellerContract(selectedValue);  
 
@@ -254,10 +255,14 @@ export default function Index() {
     setContractDataList(updatedDataList);
   };
 
-  const handleBillNoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBillNoChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     formik.setFieldValue('billingNo', event.target.value);
-    const billingNo = debouncedHandleChange(event.target.value);    
-    console.log('billingNo', billingNo);
+    const billingNo = await debouncedHandleChange(event.target.value);    
+    if (billingNo?.data) {            
+      setIsBillNoExists(true);
+    } else {      
+      setIsBillNoExists(false);
+    }
   };
 
   
@@ -308,7 +313,9 @@ export default function Index() {
                             fullWidth
                             margin="normal"
                             value={formik.values.billingNo}                          
-                            onChange={handleBillNoChange}                            
+                          onChange={handleBillNoChange}  
+                          error={formik.touched.billingNo && Boolean(formik.errors.billingNo)}
+                          helperText={ isBillNoExists && <span style={{ color: 'red' }}>Billing No already exists.</span>}
                           />
                       </ListItem>
                     </Grid>
@@ -324,7 +331,7 @@ export default function Index() {
                             InputLabelProps={{shrink: true }}
                             value={formik.values.billingDate}
                             onChange={formik.handleChange}
-                             onBlur={formik.handleBlur}
+                            onBlur={formik.handleBlur}
                             error={formik.touched.billingDate && Boolean(formik.errors.billingDate)}
                             helperText={formik.touched.billingDate && formik.errors.billingDate}
                           />

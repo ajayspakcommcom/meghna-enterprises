@@ -162,3 +162,12 @@ export const convertHtmlToPdf = async (billingData: any): Promise<any> => {
         throw err;
     }
 };
+
+export const checkBillNo = async (billingNo: string): Promise<any> => {
+    try {
+        const response = await apiClient.post<any>('/billing', { billingNo: billingNo, type: 'BILL-NO-CHECK' });
+        return response.data;
+    } catch (err: unknown) {
+        throw err;
+    }
+};
