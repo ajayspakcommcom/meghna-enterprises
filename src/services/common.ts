@@ -232,9 +232,8 @@ export const getBillingHtmlTemplate = (data?: any) => {
 
     <div
         style="max-width: 1200px; margin: auto; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-        <h2 style="text-align: center; color: #333; background-color: #c0c0c0; margin: auto; padding: 10px 0;">MEGHNA
-            ENTERPRISE</h2>
-
+        <img src="http://localhost:3000/images/billing-logo.jpg" alt="Signature" style="width: 750px; height: 85px; display: block; margin: 0 0 0 0;" />
+        
         <div style="width: 600px; margin: auto; margin-top: 10px; margin-bottom: 10px;">
             <p style="text-align: center; font-size: 12px; margin: 0 0 10px 0; line-height: 20px; font-weight: 300;">
                 504, SYNERGY, KACH PADA RD NO. 2, NEAR MALAD IND. ESTATE, RAMCHANDRA LANE EXTENTION, MALAD (W),
