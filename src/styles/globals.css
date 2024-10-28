@@ -829,8 +829,61 @@ pre {
 .signature>img {
     width: 100px;
     height: 31px;
+    margin: 15px 0;
 }
 
 .signature>span {
     font-size: 14px;
+}
+
+.bill-no-date-wrapper {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    border: 1px solid #dddddd;
+    margin-bottom: 20px;
+}
+
+.bill-no-date-wrapper>div:first-child {
+    padding: 10px;
+}
+
+.bill-no-date-wrapper>div:last-child {
+    padding: 10px 10px 10px 50px;
+    border-left: 1px solid #dddddd;
+}
+
+.company-info {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    padding-left: 15px;
+    font-size: 14px;
+}
+
+.company-name>p {
+    margin: 0 0 5px 0;
+}
+
+.company-address {
+    margin-left: 30px;
+    line-height: 20px;
+    font-size: 12px;
+    width: 330px;
+}
+
+.gst-info {
+    line-height: 10px;
+}
+
+.info-row {
+    display: flex;
+}
+
+.info-row>p:first-child {
+    width: 200px;
+}
+
+.info-row>p {
+    margin: 0;
+    margin-bottom: 10px;
 }

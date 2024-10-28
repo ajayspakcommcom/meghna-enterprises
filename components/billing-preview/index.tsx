@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Image from "next/image";
 import { Typography } from "@mui/material";
-import { customFormatDate, getLocalStorage } from "@/services/common";
+import { customDateFormatter, customFormatDate, getLocalStorage } from "@/services/common";
 import { getBuyer } from "@/services/buyer";
 import { getSeller } from "@/services/seller";
 
@@ -28,16 +28,14 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
     const fetchPartyData = async () => {        
         const partyData = contentData?.partyType.toLowerCase() === 'buyer' ? await getBuyer(contentData.partyId) : await getSeller(contentData.partyId);
         const respData = (partyData as any).data;
-        contentData?.partyType.toLowerCase() === 'buyer' ? setBuyerData(respData) : setSellerData(respData);
+        contentData?.partyType.toLowerCase() === 'buyer' ? setBuyerData(respData) : setSellerData(respData);    
+        console.log('contentData', contentData);
     };
 
     useEffect(() => {
-
         
-        if (contentData) {
-            if (contentData.selectedBuyer !== null && contentData.selectedBuyer !== undefined) {
-                fetchPartyData();
-            }
+        if (contentData) {            
+            fetchPartyData();        
         }
 
         if (getLocalStorage('appLogo')) {
@@ -68,9 +66,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                     <DialogContent className="preview-dialogue-content">
 
                         <div className="preview-wrapper">
-                            <div className="header">
-                                <Image src={require(`../../public/images/seedsnfeeds.png`)} alt="seedsnfeeds" className="responsive-img center" />
-                        </div>
+                            <div className="header"><Image src={require(`../../public/images/seedsnfeeds.png`)} alt="seedsnfeeds" className="responsive-img center" /></div>
                         
                         <div className="address">
                             <Typography variant="body2">504, SYNERGY, KACH PADA RD NO. 2, NEAR MALAD IND. ESTATE, RAMCHANDRA LANE EXTENTION, MALAD (W), MUMBAI - 400 064.</Typography>
@@ -79,6 +75,57 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                             <Typography variant="body2"><b>TAX-INVOICE</b></Typography>
                         </div>
                             
+                        <div className="bill-no-date-wrapper">
+                                <div>
+                                    <span>BILL NO.</span>
+                                <b>: {contentData.billingNo}</b>
+                                </div>
+                                <div>
+                                <span>DATE</span>
+                                    <b>: {customFormatDate(new Date(contentData.billingDate))}</b>
+                                </div>
+                        </div>
+                        
+                        
+                        {buyerData && <div className="company-info">
+                            <p className="company-name"><b>{buyerData.name}</b></p>
+                                <div className="company-address">
+                                    <p className="address-text">
+                                        {buyerData.address}
+                                    </p>
+                                    <div className="gst-info">
+                                    <div className="info-row">
+                                        <p className="info-label">PARTY'S GSTIN</p>
+                                        <p>: {buyerData.gstin}</p>
+                                    </div>
+                                    <div className="info-row">
+                                        <p className="info-label">PARTY'S STATE CODE</p>
+                                        <p>: {buyerData.state_code}</p>
+                                    </div>
+                                    </div>
+                                </div>
+                        </div>}
+
+
+                        {sellerData && <div className="company-info">
+                            <p className="company-name"><b>{sellerData.name}</b></p>
+                                <div className="company-address">
+                                    <p className="address-text">
+                                        {sellerData.address}
+                                    </p>
+                                    <div className="gst-info">
+                                    <div className="info-row">
+                                        <p className="info-label">PARTY'S GSTIN</p>
+                                        <p>: {sellerData.gstin}</p>
+                                    </div>
+                                    <div className="info-row">
+                                        <p className="info-label">PARTY'S STATE CODE</p>
+                                        <p>: {sellerData.state_code}</p>
+                                    </div>
+                                    </div>
+                                </div>
+                        </div>}
+                        
 
                              <table className="invoice-table">
                                 <thead>
@@ -94,16 +141,16 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {[...Array(3)].map((_, index) => (
+                                    {contentData?.contracts.map((contract: any, index: number) => (
                                     <tr key={index}>
-                                        <td>31/05/2024</td>
-                                        <td>MEC/L/00040/24-25</td>
-                                        <td>SACHIN INTERNATIONAL PROTEINS PVT. LTD.</td>
+                                        <td>{customFormatDate(new Date(contract.createdDate))}</td>
+                                        <td>{contract.contractNo}</td>
+                                        <td>{'Name'}</td>
                                         <td>SOYA EXT.</td>
-                                        <td>200.000</td>
-                                        <td>44100.00</td>
-                                        <td>25.00</td>
-                                        <td>5000.00</td>
+                                        <td>{contract.quantity}</td>
+                                        <td>{contract.price}</td>
+                                        <td>{contract.brokerageQty}</td>
+                                        <td>{contract.brokerageAmt}</td>
                                     </tr>
                                     ))}
                                 </tbody>
@@ -117,7 +164,13 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                         <table>
                                             <tbody>
                                                 <tr><td>Total</td></tr>
-                                                <tr><td>GST @18%</td></tr>
+                                                <tr>
+                                                    <td>
+                                                        ${contentData?.cgst > 0 && `CGST @${contentData.cgst}%,`}
+                                                        ${contentData?.sgst > 0 && `SGST @${contentData.sgst}%,`}
+                                                        ${contentData?.igst > 0 && `IGST @${contentData.igst}%`}
+                                                    </td>
+                                                </tr>
                                                 <tr><td></td></tr>
                                                 <tr><td>ROUNDOFF AMOUNT</td></tr>
                                                 <tr><td>GRAND TOTAL</td></tr>
@@ -127,11 +180,11 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                     <td className="totals-amount">
                                         <table>
                                         <tbody>
-                                            <tr><td><b>17500.00</b></td></tr>
-                                            <tr><td><b>3150.00</b></td></tr>
+                                            <tr><td><b>{contentData?.netAmount}</b></td></tr>
+                                            <tr><td><b>{contentData?.brokerage}</b></td></tr>
                                             <tr><td></td></tr>
                                             <tr><td><b>0.00</b></td></tr>
-                                            <tr><td><b>20650.00</b></td></tr>
+                                            <tr><td><b>{contentData?.grandTotalAmt}</b></td></tr>
                                         </tbody>
                                         </table>
                                     </td>
