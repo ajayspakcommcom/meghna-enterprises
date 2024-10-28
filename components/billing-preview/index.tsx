@@ -25,26 +25,18 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
     const [sellerData, setSellerData] = React.useState<any>();
     const [logo, setLogo] = React.useState<string | null>('');
 
-    const fetchBuyerData = async () => {
-            const resp: any = await getBuyer(contentData.selectedBuyer._id as string);
-            setBuyerData(resp.data);
-        };
-
-    const fetchSellerData = async () => {
-        const resp: any = await getSeller(contentData.selectedSeller._id as string);
-        setSellerData(resp.data);
+    const fetchPartyData = async () => {        
+        const partyData = contentData?.partyType.toLowerCase() === 'buyer' ? await getBuyer(contentData.partyId) : await getSeller(contentData.partyId);
+        const respData = (partyData as any).data;
+        contentData?.partyType.toLowerCase() === 'buyer' ? setBuyerData(respData) : setSellerData(respData);
     };
 
     useEffect(() => {
 
-        console.log('contentData', contentData);
-        console.log('buyerData', buyerData);
-        console.log('sellerData', sellerData);
-
+        
         if (contentData) {
             if (contentData.selectedBuyer !== null && contentData.selectedBuyer !== undefined) {
-                fetchBuyerData();
-                fetchSellerData();
+                fetchPartyData();
             }
         }
 
@@ -70,8 +62,8 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                 aria-describedby="alert-dialog-description"
                 className="preview-dialogue"
             >
-                {false && <DialogTitle id="alert-dialog-title">{heading}</DialogTitle>}
-
+            {false && <DialogTitle id="alert-dialog-title">{heading}</DialogTitle>}
+            
                 {contentData &&
                     <DialogContent className="preview-dialogue-content">
 
