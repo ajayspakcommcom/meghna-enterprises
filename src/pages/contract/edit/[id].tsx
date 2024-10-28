@@ -11,7 +11,7 @@ import { getSellerIdName } from "@/services/seller";
 import { getBuyerIdName } from "@/services/buyer";
 import { getTemplate, getTemplateIdName } from "@/services/template";
 import { createContract, getContract, getLastContract, updateContract } from "@/services/contract";
-import { getCurrentFinancialYear, getLocalStorage, incrementContractNo } from "@/services/common";
+import { debounceContractNoCheck, getCurrentFinancialYear, getLocalStorage, incrementContractNo } from "@/services/common";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 
 const Header = dynamic(() => import('../../../../components/header/index'));
@@ -84,6 +84,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
   const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
   const [previewContent, setPreviewContent] = useState<any>();
+  const [isContractNoExists, setIsContractNoExists] = useState(false);
 
 
   const handleAddLabelField = () => {
@@ -132,20 +133,22 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
   useEffect(() => {
 
+    console.log('detailedData', detailedData);
+
     const token = localStorage.getItem("token");
     if (!token) {
       router.push('/');
     }
 
 
-    const fetchLastContract = async () => {
-      try {
-        const response: any = await getLastContract();
-        //setContractNo(incrementContractNo(response.data.contract_no, getCurrentFinancialYear(true)))
-      } catch (error) {
-        console.error('Error fetching seller data:', error);
-      }
-    };
+    // const fetchLastContract = async () => {
+    //   try {
+    //     const response: any = await getLastContract();
+    //     setContractNo(incrementContractNo(response.data.contract_no, getCurrentFinancialYear(true)))        
+    //   } catch (error) {
+    //     console.error('Error fetching seller data:', error);
+    //   }
+    // };
 
     const fetchSellerIdName = async () => {
       try {
@@ -204,7 +207,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
     };
 
 
-    fetchLastContract();
+    //fetchLastContract();
     fetchSellerIdName();
     fetchBuyerIdName();
     fetchTemplateIdName();
@@ -213,6 +216,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
     formik.setValues({
       quantity: detailedData.quantity.toString(),
       price: detailedData.price.toString(),
+      contract_no: detailedData.contract_no
     });
 
 
@@ -225,7 +229,8 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
   const initialValues: Contract = {
     quantity: '',
-    price: ''
+    price: '',
+    contract_no: ''
   };
 
   const handleSubmit = async (contract: Contract) => {
@@ -242,7 +247,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
     const submittedData = {
       ...contract,
-      contract_no: detailedData.contract_no,
+      contract_no: formik.values.contract_no, //detailedData.contract_no,
       buyer_id: selectedBuyer?._id,
       seller_id: selectedSeller?._id,
       template: transformedFeildData,
@@ -294,7 +299,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
 
     let previewData = {
-      contract_no: contractNo,
+      contract_no: formik.values.contract_no,
       selectedSeller: selectedSeller,
       selectedBuyer: selectedBuyer,
       selectedTemplate: transformedFeildData,
@@ -309,6 +314,16 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
   const previewClickHandler = (val: boolean) => {
     setIsPreviewDialogOpen(val)
+  };
+
+   const handleContractNoChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    formik.setFieldValue('contract_no', event.target.value);
+    const contractNo = await debounceContractNoCheck(event.target.value);    
+    if (contractNo?.data) {            
+      setIsContractNoExists(true);
+    } else {      
+      setIsContractNoExists(false);
+    }
   };
 
   return (
@@ -335,6 +350,19 @@ const Index: React.FC<compProps> = ({ detail }) => {
                 <form onSubmit={formik.handleSubmit} onReset={formik.handleReset} className='form'>
 
                   {errors && <div className="error"><ErrorMessage message={errors} /></div>}
+
+                  <TextField
+                    type="text"
+                    label="Contract No"
+                    name="contract_no"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    value={formik.values.contract_no}
+                    onChange={handleContractNoChange}
+                    error={formik.touched.contract_no && Boolean(formik.errors.contract_no)}
+                    helperText={ isContractNoExists && <span style={{ color: 'red' }}>Contract No already exists.</span>}
+                  />
 
                   <div className="buyer-seller-forms-wrapper contract-form-wrapper">
                     <div>
