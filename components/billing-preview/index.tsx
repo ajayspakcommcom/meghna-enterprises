@@ -203,7 +203,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                     <td colSpan={5} className="signature">
                                         <b>for MEGHNA ENTERPRISE</b>
                                         <br />
-                                        <img src="http://localhost:3000/images/signature.jpg" alt="Signature" className="signature-img" />
+                                        <img src="../../public/images/signature.jpg" alt="Signature" className="signature-img" />
                                         <br />
                                         <span>(AS BROKER)</span>
                                     </td>
