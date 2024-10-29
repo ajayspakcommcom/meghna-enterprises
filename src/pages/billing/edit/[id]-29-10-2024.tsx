@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
-import {Card,CardContent,Button,Typography, TextField, Container, Autocomplete, FormControl, Select, InputLabel, MenuItem, FormHelperText, SelectChangeEvent, Grid, ListItem, debounce } from "@mui/material";
+import {Card,CardContent,Button,Typography, TextField, Container, Autocomplete, FormControl, Select, InputLabel, MenuItem, FormHelperText, SelectChangeEvent, Grid, ListItem } from "@mui/material";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import Billing from "../../../../models/Billing";
 import { useFormik } from "formik";
 import billingSchema from "@/validation/billingSchema";
 import { createBilling, getBillCreatedContractList, getBilling, getBuyerContract, getLastBilling, getPartyList, getSellerContract } from "@/services/billing";
-import { customFormatDate, debounceBillingNoCheck, getCurrentFinancialYear, incrementBillingNo } from "@/services/common";
+import { customFormatDate, getCurrentFinancialYear, incrementBillingNo } from "@/services/common";
 import { getSeller } from "@/services/seller";
 import { getBuyer } from "@/services/buyer";
 const converter = require('number-to-words');
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-
 
 const Header = dynamic(() => import("../../../../components/header/index"));
 const SuccessConfirmationDialogue = dynamic(() => import('../../../../components/success-confirmation/index'));
@@ -42,28 +41,15 @@ export default function Index({detail}: {detail: Billing}) {
   const [partyList, setPartyList] = useState<Party[]>([]);
   const [contractDataList, setContractDataList] = useState<any>(null);
   const [netAmount, setNetAmount] = useState<number>(0);
-  const [sgst, setSgst] = useState<number>(0);
-  const [cgst, setCgst] = useState<number>(0);
-  const [igst, setIgst] = useState<number>(0);
+  const [sgst, setSgst] = useState<number>(9);
+  const [cgst, setCgst] = useState<number>(9);
+  const [igst, setIgst] = useState<number>(18);
   const [brokerageAmt, setBrokerageAmt] = useState<number>(0);
   const [grandTotalAmt, setGrandTotalAmt] = useState<number>(0);
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
-  const [isBillNoExists, setIsBillNoExists] = useState(false);
-
-  const initialValues: Billing = {
-    billingNo: '',  
-    billingDate: '',
-    partyId: '',
-    email: '',
-    mobile_no: '',
-    address: '',
-  };
 
 
   useEffect(() => {
-
-    console.log('detail', (detail as any).data);
-
     const token = localStorage.getItem("token");
     if (!token) {
       router.push("/");
@@ -74,10 +60,19 @@ export default function Index({detail}: {detail: Billing}) {
     router.push(`${url}`);
   };
 
-  
+  const initialValues: Billing = {
+    billingNo: '',  
+    billingDate: '',
+    partyId: '',
+    email: '',
+    mobile_no: '',
+    address: '',
+  };
 
   const handleSubmit = async (billing: Billing) => {  
 
+    console.log('contractDataList', contractDataList);
+    
     const contractData = contractDataList.map((contract: any) => ({
       contractId: contract._id,
       quantity: contract.quantity,
@@ -135,63 +130,19 @@ export default function Index({detail}: {detail: Billing}) {
   });
 
   const handlePartySelectChange = async (event: SelectChangeEvent<string>) => {
-
     const selectedValue = event.target.value;
     formik.handleChange(event);   
     const selectedParty = partyList.find((party: Party) => party._id === selectedValue);        
     const partyData = selectedParty?.type === 'buyer' ? await getBuyer(selectedValue) : await getSeller(selectedValue);
-    
+
     formik.setFieldValue('email', ((partyData as any).data.email));
     formik.setFieldValue('mobile_no', ((partyData as any).data.mobile_no));
     formik.setFieldValue('address', ((partyData as any).data.address));
 
-    const { data: contractData } = selectedParty?.type === 'buyer' ? await getBuyerContract(selectedValue) : await getSellerContract(selectedValue);  
+    const { data: contractData } = selectedParty?.type === 'buyer' ? await getBuyerContract(selectedValue) : await getSellerContract(selectedValue);    
 
     let updatedContractData = contractData.map((contract: any) => ({ ...contract, brockerageAmt: 0 }));
     let createdContractListResponse = (await getBillCreatedContractList(selectedValue)).data;
-
-
-    createdContractListResponse.map((createdContract: any, index: number) => {
-          
-          const contractId = createdContract.contracts.contractId;    
-          const updatedContract = updatedContractData.find((updated: any) => updated._id === contractId);
-                  
-          if (updatedContract) {
-              const indexToRemove = updatedContractData.findIndex((updated: any) => updated._id === contractId);
-                  if (indexToRemove > -1) {
-                      updatedContractData.splice(indexToRemove, 1); 
-                  }
-              return {
-                ...updatedContract,
-                isBillCreated: true
-              };
-              }
-              else {
-            return {    
-                    ...updatedContract,                
-                      isBillCreated: false
-                  };
-              }
-    }); 
-
-    setContractDataList(updatedContractData);
-    setNetAmount(0);
-    setGrandTotalAmt(0);
-    setBrokerageAmt(0);
-  };
-
-   const handlePartySelectChangeOnLoad = async (id: string) => {
-  
-    const selectedParty = partyList.find((party: Party) => party._id === id);        
-    const partyData = selectedParty?.type === 'buyer' ? await getBuyer(id) : await getSeller(id);
-    
-    formik.setFieldValue('email', ((partyData as any).data.email));
-    formik.setFieldValue('mobile_no', ((partyData as any).data.mobile_no));
-    formik.setFieldValue('address', ((partyData as any).data.address));
-
-    const { data: contractData } = selectedParty?.type === 'buyer' ? await getBuyerContract(id) : await getSellerContract(id);  
-    let updatedContractData = contractData.map((contract: any) => ({ ...contract, brockerageAmt: 0 }));
-    let createdContractListResponse = (await getBillCreatedContractList(id)).data;
 
     createdContractListResponse.map((createdContract: any, index: number) => {
           
@@ -267,9 +218,10 @@ export default function Index({detail}: {detail: Billing}) {
   const handleSgstChange = (event: SelectChangeEvent) => {    
     const value = parseInt(event.target.value);
     setSgst(value);
-    
+    setIgst(cgst + value);
+
     const totalAmt = contractDataList.reduce((total: number, item: any) => total + (item.amount || 0), 0);
-    const grossAmt = totalAmt * (cgst + value + igst) / 100;
+    const grossAmt = totalAmt * (cgst + value) / 100;
     setBrokerageAmt(grossAmt);
 
   };
@@ -277,38 +229,13 @@ export default function Index({detail}: {detail: Billing}) {
   const handleCgstChange = (event: SelectChangeEvent) => {     
     const value = parseInt(event.target.value);
     setCgst(value);
-  
-    const totalAmt = contractDataList.reduce((total: number, item: any) => total + (item.amount || 0), 0);
-    const grossAmt = totalAmt * (sgst + value + igst) / 100;
-    setBrokerageAmt(grossAmt);
-  };
-
-
-  const handleIgstChange = (event: SelectChangeEvent) => {     
-    const value = parseInt(event.target.value);
-    setIgst(value);    
+    setIgst(sgst + value);
     
     const totalAmt = contractDataList.reduce((total: number, item: any) => total + (item.amount || 0), 0);
-    const grossAmt = totalAmt * (cgst + sgst + value) / 100;
+    const grossAmt = totalAmt * (sgst + value) / 100;
     setBrokerageAmt(grossAmt);
   };
-
-  const handleContractRemove = (index: number) => {
-    const updatedDataList = [...contractDataList];
-    updatedDataList.splice(index, 1);
-    setContractDataList(updatedDataList);
-  };
-
-  const handleBillNoChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    formik.setFieldValue('billingNo', event.target.value);
-    const billingNo = await debounceBillingNoCheck(event.target.value);    
-    if (billingNo?.data) {            
-      setIsBillNoExists(true);
-    } else {      
-      setIsBillNoExists(false);
-    }
-  };
-
+  
   
   useEffect(() => {     
     setGrandTotalAmt(netAmount + brokerageAmt);
@@ -316,21 +243,9 @@ export default function Index({detail}: {detail: Billing}) {
 
 
   useEffect(() => {
-
+    fetchLastBilling();
     fetchPartyList();
-    formik.setFieldValue('billingNo', (detail as any).data.billingNo);
-    formik.setFieldValue('partyId', (detail as any).data.partyId);
-    formik.setFieldValue('billingDate', new Date((detail as any).data.billingDate).toISOString().split('T')[0]);
-    console.log('detail', (detail as any).data);
-    handlePartySelectChangeOnLoad((detail as any).data.partyId);
-
-    // billingNo => Done
-    // billingDate => Done
-    // partyId => Pending
-    // email => Pending
-    // mobile_no => Pending
-    // address => Pending
-    
+    console.log('detail', detail);
   }, []);
 
   return (
@@ -342,7 +257,7 @@ export default function Index({detail}: {detail: Billing}) {
             <div className="header-content">
               <div>
                 <Typography variant="h5" component="article">
-                  Edit Billing
+                  Create Billing
                 </Typography>
               </div>
               <div className="btn-wrapper">
@@ -358,6 +273,7 @@ export default function Index({detail}: {detail: Billing}) {
               <CardContent>
                 <form onSubmit={formik.handleSubmit} onReset={formik.handleReset} className="form billing-form">
 
+                  
                   <Grid container spacing={1}>
                     <Grid item xs={3}>
                       <ListItem>
@@ -369,9 +285,10 @@ export default function Index({detail}: {detail: Billing}) {
                             fullWidth
                             margin="normal"
                             value={formik.values.billingNo}                          
-                          onChange={handleBillNoChange}  
-                          error={formik.touched.billingNo && Boolean(formik.errors.billingNo)}
-                          helperText={ isBillNoExists && <span style={{ color: 'red' }}>Billing No already exists.</span>}
+                            onChange={formik.handleChange}
+                            error={formik.touched.billingNo && Boolean(formik.errors.billingNo)}
+                            helperText={formik.touched.billingNo && formik.errors.billingNo}
+                            disabled={true}
                           />
                       </ListItem>
                     </Grid>
@@ -387,7 +304,7 @@ export default function Index({detail}: {detail: Billing}) {
                             InputLabelProps={{shrink: true }}
                             value={formik.values.billingDate}
                             onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
+                             onBlur={formik.handleBlur}
                             error={formik.touched.billingDate && Boolean(formik.errors.billingDate)}
                             helperText={formik.touched.billingDate && formik.errors.billingDate}
                           />
@@ -545,10 +462,7 @@ export default function Index({detail}: {detail: Billing}) {
                     margin="normal"
                     value={contract.amount || 0}                    
                     disabled={true}   
-                      />
-                      
-                  <button type="button" onClick={() => handleContractRemove(index)}>x</button>
-
+                />
                 </div>
                   ))}
                   
@@ -569,7 +483,7 @@ export default function Index({detail}: {detail: Billing}) {
                       <InputLabel id="demo-simple-select-autowidth-label">Sgst</InputLabel>
                       <Select labelId="demo-simple-select-autowidth-label" id="demo-simple-select-autowidth"  onChange={handleSgstChange} autoWidth label="Sgst" value={sgst.toString()}>                                          
                           {Array.from({ length: 29 }, (_, index) => index).map((value) => (
-                          <MenuItem key={value} value={value}>{value === 0 ? '0%' : `${value} ${value === 1 ? '%' : '%'}`}</MenuItem>
+                          <MenuItem key={value} value={value}>{value === 0 ? 'None' : `${value} ${value === 1 ? '%' : '%'}`}</MenuItem>
                         ))}
                       </Select>
                       </FormControl>
@@ -578,16 +492,16 @@ export default function Index({detail}: {detail: Billing}) {
                       <InputLabel id="demo-simple-select-autowidth-label">Cgst</InputLabel>
                       <Select labelId="demo-simple-select-autowidth-label" id="demo-simple-select-autowidth" onChange={handleCgstChange} autoWidth label="Cgst" value={cgst.toString()}>                    
                         {Array.from({ length: 29 }, (_, index) => index).map((value) => (
-                          <MenuItem key={value} value={value}>{value === 0 ? '0%' : `${value} ${value === 1 ? '%' : '%'}`}</MenuItem>
+                          <MenuItem key={value} value={value}>{value === 0 ? 'None' : `${value} ${value === 1 ? '%' : '%'}`}</MenuItem>
                         ))}
                       </Select>
                      </FormControl>
                     
-                     <FormControl sx={{ m: 1 }} className="billing-tax-select">
+                     <FormControl sx={{ m: 1 }} disabled={true} className="billing-tax-select">
                       <InputLabel id="demo-simple-select-autowidth-label">Igst</InputLabel>
-                      <Select labelId="demo-simple-select-autowidth-label" id="demo-simple-select-autowidth" onChange={handleIgstChange} autoWidth label="Cgst" value={igst.toString()}>                    
+                      <Select labelId="demo-simple-select-autowidth-label" id="demo-simple-select-autowidth" onChange={handleCgstChange} autoWidth label="Cgst" value={igst.toString()}>                    
                         {Array.from({ length: 29 }, (_, index) => index).map((value) => (
-                          <MenuItem key={value} value={value}>{value === 0 ? '0%' : `${value} ${value === 1 ? '%' : '%'}`}</MenuItem>
+                          <MenuItem key={value} value={value}>{value === 0 ? 'None' : `${value} ${value === 1 ? '%' : '%'}`}</MenuItem>
                         ))}
                       </Select>
                      </FormControl>
@@ -637,11 +551,11 @@ export default function Index({detail}: {detail: Billing}) {
   );
 }
 
-
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
   const { id } = context.query;
   const detail = await getBilling(id as string);
   return {
     props: { detail }
   };
+
 };
