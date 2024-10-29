@@ -34,7 +34,7 @@
 //   ]
 // }
 {
-  "compilerOptions": {
+  "compilerOptions": {    
     "lib": [
       "dom",
       "dom.iterable",
