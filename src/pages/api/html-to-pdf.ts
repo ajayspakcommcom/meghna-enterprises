@@ -6,8 +6,8 @@ import PDFDocument from 'pdfkit';
 import fs from 'fs';
 import path from 'path';
 import { customFormatDate } from '@/services/common';
-import puppeteer from 'puppeteer';
 import pdf from 'html-pdf-node';
+
 
 const cors = Cors({
     methods: ['GET', 'OPTIONS'],
@@ -37,8 +37,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
                 break;
         }
-
-
 
     } else {
         res.status(405).json({ error: 'Method Not Allowed' });

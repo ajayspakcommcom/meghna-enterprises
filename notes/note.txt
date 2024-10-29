@@ -1,5 +1,8 @@
 if getting contract.pdf conflict 
 
+
+    Git Url : https://github.com/ajayspakcommcom/meghna-enterprises.git
+
     Run the following commands on aws 
         1) git status
         2) git checkout --ours public/pdf/contract.pdf
