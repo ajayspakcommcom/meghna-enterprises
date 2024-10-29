@@ -23,13 +23,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         switch (req.body.type) {
             case 'HTML-TO-PDF':
+                try {
+                    const { html } = req.body;
+                    const file = { content: html };
+                    const pdfBuffer = await pdf.generatePdf(file, { format: 'A4' });
 
-                const { html } = req.body;
-                const file = { content: html };
-                const pdfBuffer = await pdf.generatePdf(file, { format: 'A4' });
-                res.setHeader('Content-Type', 'application/pdf');
-                res.setHeader('Content-Disposition', 'attachment; filename=generated.pdf');
-                res.send(pdfBuffer);
+                    res.setHeader('Content-Type', 'application/pdf');
+                    res.setHeader('Content-Disposition', 'attachment; filename=generated.pdf');
+                    res.send(pdfBuffer);
+                } catch (error) {
+                    console.error("Error generating PDF:", error);
+                    res.status(500).json({ message: 'Failed to generate PDF', error: error });
+                }
                 break;
         }
 
