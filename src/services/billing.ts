@@ -145,23 +145,38 @@ export const getBillCreatedContractList = async (id: string): Promise<any> => {
     }
 };
 
+// export const convertHtmlToPdf = async (billingData: any): Promise<any> => {
+//     try {
+//         const response = await apiClient.post('/html-to-pdf', { ...billingData, type: 'HTML-TO-PDF' }, {
+//             responseType: 'blob'
+//         });
+
+//         const url = window.URL.createObjectURL(response.data);
+//         const a = document.createElement('a');
+//         a.href = url;
+//         a.download = 'generated.pdf';
+//         a.click();
+
+//         return response;
+//     } catch (err: unknown) {
+//         throw err;
+//     }
+// };
+
 export const convertHtmlToPdf = async (billingData: any): Promise<any> => {
     try {
-        const response = await apiClient.post('/html-to-pdf', { ...billingData, type: 'HTML-TO-PDF' }, {
-            responseType: 'blob'
-        });
+        const response = await apiClient.post('/html-to-pdf', { ...billingData, type: 'HTML-TO-PDF' });
 
-        const url = window.URL.createObjectURL(response.data);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'generated.pdf';
-        a.click();
+        if (response.data.pdfPath) {
+            window.open(`../pdf/billing.pdf`, '_blank');
+        }
 
         return response;
     } catch (err: unknown) {
         throw err;
     }
 };
+
 
 export const checkBillNo = async (billingNo: string): Promise<any> => {
     try {

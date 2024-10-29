@@ -112,7 +112,9 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
     const billingData = { html: getBillingHtmlTemplate(htmlData) };
     try {
-          await convertHtmlToPdf(billingData);            
+        const response = await convertHtmlToPdf(billingData);     
+        console.log('response',response);
+      
         } catch (error) {
             console.error("Error generating PDF:", error);
         }
