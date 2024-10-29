@@ -239,7 +239,7 @@ export const getBillingHtmlTemplate = (data?: any) => {
 
     <div
         style="max-width: 1200px; margin: auto; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-        <img src="http://localhost:3000/images/billing-logo.jpg" alt="Signature" style="width: 750px; height: 85px; display: block; margin: 0 0 0 0;" />
+        <img src="http://13.233.255.109/images/billing-logo.jpg" alt="Signature" style="width: 750px; height: 85px; display: block; margin: 0 0 0 0;" />
         
         <div style="width: 600px; margin: auto; margin-top: 10px; margin-bottom: 10px;">
             <p style="text-align: center; font-size: 12px; margin: 0 0 10px 0; line-height: 20px; font-weight: 300;">
@@ -434,7 +434,7 @@ export const getBillingHtmlTemplate = (data?: any) => {
                         style="border-right: 1px solid #ddd; border-left: 1px solid #ddd; text-align: right; vertical-align: top; padding: 10px 10px;">
                         <b style="font-size: 16px;">for MEGHNA ENTERPRISE</b>
                         <br />
-                        <img src="http://localhost:3000/images/signature.jpg" alt="Signature" style="width: 106px; height: 30px; display: inline-block; margin: 20px 15px;" />
+                        <img src="http://13.233.255.109/images/signature.jpg" alt="Signature" style="width: 106px; height: 30px; display: inline-block; margin: 20px 15px;" />
                         <br />
                         <span style="font-size: 14px;">(AS BROKER)</span>
                     </td>
