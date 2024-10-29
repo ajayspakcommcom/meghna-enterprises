@@ -1,32 +1,38 @@
-import { convertHtmlToPdf } from "@/services/billing";
+
 import { getBillingHtmlTemplate } from "@/services/common";
 import React, { useEffect, useState } from "react";
-
-const htmlContent = `${getBillingHtmlTemplate()}`;
-
+import html2pdf from 'html2pdf.js';
 
 export default function Index() {
 
-    const downloadBillingPdf = async () => {
-        const billingData = {html: htmlContent};
-        try {
-            await convertHtmlToPdf(billingData);
-            console.log("PDF generated and download triggered");
-        } catch (error) {
-            console.error("Error generating PDF:", error);
-        }
-    };
- 
-    const handleClick = () => {
-        console.log('clicked');
-        downloadBillingPdf();
-    }
+    const pdfRef = React.useRef<HTMLDivElement>(null);
 
+  const generatePdf = () => {
+    const element = pdfRef.current;
+    const options = {
+      margin: 1,
+      filename: 'generated.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+    };
+
+    html2pdf().set(options).from(element).save();
+  };
+     
     return (    
-        <>      
-            {/* <img src="./images/signature.jpg" alt="Signature" style={{width: '106px', height: '30px'}} />     */}
-            <img src="../public/images/signature.jpg" alt="Signature" style={{width: '106px', height: '30px'}} />    
-            <button onClick={handleClick}>Convert HTML to PDF</button>         
+        <>                      
+            <div>
+      <div ref={pdfRef} style={{ padding: '20px', background: '#fff' }}>
+        <h1>Invoice</h1>
+        <p>This is your billing information.</p>
+        {/* Add more HTML content here as needed */}
+      </div>
+      
+      <button onClick={generatePdf} style={{ marginTop: '20px' }}>
+        Download PDF
+      </button>
+    </div>
         </>
     );
 }

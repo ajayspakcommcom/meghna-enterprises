@@ -21,6 +21,7 @@
     "date-fns": "^3.6.0",
     "formik": "^2.4.6",
     "html-pdf-node": "^1.0.8",
+    "html2pdf.js": "^0.10.2",
     "jsonwebtoken": "^9.0.2",
     "jspdf": "^2.5.1",
     "lodash": "^4.17.21",
