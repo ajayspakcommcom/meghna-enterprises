@@ -4,36 +4,33 @@ import html2canvas from 'html2canvas';
 
 export default function Index() {
 
-    const pdfRef = useRef<HTMLDivElement>(null); 
+  const pdfRef = useRef<HTMLDivElement>(null); 
 
-  const generatePdf = async () => {
+    const generatePdf = async () => {      
     const element = (pdfRef.current as HTMLDivElement);
-    
-    
     // Use html2canvas to take a screenshot of the HTML element
-    const canvas = await html2canvas(element);
-    const imgData = canvas.toDataURL('image/png');
+    const canvas = await html2canvas(element, {scale: 5});
+    const imgData = canvas.toDataURL('image/jpeg', 1.0);
 
     // Create a new jsPDF instance
     const pdf = new jsPDF();
-    const imgWidth = 190; // PDF width in mm
+    const imgWidth = 150; // PDF width in mm
     const pageHeight = pdf.internal.pageSize.height;
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
     let heightLeft = imgHeight;
     let position = 0;
 
     // Add the image to the PDF
-    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+    pdf.addImage(imgData, 'JPEG', 10, position, imgWidth, imgHeight);
     heightLeft -= pageHeight;
 
     // If the image height is larger than a single page, add new pages
     while (heightLeft >= 0) {
       position = heightLeft - imgHeight;
       pdf.addPage();
-      pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+      pdf.addImage(imgData, 'JPEG', 10, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;
     }
-
     // Save the PDF
     pdf.save('generated.pdf');
   };
@@ -41,9 +38,9 @@ export default function Index() {
     return (    
         <>                      
             <div ref={pdfRef}>
-                    <div
+            <div
       style={{
-        maxWidth: '1200px',
+        maxWidth: '1500px',
         margin: 'auto',
         padding: '20px',
         borderRadius: '5px',
@@ -156,10 +153,11 @@ export default function Index() {
       </div>
     </div>
                     
-                    <button onClick={generatePdf} style={{ marginTop: '20px' }}>
+                    
+        </div> 
+        <button onClick={generatePdf} style={{ marginTop: '20px' }}>
                         Download PDF
                     </button>
-                </div> 
         </>
     );
 }

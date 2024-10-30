@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -10,6 +10,8 @@ import { customDateFormatter, customFormatDate, getLocalStorage } from "@/servic
 import { getBuyer } from "@/services/buyer";
 import { getSeller } from "@/services/seller";
 const converter = require('number-to-words');
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
 
 interface BillingPreviewProps {
     isOpen: boolean;
@@ -25,6 +27,37 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
     const [buyerData, setBuyerData] = React.useState<any>();
     const [sellerData, setSellerData] = React.useState<any>();
     const [logo, setLogo] = React.useState<string | null>('');
+
+    const pdfRef = useRef<HTMLDivElement>(null); 
+
+    const generatePdf = async () => {      
+    const element = (pdfRef.current as HTMLDivElement);
+    // Use html2canvas to take a screenshot of the HTML element
+    const canvas = await html2canvas(element, {scale: 5});
+    const imgData = canvas.toDataURL('image/jpeg', 1.0);
+
+    // Create a new jsPDF instance
+    const pdf = new jsPDF();
+    const imgWidth = 150; // PDF width in mm
+    const pageHeight = pdf.internal.pageSize.height;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    // Add the image to the PDF
+    pdf.addImage(imgData, 'JPEG', 10, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+
+    // If the image height is larger than a single page, add new pages
+    while (heightLeft >= 0) {
+      position = heightLeft - imgHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, 'JPEG', 10, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
+    // Save the PDF
+    pdf.save('generated.pdf');
+  };
 
     const fetchPartyData = async () => {        
         const partyData = contentData?.partyType.toLowerCase() === 'buyer' ? await getBuyer(contentData.partyId) : await getSeller(contentData.partyId);
@@ -49,6 +82,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
     const handleClose = () => {
         onClick?.(false);
         setOpen(false);
+        generatePdf();
     };
 
 
@@ -65,7 +99,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                 {contentData &&
                     <DialogContent className="preview-dialogue-content">
 
-                        <div className="preview-wrapper">
+                        <div className="preview-wrapper" ref={pdfRef}>
                             <div className="header"><Image src={require(`../../public/images/seedsnfeeds.png`)} alt="seedsnfeeds" className="responsive-img center" /></div>
                         
                         <div className="address">
@@ -203,7 +237,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                     <td colSpan={5} className="signature">
                                         <b>for MEGHNA ENTERPRISE</b>
                                         <br />
-                                        <img src="../../public/images/signature.jpg" alt="Signature" className="signature-img" />
+                                        <Image src={require(`../../public/images/signature.jpg`)} alt="Signature" className="signature-img" />                                        
                                         <br />
                                         <span>(AS BROKER)</span>
                                     </td>
@@ -217,8 +251,9 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                 }
 
                 <DialogActions>
-                    <div className="preview-pop-ok-btn">
-                        <Button onClick={handleClose} variant="outlined" fullWidth>Ok</Button>
+                    <div className="preview-pop-ok-btn billing-preview-pop">
+                    <Button variant="outlined" onClick={() => generatePdf()}>Download Pdf</Button>
+                    <Button onClick={handleClose} variant="outlined" fullWidth>Close</Button>
                     </div>
                 </DialogActions>
             </Dialog>        

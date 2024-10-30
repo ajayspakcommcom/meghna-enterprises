@@ -9,6 +9,7 @@ import { getBuyer } from "@/services/buyer";
 import { getSeller } from "@/services/seller";
 
 
+
 const Header = dynamic(() => import('../../../components/header/index'));
 const SuccessConfirmationDialogue = dynamic(() => import('../../../components/success-confirmation/index'));
 const BillingPreviewDialogue = dynamic(() => import('../../../components/billing-preview/index'));
@@ -135,6 +136,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
  
   return (
     <>
+      
       <Header />
 
       <Container maxWidth="xl">
@@ -145,7 +147,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
           <div className="btn-wrapper detail-btn-wrapper">
             <Button variant="outlined" onClick={() => previewHandler()}>Preview</Button>
             {/* <Button variant="outlined">Send Mail</Button> */}
-            <Button variant="outlined" onClick={downloadBillingPdf}>Download Pdf</Button>
+            {/* <Button variant="outlined" onClick={downloadBillingPdf}>Download Pdf</Button> */}
             <Button variant="outlined" onClick={() => goToPage("/billing")}>Back</Button>
           </div>
         </div>

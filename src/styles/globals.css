@@ -887,3 +887,7 @@ pre {
     margin: 0;
     margin-bottom: 10px;
 }
+
+.billing-preview-pop>button {
+    margin-right: 15px;
+}
