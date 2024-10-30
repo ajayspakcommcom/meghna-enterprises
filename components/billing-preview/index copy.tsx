@@ -38,24 +38,21 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
 
     // Create a new jsPDF instance
     const pdf = new jsPDF();
-    const pageWidth = pdf.internal.pageSize.width;
-    const imgWidth = pageWidth - 10;; // PDF width in mm
+    const imgWidth = 150; // PDF width in mm
     const pageHeight = pdf.internal.pageSize.height;
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
     let heightLeft = imgHeight;
-    let position = 0;    
-    
-    const xOffset = (pageWidth - imgWidth) / 2;
+    let position = 0;
 
     // Add the image to the PDF
-    pdf.addImage(imgData, 'JPEG', xOffset, position, imgWidth, imgHeight);
+    pdf.addImage(imgData, 'JPEG', 10, position, imgWidth, imgHeight);
     heightLeft -= pageHeight;
 
     // If the image height is larger than a single page, add new pages
     while (heightLeft >= 0) {
       position = heightLeft - imgHeight;
       pdf.addPage();
-      pdf.addImage(imgData, 'JPEG', xOffset, position, imgWidth, imgHeight);
+      pdf.addImage(imgData, 'JPEG', 10, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;
     }
     // Save the PDF
