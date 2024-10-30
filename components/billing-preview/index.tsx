@@ -237,7 +237,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                         </div>
                                     </td>
                                     <td colSpan={5} className="signature">
-                                        <b>for MEGHNA ENTERPRISE</b>
+                                        <b>for Seeds & Feeds Vyanah</b>
                                         <br />
                                         <Image src={require(`../../public/images/signature.jpg`)} alt="Signature" className="signature-img" />                                        
                                         <br />
