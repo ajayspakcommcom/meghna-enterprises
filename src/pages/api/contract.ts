@@ -117,11 +117,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
           const updatedDataList = dataList.map(item => {
             const priceWithText = item.price;
+            const quantityWithText = item.quantity
             const price = parseInt(priceWithText.replace(/[^\d.-]+/g, ''));
+            const quantity = parseInt(quantityWithText.replace(/[^\d.-]+/g, ''));
+
             return {
               ...item.toObject(),
               category: 'Seller',
               price: isNaN(price) ? 0 : price,
+              quantity: isNaN(quantity) ? 0 : quantity,
               template: item.template ? Object.fromEntries(item.template) : {},
               label: item.label ? Object.fromEntries(item.label) : {}
             }
@@ -145,11 +149,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
           const updatedDataList = dataList.map(item => {
             const priceWithText = item.price;
+            const quantityWithText = item.quantity
             const price = parseInt(priceWithText.replace(/[^\d.-]+/g, ''));
+            const quantity = parseInt(quantityWithText.replace(/[^\d.-]+/g, ''));
             return {
               ...item.toObject(),
               category: 'Buyer',
               price: isNaN(price) ? 0 : price,
+              quantity: isNaN(quantity) ? 0 : quantity,
               template: item.template ? Object.fromEntries(item.template) : {},
               label: item.label ? Object.fromEntries(item.label) : {}
             }

@@ -172,6 +172,7 @@ export default function Index() {
               }
     }); 
 
+    
     setContractDataList(updatedContractData);
     setNetAmount(0);
     setGrandTotalAmt(0);
