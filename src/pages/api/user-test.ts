@@ -64,11 +64,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         doc.fontSize(9).fillColor('#000').text(commodityText, 150, 280);
 
         doc.fontSize(10).fillColor('#000').text('QUANTITY', 25, 320);
-        const quantityText = `121: GROSS MT.`;
+        const quantityText = `121`;
         doc.fontSize(9).fillColor('#000').text(quantityText, 150, 320);
 
         doc.fontSize(10).fillColor('#000').text('PRICE', 25, 340);
-        const priceText = `121: GROSS MT.`;
+        const priceText = `121`;
         doc.fontSize(9).fillColor('#000').text(priceText, 150, 340);
 
         doc.fontSize(10).fillColor('#000').text('PLACE OF DELIVERY', 25, 360);

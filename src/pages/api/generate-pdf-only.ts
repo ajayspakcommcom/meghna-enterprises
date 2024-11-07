@@ -81,7 +81,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                     doc.fontSize(10).fillColor('#000').text('QUANTITY', 25, y);
                     const quantityText = `${req.body.quantity}`;
-                    doc.fontSize(9).fillColor('#000').text(quantityText.replace(/\n\n/g, ' ') + ' GROSS MT.', 150, y);
+                    doc.fontSize(9).fillColor('#000').text(quantityText.replace(/\n\n/g, ' '), 150, y);
                     y += doc.heightOfString(quantityText.replace(/\n\n/g, ' '), { width: pageWidth, align: 'left' }) + heightIncrease;
 
 

@@ -217,6 +217,8 @@ export default function Index() {
       createdDate: formik.values.createdDate
     };
 
+    console.log('submittedData', submittedData);
+
     setLoading(true);
     try {
       const response = await createContract(submittedData);
