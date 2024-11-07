@@ -316,20 +316,11 @@ export default function Index({detail}: {detail: Billing}) {
 
 
   useEffect(() => {
-
     fetchPartyList();
     formik.setFieldValue('billingNo', (detail as any).data.billingNo);
     formik.setFieldValue('partyId', (detail as any).data.partyId);
     formik.setFieldValue('billingDate', new Date((detail as any).data.billingDate).toISOString().split('T')[0]);    
     handlePartySelectChangeOnLoad((detail as any).data.partyId);
-
-    // billingNo => Done
-    // billingDate => Done
-    // partyId => Pending
-    // email => Pending
-    // mobile_no => Pending
-    // address => Pending
-    
   }, []);
 
   return (
@@ -394,7 +385,7 @@ export default function Index({detail}: {detail: Billing}) {
                     </Grid>
                     <Grid item xs={3}>
                       <ListItem>
-                        <FormControl fullWidth className="party-select">
+                        <FormControl fullWidth className="party-select" disabled={true}>
                         <InputLabel id="party-select-label">Party</InputLabel>
                           <Select
                             labelId="party-select-label"
@@ -404,7 +395,7 @@ export default function Index({detail}: {detail: Billing}) {
                             label="Party"
                             onChange={handlePartySelectChange}
                             onBlur={formik.handleBlur} error={formik.touched.partyId && Boolean(formik.errors.partyId)}>
-                            {partyList.map((party: any) => (<MenuItem key={party._id} value={party._id}>{party.name} {party.type}</MenuItem>))}                            
+                            {partyList.map((party: any) => (<MenuItem key={party._id} value={party._id}>{party.name} {party.type}</MenuItem>))}   
                           </Select>
                         </FormControl>
                         {formik.touched.partyId && formik.errors.partyId && (<FormHelperText error>{formik.errors.partyId}</FormHelperText>)}  
