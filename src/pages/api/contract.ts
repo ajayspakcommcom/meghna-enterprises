@@ -40,6 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             template_id: req.body.template_id,
             company: req.body.company,
             createdDate: req.body.createdDate,
+            template_name: req.body.templateName,
           });
 
           res.status(201).json({ message: 'Contract have been successfully created.' });
@@ -78,6 +79,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             template_id: req.body.template_id,
             createdDate: req.body.createdDate,
             updatedDate: Date.now(),
+            template_name: req.body.templateName,
           };
 
           const updatedContract = await Contract.findByIdAndUpdate(contractId, updatedData, { new: true });
@@ -109,7 +111,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
       case 'SELLER-CONTRACT':
         try {
-          const dataList = await Contract.find({ isDeleted: false, seller_id: req.body.id }, 'template contract_no seller_id quantity price createdDate').exec();
+          const dataList = await Contract.find({ isDeleted: false, seller_id: req.body.id }, 'template contract_no seller_id quantity price createdDate template_name').exec();
 
           if (!dataList) {
             return res.status(404).json({ error: 'Contract not found' });
@@ -127,10 +129,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
               price: isNaN(price) ? 0 : price,
               quantity: isNaN(quantity) ? 0 : quantity,
               template: item.template ? Object.fromEntries(item.template) : {},
-              label: item.label ? Object.fromEntries(item.label) : {}
+              label: item.label ? Object.fromEntries(item.label) : {},
+              template_name: item.template_name ? item.template_name : ''
             }
 
           });
+
+          console.log('seller', updatedDataList)
 
 
           res.status(200).json({ data: updatedDataList });
@@ -142,7 +147,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
       case 'BUYER-CONTRACT':
         try {
-          const dataList = await Contract.find({ isDeleted: false, buyer_id: req.body.id }, 'template contract_no buyer_id quantity price createdDate').exec();
+          const dataList = await Contract.find({ isDeleted: false, buyer_id: req.body.id }, 'template contract_no buyer_id quantity price createdDate template_name').exec();
           if (!dataList) {
             return res.status(404).json({ error: 'Contract not found' });
           }
@@ -158,11 +163,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
               price: isNaN(price) ? 0 : price,
               quantity: isNaN(quantity) ? 0 : quantity,
               template: item.template ? Object.fromEntries(item.template) : {},
-              label: item.label ? Object.fromEntries(item.label) : {}
+              label: item.label ? Object.fromEntries(item.label) : {},
+              template_name: item.template_name ? item.template_name : ''
             }
 
           });
 
+          console.log('seller', updatedDataList)
 
           res.status(200).json({ data: updatedDataList });
         } catch (error) {

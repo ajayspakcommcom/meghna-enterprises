@@ -5,4 +5,6 @@ export default interface Seller {
     price?: string | null;
     contract_no?: string | null;
     createdDate?: string | Date;
+    templateName?: string | null;
+
 }

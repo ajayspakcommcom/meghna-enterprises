@@ -184,7 +184,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                         <td>{customFormatDate(new Date(contract.createdDate))}</td>
                                         <td>{contract.contractNo}</td>
                                         <td>{contentData.name}</td>
-                                        <td>SOYA EXT.</td>
+                                        <td>{contract.templateName}</td>
                                         <td>{contract.quantity}</td>
                                         <td>{contract.price}</td>
                                         <td>{contract.brokerageQty}</td>

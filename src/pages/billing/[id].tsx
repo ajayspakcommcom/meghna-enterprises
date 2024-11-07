@@ -424,7 +424,7 @@ export default Index;
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
 
   const { id } = context.query;  
-  const detail = await getBilling(id as string);    
+  const detail = await getBilling(id as string);      
   return {
     props: {
       detail

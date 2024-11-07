@@ -47,7 +47,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
               isBillCreated: true,
               partyType: contract.partyType,
               contractNo: contract.contractNo,
-              createdDate: contract.createdDate
+              createdDate: contract.createdDate,
+              templateName: contract.template_name
             })),
             sgst: req.body.sgst || 0,
             cgst: req.body.cgst || 0,

@@ -37,6 +37,10 @@ const contractSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    template_name: {
+        type: String,
+        default: ''
+    },
     assessment_year: {
         type: String,
         required: true

@@ -80,6 +80,9 @@ const billingSchema = new mongoose.Schema({
             type: Date,
             required: true,
             default: Date.now
+        },
+        templateName: {
+            type: String
         }
     }],
     sgst: {

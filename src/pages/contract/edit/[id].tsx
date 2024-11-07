@@ -122,6 +122,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
     } catch (error) {
     }
     setSelectedTemplate(value);
+    formik.setFieldValue('templateName', value?.label);
   };
 
   const handleInputChange = (index: number, type: keyof Field, value: string) => {
@@ -218,10 +219,6 @@ const Index: React.FC<compProps> = ({ detail }) => {
       createdDate: new Date(detailedData.createdDate).toISOString().split('T')[0] 
     });
 
-    console.log(formik.values);
-
-
-
   }, []);
 
   const goToPage = (url: string) => {
@@ -232,7 +229,8 @@ const Index: React.FC<compProps> = ({ detail }) => {
     quantity: '',
     price: '',
     contract_no: '',
-    createdDate: new Date()
+    createdDate: new Date(),
+    templateName: ''
   };
 
   const handleSubmit = async (contract: Contract) => {
@@ -258,7 +256,8 @@ const Index: React.FC<compProps> = ({ detail }) => {
       template_id: selectedTemplate?._id,
       id: detailedData._id,
       company: detailedData.company,
-      createdDate: formik.values.createdDate
+      createdDate: formik.values.createdDate,
+      templateName: formik.values.templateName,
     };
 
     setLoading(true);

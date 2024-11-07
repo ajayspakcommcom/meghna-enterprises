@@ -81,7 +81,8 @@ export default function Index() {
       category: contract.category,
       partyType: contract.category.toLowerCase() === 'seller' ? 'Seller' : 'Buyer',
       contractNo: contract.contract_no,
-      createdDate: contract.createdDate      
+      createdDate: contract.createdDate,
+      template_name: contract.template_name
     }));
 
     const objData = {
@@ -172,7 +173,6 @@ export default function Index() {
               }
     }); 
 
-    
     setContractDataList(updatedContractData);
     setNetAmount(0);
     setGrandTotalAmt(0);

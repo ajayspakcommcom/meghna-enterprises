@@ -85,7 +85,8 @@ export default function Index() {
   const handleTemplateChange = async (event: React.ChangeEvent<{}>, value: selectedAutoField | null) => {
 
     setSelectedTemplateId(value?._id)
-
+    formik.setFieldValue('templateName', value?.label);
+    
     setFields([]);
     try {
       const templateId = value?._id ?? '';
@@ -190,6 +191,7 @@ export default function Index() {
     price: '',
     contract_no: '',
     createdDate: new Date().toISOString().split('T')[0],
+    templateName: ''
   };
 
   const handleSubmit = async (contract: Contract) => {
@@ -214,10 +216,9 @@ export default function Index() {
       assessment_year: getCurrentFinancialYear(),
       template_id: selectedTemplateId,
       company: getLocalStorage('appLogo') ? getLocalStorage('appLogo') : '',
-      createdDate: formik.values.createdDate
+      createdDate: formik.values.createdDate,
+      templateName: formik.values.templateName,
     };
-
-    console.log('submittedData', submittedData);
 
     setLoading(true);
     try {
