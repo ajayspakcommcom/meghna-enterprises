@@ -11,3 +11,28 @@ if getting contract.pdf conflict
         5) git commit -m "Resolved PDF conflict"
         6) git push
 
+
+
+
+1. Browser Cache and Cookies
+        Clear the browser’s cache and cookies on the specific machine, as outdated or corrupted data might interfere with the application.
+
+2. Browser Compatibility
+        Verify that the application is compatible with the browser version being used on the problem machine. Update or switch browsers to see if the error persists.
+
+3. Network and Firewall Restrictions
+        Check if there are any firewall or network restrictions on the machine that might block requests to the EC2 instance. 
+        If using a corporate network, certain domains or ports might be restricted.
+        
+4. Check Application Logs
+        Inspect the Next.js application logs on the EC2 instance for errors when the specific machine accesses it. 
+        Logs can provide insight into issues like network requests, permissions, or data fetching problems.
+
+5. CORS Issues
+        If the application makes API calls, ensure that Cross-Origin Resource Sharing (CORS) is configured correctly to allow access from the specific machine’s IP or domain.
+
+6. EC2 Security Groups and Inbound Rules
+        Confirm that the EC2 instance’s security group allows inbound traffic from the specific machine’s IP, if access is IP-restricted.
+
+7. Local DNS or Proxy Issues
+        The specific machine might be using a proxy or DNS settings that could interfere with access. Try switching to a different network or checking DNS configurations.

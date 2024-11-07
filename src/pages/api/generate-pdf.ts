@@ -154,8 +154,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                     y += 10;
 
-                    doc.fontSize(10).fillColor('#000').text('For SEEDS & FEEDS INDIA', 240, y);
-                    y += doc.heightOfString('For SEEDS & FEEDS INDIA', { width: pageWidth, align: 'left' }) + heightIncrease;
+                    doc.fontSize(10).fillColor('#000').text('For SEEDS & FEEDS VYANAH', 240, y);
+                    y += doc.heightOfString('For SEEDS & FEEDS VYANAH', { width: pageWidth, align: 'left' }) + heightIncrease;
                     doc.fontSize(10).fillColor('#000').text('FOR SELLER', 25, y);
                     y += doc.heightOfString('FOR SELLER', { width: pageWidth, align: 'left' }) + heightIncrease;
                     doc.fontSize(10).fillColor('#000').text('FOR BUYER', 520, y);

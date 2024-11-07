@@ -133,8 +133,6 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
   useEffect(() => {
 
-    console.log('detailedData', detailedData);
-
     const token = localStorage.getItem("token");
     if (!token) {
       router.push('/');
@@ -216,8 +214,11 @@ const Index: React.FC<compProps> = ({ detail }) => {
     formik.setValues({
       quantity: detailedData.quantity.toString(),
       price: detailedData.price.toString(),
-      contract_no: detailedData.contract_no
+      contract_no: detailedData.contract_no,
+      createdDate: new Date(detailedData.createdDate).toISOString().split('T')[0] 
     });
+
+    console.log(formik.values);
 
 
 
@@ -230,7 +231,8 @@ const Index: React.FC<compProps> = ({ detail }) => {
   const initialValues: Contract = {
     quantity: '',
     price: '',
-    contract_no: ''
+    contract_no: '',
+    createdDate: new Date()
   };
 
   const handleSubmit = async (contract: Contract) => {
@@ -255,7 +257,8 @@ const Index: React.FC<compProps> = ({ detail }) => {
       assessment_year: getCurrentFinancialYear(),
       template_id: selectedTemplate?._id,
       id: detailedData._id,
-      company: detailedData.company
+      company: detailedData.company,
+      createdDate: formik.values.createdDate
     };
 
     setLoading(true);
@@ -326,6 +329,11 @@ const Index: React.FC<compProps> = ({ detail }) => {
     }
   };
 
+  
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {    
+    formik.setFieldValue('createdDate', event.target.value);
+  };
+
   return (
     <>
       <Header />
@@ -351,18 +359,36 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
                   {errors && <div className="error"><ErrorMessage message={errors} /></div>}
 
-                  <TextField
-                    type="text"
-                    label="Contract No"
-                    name="contract_no"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    value={formik.values.contract_no}
-                    onChange={handleContractNoChange}
-                    error={formik.touched.contract_no && Boolean(formik.errors.contract_no)}
-                    helperText={ isContractNoExists && <span style={{ color: 'red' }}>Contract No already exists.</span>}
-                  />
+                  <div className="buyer-seller-forms-wrapper contract-form-wrapper">
+                    <div>
+                        <TextField
+                          type="text"
+                          label="Contract No"
+                          name="contract_no"
+                          variant="outlined"
+                          fullWidth
+                          margin="normal"
+                          value={formik.values.contract_no}
+                          onChange={handleContractNoChange}
+                          error={formik.touched.contract_no && Boolean(formik.errors.contract_no)}
+                          helperText={ isContractNoExists && <span style={{ color: 'red' }}>Contract No already exists.</span>}
+                        />
+                    </div>
+                    <div>
+                      <TextField
+                          type="date"
+                          label="Date"
+                          name="createdDate"
+                          variant="outlined"
+                          fullWidth
+                          margin="normal"
+                          value={formik.values.createdDate}
+                          onChange={handleDateChange}                          
+                        />
+                    </div>
+                   </div>
+
+                  
 
                   <div className="buyer-seller-forms-wrapper contract-form-wrapper">
                     <div>

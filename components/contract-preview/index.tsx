@@ -212,7 +212,7 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
 
                             <div className="footer-seed-feed">
                                 <Typography variant="body2">
-                                    <b>For SEEDS & FEEDS INDIA</b>
+                                    <b>For SEEDS & FEEDS VYANAH</b>
                                 </Typography>
                             </div>
 

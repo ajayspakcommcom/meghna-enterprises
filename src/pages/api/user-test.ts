@@ -98,7 +98,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         doc.rect(doc.page.margins.left, 540, pageWidth, 20).stroke('#d9d9d9');
         doc.fontSize(10).fillColor('#000').text('Subject to Mumbai Juridiction', 240, 545);
 
-        doc.fontSize(10).fillColor('#000').text('For SEEDS & FEEDS INDIA', 240, 575);
+        doc.fontSize(10).fillColor('#000').text('For SEEDS & FEEDS VYANAH', 240, 575);
 
         doc.fontSize(10).fillColor('#000').text('FOR SELLER', 25, 600);
         doc.fontSize(10).fillColor('#000').text('FOR BUYER', 520, 600);
