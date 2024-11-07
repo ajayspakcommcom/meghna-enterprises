@@ -123,7 +123,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
   const previewHandler = () => {
     setIsPreviewDialogOpen(true);
-    setPreviewContent(detailData);
+    setPreviewContent({...detailData, name: userData?.name});    
   };
 
   const previewClickHandler = (val: boolean) => {
@@ -424,7 +424,7 @@ export default Index;
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
 
   const { id } = context.query;  
-  const detail = await getBilling(id as string);  
+  const detail = await getBilling(id as string);    
   return {
     props: {
       detail

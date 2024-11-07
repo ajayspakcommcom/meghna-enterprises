@@ -69,6 +69,8 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
     };
 
     useEffect(() => {
+
+        console.log('contentData', contentData)
         
         if (contentData) {            
             fetchPartyData();        
@@ -181,7 +183,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                     <tr key={index}>
                                         <td>{customFormatDate(new Date(contract.createdDate))}</td>
                                         <td>{contract.contractNo}</td>
-                                        <td>{'Name'}</td>
+                                        <td>{contentData.name}</td>
                                         <td>SOYA EXT.</td>
                                         <td>{contract.quantity}</td>
                                         <td>{contract.price}</td>
