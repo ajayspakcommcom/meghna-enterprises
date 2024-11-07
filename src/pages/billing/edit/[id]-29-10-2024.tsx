@@ -71,7 +71,6 @@ export default function Index({detail}: {detail: Billing}) {
 
   const handleSubmit = async (billing: Billing) => {  
 
-    console.log('contractDataList', contractDataList);
     
     const contractData = contractDataList.map((contract: any) => ({
       contractId: contract._id,
@@ -244,8 +243,7 @@ export default function Index({detail}: {detail: Billing}) {
 
   useEffect(() => {
     fetchLastBilling();
-    fetchPartyList();
-    console.log('detail', detail);
+    fetchPartyList();    
   }, []);
 
   return (

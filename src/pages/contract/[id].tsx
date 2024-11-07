@@ -44,8 +44,6 @@ const Index: React.FC<compProps> = ({ detail }) => {
 
   useEffect(() => {
 
-    console.log('detailData', detailData);
-
     const token = localStorage.getItem("token");
     if (!token) {
       router.push('/');

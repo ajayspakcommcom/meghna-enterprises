@@ -320,8 +320,7 @@ export default function Index({detail}: {detail: Billing}) {
     fetchPartyList();
     formik.setFieldValue('billingNo', (detail as any).data.billingNo);
     formik.setFieldValue('partyId', (detail as any).data.partyId);
-    formik.setFieldValue('billingDate', new Date((detail as any).data.billingDate).toISOString().split('T')[0]);
-    console.log('detail', (detail as any).data);
+    formik.setFieldValue('billingDate', new Date((detail as any).data.billingDate).toISOString().split('T')[0]);    
     handlePartySelectChangeOnLoad((detail as any).data.partyId);
 
     // billingNo => Done

@@ -143,8 +143,6 @@ export default function Index() {
 
 
     const { data: contractData } = selectedParty?.type === 'buyer' ? await getBuyerContract(selectedValue) : await getSellerContract(selectedValue);  
-
-    console.log('contractData', contractData);
     
     let updatedContractData = contractData.map((contract: any) => ({ ...contract, brockerageAmt: 0 }));
     let createdContractListResponse = (await getBillCreatedContractList(selectedValue)).data;

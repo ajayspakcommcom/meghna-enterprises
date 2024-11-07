@@ -43,22 +43,19 @@ export default function Index() {
     { field: 'netAmount', headerName: 'Net Amount', width: 100 },
     {
       field: 'sgst', headerName: 'Sgst', width: 50, 
-      valueGetter: (value, row) => {
-        console.log('row', row);
+      valueGetter: (value, row) => {        
         return `${row.sgst}%`
       }
     },
     {
       field: 'cgst', headerName: 'Cgst', width: 50, 
-      valueGetter: (value, row) => {
-        console.log('row', row);
+      valueGetter: (value, row) => {        
         return `${row.cgst}%`
       }
     },
     {
       field: 'igst', headerName: 'Igst', width: 50, 
-      valueGetter: (value, row) => {
-        console.log('row', row);
+      valueGetter: (value, row) => {        
         return `${row.igst}%`
       }
     },
@@ -109,8 +106,7 @@ export default function Index() {
   const fetchData = async () => {
       try {
         const response = await getAllBilling();
-        const formattedData = response.data.map((billing: any) => ({ ...billing, id: billing._id, _id: undefined }));        
-        console.log('formattedData', formattedData);
+        const formattedData = response.data.map((billing: any) => ({ ...billing, id: billing._id, _id: undefined }));                
         setRowData(formattedData);
       } catch (error) {
         console.error('Error fetching data:', error);

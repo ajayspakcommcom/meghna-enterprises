@@ -135,9 +135,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
           });
 
-          console.log('seller', updatedDataList)
-
-
           res.status(200).json({ data: updatedDataList });
         } catch (error) {
           res.status(500).json({ error: 'Internal Server Error' });
@@ -168,8 +165,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             }
 
           });
-
-          console.log('seller', updatedDataList)
 
           res.status(200).json({ data: updatedDataList });
         } catch (error) {

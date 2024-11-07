@@ -77,7 +77,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           const formattedData = await Promise.all(
             dataList.map(async (billing: any) => {
               const partyData = billing.partyType.toLowerCase() === 'buyer' ? await Buyer.findById(billing.partyId).exec() : await Seller.findById(billing.partyId).exec();
-              console.log('partyData', partyData);
               return {
                 ...billing._doc,
                 partyDetail: partyData

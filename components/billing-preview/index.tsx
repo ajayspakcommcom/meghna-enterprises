@@ -70,8 +70,6 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
 
     useEffect(() => {
 
-        console.log('contentData', contentData)
-        
         if (contentData) {            
             fetchPartyData();        
         }
