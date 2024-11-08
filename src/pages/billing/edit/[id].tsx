@@ -79,7 +79,7 @@ export default function Index({detail}: {detail: Billing}) {
     console.log('contractDataList', contractDataList);
 
     const contractData = contractDataList.map((contract: any) => ({
-      contractId: contract._id,
+      contractId: contract.contractId,
       quantity: contract.quantity,
       price: contract.price,
       brokerageQty: contract.brokerageQty ? parseInt(contract.brokerageQty) : 0,
@@ -117,7 +117,7 @@ export default function Index({detail}: {detail: Billing}) {
     console.log('objData', objData);
 
     const response = await updateBilling(objData);
-    console.log('response', response);
+    //console.log('response', response);
     
   
     // try {
