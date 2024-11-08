@@ -214,9 +214,12 @@ export default function Index() {
     const totalAmt = updatedDataList.reduce((total, item) => total + (item.amount || 0), 0);
     const grossAmt = totalAmt * igst/100;
 
+    const totalTax = cgst + sgst + igst;
+
     setNetAmount(totalAmt);
     setContractDataList(updatedDataList);
-    setBrokerageAmt(grossAmt);
+    //setBrokerageAmt(grossAmt);
+    setBrokerageAmt(totalAmt * (totalTax/100));
   };
   
   const handleSgstChange = (event: SelectChangeEvent) => {    

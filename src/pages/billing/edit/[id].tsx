@@ -76,8 +76,6 @@ export default function Index({detail}: {detail: Billing}) {
 
   const handleSubmit = async (billing: Billing) => {  
 
-    console.log('contractDataList', contractDataList);
-
     const contractData = contractDataList.map((contract: any) => ({
       contractId: contract.contractId,
       quantity: contract.quantity,
@@ -280,9 +278,12 @@ export default function Index({detail}: {detail: Billing}) {
     const totalAmt = updatedDataList.reduce((total, item) => total + (item.brokerageAmt || 0), 0);
     const grossAmt = totalAmt * igst/100;
 
+    const totalTax = cgst + sgst + igst;
+    
     setNetAmount(totalAmt);
     setContractDataList(updatedDataList);
-    setBrokerageAmt(grossAmt);
+    //setBrokerageAmt(grossAmt);
+    setBrokerageAmt(totalAmt * (totalTax/100));
   };
   
   const handleSgstChange = (event: SelectChangeEvent) => {    
