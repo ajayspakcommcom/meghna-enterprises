@@ -9,6 +9,9 @@ import { Contract } from './models/Contract';
 import { Buyer } from './models/Buyer';
 import { Seller } from './models/Seller';
 import mongoose from 'mongoose';
+import {sendHtmlContent} from './libs/sendHtmlService'
+import { sentBillingHtmlTemplateOnEmail } from '@/services/common';
+
 
 interface ApiResponse {
   message?: string;
@@ -231,6 +234,70 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           res.status(500).json({ error: 'Internal Server Error', errorDetail: error.message });
         }
         break;
+
+        case 'SEND-BILLING':
+          try {
+            const data = {
+              billingData: {
+                  billingNo: "BILL123",
+                  billingDate: "2024-11-08T00:00:00Z",
+                  contracts: [
+                      {
+                          createdDate: "2024-11-08T00:00:00Z",
+                          contractNo: "CONTRACT001",
+                          quantity: 100,
+                          price: "1500",
+                          brokerageQty: 5,
+                          brokerageAmt: 750
+                      }, 
+                      {
+                        createdDate: "2024-11-09T00:00:00Z",
+                        contractNo: "CONTRACT002",
+                        quantity: 100,
+                        price: "1500",
+                        brokerageQty: 5,
+                        brokerageAmt: 750
+                      }, 
+                      {
+                        createdDate: "2024-11-09T00:00:00Z",
+                        contractNo: "CONTRACT002",
+                        quantity: 100,
+                        price: "1500",
+                        brokerageQty: 5,
+                        brokerageAmt: 750
+                      }, 
+                      {
+                        createdDate: "2024-11-09T00:00:00Z",
+                        contractNo: "CONTRACT002",
+                        quantity: 100,
+                        price: "1500",
+                        brokerageQty: 5,
+                        brokerageAmt: 750
+                      },                      
+                  ],
+                  sgst: 9,
+                  cgst: 9,
+                  igst: 18,
+                  netAmount: 15000,
+                  brokerage: 750,
+                  grandTotalAmt: 15750
+              },
+              partyData: {
+                  name: "Buyer Company",
+                  address: "123 Street, City, State, Zip",
+                  gstin: "27AABCU9603R1ZX",
+                  state_code: "27"
+              }
+          };
+            const htmlContent = sentBillingHtmlTemplateOnEmail(data); 
+            console.clear();
+            console.log('Html', htmlContent);
+            await sendHtmlContent({recipient:'ajay@spakcomm.com', subject:'Testing', htmlContent:htmlContent})       
+            res.status(200).json({ message:'Bill sent...' });
+          } catch (error: any) {
+            res.status(500).json({ error: 'Internal Server Error', errorDetail: error.message });
+          }
+          break;
     }
 
   } else {
