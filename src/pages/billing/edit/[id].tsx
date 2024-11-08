@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import Billing from "../../../../models/Billing";
 import { useFormik } from "formik";
 import billingSchema from "@/validation/billingSchema";
-import { createBilling, getBillCreatedContractList, getBilling, getBuyerContract, getLastBilling, getPartyList, getSellerContract } from "@/services/billing";
+import { createBilling, getBillCreatedContractList, getBilling, getBuyerContract, getLastBilling, getPartyList, getSellerContract, updateBilling } from "@/services/billing";
 import { customFormatDate, debounceBillingNoCheck, getCurrentFinancialYear, incrementBillingNo } from "@/services/common";
 import { getSeller } from "@/services/seller";
 import { getBuyer } from "@/services/buyer";
@@ -76,36 +76,52 @@ export default function Index({detail}: {detail: Billing}) {
 
   const handleSubmit = async (billing: Billing) => {  
 
-    // const contractData = contractDataList.map((contract: any) => ({
-    //   contractId: contract._id,
-    //   quantity: contract.quantity,
-    //   price: contract.price,
-    //   brokerageQty: contract.brockerageAmt ? parseInt(contract.brockerageAmt) : 0,
-    //   brokerageAmt: contract.amount ? contract.amount : 0,
-    //   category: contract.category,
-    //   partyType: contract.category.toLowerCase() === 'seller' ? 'Seller' : 'Buyer',
-    //   contractNo: contract.contract_no,
-    //   createdDate: contract.createdDate      
-    // }));
+    console.log('contractDataList', contractDataList);
 
-    // const objData = {
-    //   billingNo: billing.billingNo,
-    //   billingDate: billing.billingDate,
-    //   partyId: billing.partyId,
-    //   contracts: [...contractData],
-    //   sgst: sgst,
-    //   cgst: cgst,
-    //   igst: igst,
-    //   netAmount: netAmount,
-    //   brokerage: brokerageAmt,
-    //   grandTotalAmt: grandTotalAmt,
-    //   outstandingAmount: 0,
-    //   partyType: contractData[0].category.toLowerCase() === 'seller' ? 'Seller' : 'Buyer'
-    // }
+    const contractData = contractDataList.map((contract: any) => ({
+      contractId: contract._id,
+      quantity: contract.quantity,
+      price: contract.price,
+      brokerageQty: contract.brokerageQty ? parseInt(contract.brokerageQty) : 0,
+      brokerageAmt: contract.brokerageAmt ? contract.brokerageAmt : 0,
+      category: contract.partyType,
+      partyType: contract.partyType,
+      contractNo: contract.contractNo,
+      createdDate: contract.createdDate,
+      templateName : contract.templateName,
+      partyId: contract.partyId     
+    }));
 
 
+    const objData = {
+      billingNo: billing.billingNo,
+      billingDate: billing.billingDate,
+      partyId: billing.partyId,
+      contracts: [...contractData],
+      sgst: sgst,
+      cgst: cgst,
+      igst: igst,
+      netAmount: netAmount,
+      brokerage: brokerageAmt,
+      grandTotalAmt: grandTotalAmt,
+      outstandingAmount: 0,
+      partyType: contractData[0].category.toLowerCase() === 'seller' ? 'Seller' : 'Buyer',
+      billingId: (detail as any).data._id
+    }
+
+    
+
+    console.log('billing', billing);
+    console.log('contractDataList', contractDataList);
+    console.log('contractData', contractData);
+    console.log('objData', objData);
+
+    const response = await updateBilling(objData);
+    console.log('response', response);
+    
+  
     // try {
-    //   const response = await createBilling(objData);      
+    //   const response = await updateBilling(objData);      
     //   formik.resetForm();       
     //   if (response?.message) {
     //     setIsSuccessDialogOpen(true);   
@@ -513,8 +529,7 @@ export default function Index({detail}: {detail: Billing}) {
                     type="text"
                     fullWidth
                     margin="normal"
-                    value={contract.contract_no}
-                    onChange={(e) => contractHandleInputChange(index, 'contract_no', e.target.value)}
+                    value={(contract as any).contractNo}                    
                     disabled={true}    
                     />
                     
@@ -523,8 +538,7 @@ export default function Index({detail}: {detail: Billing}) {
                     type="text"
                     fullWidth
                     margin="normal"
-                    value={contract.category}
-                    onChange={(e) => contractHandleInputChange(index, 'category', e.target.value)}
+                    value={(contract as any).partyType}                    
                     disabled={true}    
                 />
 

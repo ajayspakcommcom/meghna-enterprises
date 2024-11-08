@@ -90,32 +90,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         break;
       case 'UPDATE':
         try {
-          const buyerId = req.body.id;
-          const updatedData = {
-            billDate: req.body.billDate,
-            contractReferenceNo: req.body.contractReferenceNo,
-            contractReferenceNo_Id: req.body.contractReferenceNo_Id,
-            buyer: req.body.buyer,
-            seller: req.body.seller,
-            quantity: req.body.quantity,
-            price: req.body.price,
-            brokeragePrice: req.body.brokeragePrice,
-            brokerageOn: req.body.brokerageOn || 'Quantity',
-            brokerageAmount: req.body.brokerageAmount,
-            sgst: req.body.sgst,
-            cgst: req.body.cgst,
-            igst: req.body.igst,
-            createdDate: req.body.createdDate,
-            updatedDate: req.body.updatedDate || new Date(),
-            deletedDate: req.body.deletedDate || null,
-            isDeleted: req.body.isDeleted || false,
-            billingNo: req.body.billingNo
-          };
+          const {billingId, billingDate, billingNo, sgst, cgst, igst, netAmount,brokerage,grandTotalAmt, contracts} = req.body;          
+          if (!billingId) {
+            return res.status(400).json({ error: 'billingNo is required.' });
+          }
 
-          const updatedBuyer = await Billing.findByIdAndUpdate(buyerId, updatedData, { new: true });
-
-          if (!updatedBuyer) {
-            return res.status(404).json({ error: 'Billing not found' });
+          const updatedContracts = contracts.map((contract:any) => ({
+              ...contract,
+              isBillCreated: true
+            }));
+          
+          try {
+            await Billing.updateOne(
+              { _id: billingId },
+              { $set: {billingDate, billingNo, sgst, cgst, igst, netAmount,brokerage,grandTotalAmt, contracts: [...updatedContracts]} },
+              { runValidators: true }
+            );
+          } catch(error) {
+            res.status(500).json({ error: `Internal Server Error ${error}` });
           }
 
           res.status(200).json({ message: 'Billing updated successfully' });
