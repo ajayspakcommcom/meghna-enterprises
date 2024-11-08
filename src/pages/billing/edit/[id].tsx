@@ -117,20 +117,20 @@ export default function Index({detail}: {detail: Billing}) {
     console.log('objData', objData);
 
     const response = await updateBilling(objData);
-    //console.log('response', response);
+    console.log('response', response);
     
   
-    // try {
-    //   const response = await updateBilling(objData);      
-    //   formik.resetForm();       
-    //   if (response?.message) {
-    //     setIsSuccessDialogOpen(true);   
-    // } else {
-    //   console.log('Error creating billing:', response);
-    // }
-    // } catch (error: any) {
-    //   console.log('Error creating billing:', error);
-    // }
+    try {
+      const response = await updateBilling(objData);      
+      formik.resetForm();       
+      if ((response as any)?.message) {
+        setIsSuccessDialogOpen(true);   
+    } else {
+      console.log('Error updating billing:', response);
+    }
+    } catch (error: any) {
+      console.log('Error updating billing:', error);
+    }
 
   };
 
@@ -600,7 +600,7 @@ export default function Index({detail}: {detail: Billing}) {
                     <div className="gross-amount-wrapper">
                       <div>
                       <FormControl sx={{ m: 1 }} className="billing-tax-select">
-                      <InputLabel id="demo-simple-select-autowidth-label">Sgst</InputLabel>
+                      <InputLabel id="demo-simple-select-autowidth-label">Sgst</InputLabel>                      
                       <Select labelId="demo-simple-select-autowidth-label" id="demo-simple-select-autowidth"  onChange={handleSgstChange} autoWidth label="Sgst" value={sgst.toString()}>                                          
                           {Array.from({ length: 29 }, (_, index) => index).map((value) => (
                           <MenuItem key={value} value={value}>{value === 0 ? '0%' : `${value} ${value === 1 ? '%' : '%'}`}</MenuItem>
@@ -668,7 +668,7 @@ export default function Index({detail}: {detail: Billing}) {
           </div>
         </div>
       </Container>      
-      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Billing Created Successfully" redirect="billing" onClick={successDialogCloseHandler} />
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Billing Updated Successfully" redirect="billing" onClick={successDialogCloseHandler} />
     </>
   );
 }
