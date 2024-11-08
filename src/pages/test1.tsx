@@ -1,23 +1,52 @@
-import React, { useState, useEffect } from "react";
-import { useFormik } from 'formik';
-import * as yup from 'yup';
+import React, { useState, useCallback, useMemo } from "react";
+
+
+interface State {
+    value: number;
+    count: number;
+}
 
 
 export default function Index() {
 
-   
+    const [state, setState] = useState<State>({value: 0,count: 0});
 
+    const resp = useMemo(async () => {
+      return Math.random().toString();
+    }, [state.count]);
+
+    const updateValue = useCallback(async () => {
+        setState(prevState => ({
+          ...prevState,
+          value: prevState.value + 1
+        }));
+      }, []);
+
+      const updateCount = useCallback(async () => {
+        setState(prevState => ({
+          ...prevState,
+          count: prevState.count + 1
+        }));
+      }, []);
+
+      const computedResult = useMemo(async () => {
+        console.log("Computing result..."); // This will only log when value or count changes
+        // Simulate an expensive computation
+        let result = 0;
+        for (let i = 0; i < 1000000; i++) {
+          result += (state.value * state.count) / (i + 1);
+        }
+        return result.toFixed(2);
+      }, [state.value, state.count]);
 
     return (
         <>
-            <div style={{margin: 'auto', width: '1000px', padding: '30px', border: '1px solid #000', marginTop: '20px'}}>
-                <div style={{backgroundColor: '#c0c0c0'}}>
-                    <h1 style={{textAlign: 'center', margin:'auto', fontFamily:'Arial', fontWeight: 'bold', fontSize: '30px'}}>MEGHNA ENTERPRISE</h1>
-                </div>
-                <div style={{width: '800px', margin: 'auto'}}>
-                    <p style={{textAlign: 'center', fontFamily:'Arial', fontSize: '14px', lineHeight: '25px'}}>504, SYNERGY, KACH PADA RD NO. 2, NEAR MALAD IND. ESTATE, RAMCHANDRA LANE EXTENTION, MALAD (W), MUMBAI - 400 064.</p>
-                </div>
-            </div>
+              <p>Name : {resp}</p>
+              <p>Current Value: {state.value}</p>
+              <button onClick={updateValue}>First click</button>
+              <hr />
+              <p>Current Count: {state.count}</p>
+              <button onClick={updateCount}>Second click</button>
         </>
     );
 }

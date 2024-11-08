@@ -32,7 +32,7 @@ type DataListItem = {
     category: string;
     createdDate: string;    
     amount: number;
-    brockerageAmt: number;
+    brokerageQty: number;
 };
 
 
@@ -49,6 +49,7 @@ export default function Index({detail}: {detail: Billing}) {
   const [grandTotalAmt, setGrandTotalAmt] = useState<number>(0);
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
   const [isBillNoExists, setIsBillNoExists] = useState(false);
+  const [partyListLoaded, setPartyListLoaded] = useState(false);
 
   const initialValues: Billing = {
     billingNo: '',  
@@ -61,9 +62,6 @@ export default function Index({detail}: {detail: Billing}) {
 
 
   useEffect(() => {
-
-    console.log('detail', (detail as any).data);
-
     const token = localStorage.getItem("token");
     if (!token) {
       router.push("/");
@@ -78,44 +76,46 @@ export default function Index({detail}: {detail: Billing}) {
 
   const handleSubmit = async (billing: Billing) => {  
 
-    const contractData = contractDataList.map((contract: any) => ({
-      contractId: contract._id,
-      quantity: contract.quantity,
-      price: contract.price,
-      brokerageQty: contract.brockerageAmt ? parseInt(contract.brockerageAmt) : 0,
-      brokerageAmt: contract.amount ? contract.amount : 0,
-      category: contract.category,
-      partyType: contract.category.toLowerCase() === 'seller' ? 'Seller' : 'Buyer',
-      contractNo: contract.contract_no,
-      createdDate: contract.createdDate      
-    }));
+    // const contractData = contractDataList.map((contract: any) => ({
+    //   contractId: contract._id,
+    //   quantity: contract.quantity,
+    //   price: contract.price,
+    //   brokerageQty: contract.brockerageAmt ? parseInt(contract.brockerageAmt) : 0,
+    //   brokerageAmt: contract.amount ? contract.amount : 0,
+    //   category: contract.category,
+    //   partyType: contract.category.toLowerCase() === 'seller' ? 'Seller' : 'Buyer',
+    //   contractNo: contract.contract_no,
+    //   createdDate: contract.createdDate      
+    // }));
 
-    const objData = {
-      billingNo: billing.billingNo,
-      billingDate: billing.billingDate,
-      partyId: billing.partyId,
-      contracts: [...contractData],
-      sgst: sgst,
-      cgst: cgst,
-      igst: igst,
-      netAmount: netAmount,
-      brokerage: brokerageAmt,
-      grandTotalAmt: grandTotalAmt,
-      outstandingAmount: 0,
-      partyType: contractData[0].category.toLowerCase() === 'seller' ? 'Seller' : 'Buyer'
-    }
+    // const objData = {
+    //   billingNo: billing.billingNo,
+    //   billingDate: billing.billingDate,
+    //   partyId: billing.partyId,
+    //   contracts: [...contractData],
+    //   sgst: sgst,
+    //   cgst: cgst,
+    //   igst: igst,
+    //   netAmount: netAmount,
+    //   brokerage: brokerageAmt,
+    //   grandTotalAmt: grandTotalAmt,
+    //   outstandingAmount: 0,
+    //   partyType: contractData[0].category.toLowerCase() === 'seller' ? 'Seller' : 'Buyer'
+    // }
 
-     try {
-      const response = await createBilling(objData);      
-      formik.resetForm();       
-      if (response?.message) {
-        setIsSuccessDialogOpen(true);   
-    } else {
-      console.log('Error creating billing:', response);
-    }
-    } catch (error: any) {
-      console.log('Error creating billing:', error);
-    }
+
+    // try {
+    //   const response = await createBilling(objData);      
+    //   formik.resetForm();       
+    //   if (response?.message) {
+    //     setIsSuccessDialogOpen(true);   
+    // } else {
+    //   console.log('Error creating billing:', response);
+    // }
+    // } catch (error: any) {
+    //   console.log('Error creating billing:', error);
+    // }
+
   };
 
    const successDialogCloseHandler = (val: boolean) => {      
@@ -181,7 +181,9 @@ export default function Index({detail}: {detail: Billing}) {
   };
 
    const handlePartySelectChangeOnLoad = async (id: string) => {
-  
+
+    
+
     const selectedParty = partyList.find((party: Party) => party._id === id);        
     const partyData = selectedParty?.type === 'buyer' ? await getBuyer(id) : await getSeller(id);
     
@@ -216,10 +218,10 @@ export default function Index({detail}: {detail: Billing}) {
               }
     }); 
 
-    setContractDataList(updatedContractData);
-    setNetAmount(0);
-    setGrandTotalAmt(0);
-    setBrokerageAmt(0);
+    //setContractDataList(updatedContractData);
+    //setNetAmount(0);
+    //setGrandTotalAmt(0);
+    //setBrokerageAmt(0);
   };
 
   const fetchLastBilling = async () => {
@@ -237,26 +239,29 @@ export default function Index({detail}: {detail: Billing}) {
   };
   
   const fetchPartyList = async () => {
-    try {
+    try {      
       const response = await getPartyList();      
       setPartyList(response?.data ?? []);
+      setPartyListLoaded(true);
     } catch (error) {
       console.log('Error fetching seller data:', error);
+      setPartyListLoaded(true);
     }
   };
 
   const contractHandleInputChange = (index: number,field: keyof DataListItem, value: string | number): void => {
+
     const updatedDataList = [...contractDataList];
     updatedDataList[index][field] = value as never;
         
-    const price = parseFloat(updatedDataList[index].brockerageAmt) || 0;  
+    const price = parseFloat(updatedDataList[index].brokerageQty) || 0;  
     const quantity = updatedDataList[index].quantity || 0;   
         
-    if (field === 'brockerageAmt' || field === 'quantity') {
-      updatedDataList[index].amount = price * quantity;
+    if (field === 'brokerageQty' || field === 'quantity') {
+      updatedDataList[index].brokerageAmt = price * quantity;
     }
 
-    const totalAmt = updatedDataList.reduce((total, item) => total + (item.amount || 0), 0);
+    const totalAmt = updatedDataList.reduce((total, item) => total + (item.brokerageAmt || 0), 0);
     const grossAmt = totalAmt * igst/100;
 
     setNetAmount(totalAmt);
@@ -268,7 +273,7 @@ export default function Index({detail}: {detail: Billing}) {
     const value = parseInt(event.target.value);
     setSgst(value);
     
-    const totalAmt = contractDataList.reduce((total: number, item: any) => total + (item.amount || 0), 0);
+    const totalAmt = contractDataList.reduce((total: number, item: any) => total + (item.brokerageAmt || 0), 0);
     const grossAmt = totalAmt * (cgst + value + igst) / 100;
     setBrokerageAmt(grossAmt);
 
@@ -278,17 +283,16 @@ export default function Index({detail}: {detail: Billing}) {
     const value = parseInt(event.target.value);
     setCgst(value);
   
-    const totalAmt = contractDataList.reduce((total: number, item: any) => total + (item.amount || 0), 0);
+    const totalAmt = contractDataList.reduce((total: number, item: any) => total + (item.brokerageAmt || 0), 0);
     const grossAmt = totalAmt * (sgst + value + igst) / 100;
     setBrokerageAmt(grossAmt);
   };
-
 
   const handleIgstChange = (event: SelectChangeEvent) => {     
     const value = parseInt(event.target.value);
     setIgst(value);    
     
-    const totalAmt = contractDataList.reduce((total: number, item: any) => total + (item.amount || 0), 0);
+    const totalAmt = contractDataList.reduce((total: number, item: any) => total + (item.brokerageAmt || 0), 0);
     const grossAmt = totalAmt * (cgst + sgst + value) / 100;
     setBrokerageAmt(grossAmt);
   };
@@ -309,19 +313,45 @@ export default function Index({detail}: {detail: Billing}) {
     }
   };
 
-  
   useEffect(() => {     
     setGrandTotalAmt(netAmount + brokerageAmt);
   }, [igst, netAmount, setNetAmount]);
 
 
+  // useEffect(() => {
+  //   fetchPartyList();
+  //   formik.setFieldValue('billingNo', (detail as any).data.billingNo);
+  //   formik.setFieldValue('partyId', (detail as any).data.partyId);
+  //   formik.setFieldValue('billingDate', new Date((detail as any).data.billingDate).toISOString().split('T')[0]);        
+  //   handlePartySelectChangeOnLoad((detail as any).data.partyId);
+  // }, []);
+
   useEffect(() => {
-    fetchPartyList();
-    formik.setFieldValue('billingNo', (detail as any).data.billingNo);
-    formik.setFieldValue('partyId', (detail as any).data.partyId);
-    formik.setFieldValue('billingDate', new Date((detail as any).data.billingDate).toISOString().split('T')[0]);    
-    handlePartySelectChangeOnLoad((detail as any).data.partyId);
+    
+
+    const loadData = async () => {
+      await fetchPartyList(); 
+      formik.setFieldValue('billingNo', (detail as any).data.billingNo);
+      formik.setFieldValue('partyId', (detail as any).data.partyId);
+      formik.setFieldValue('billingDate',new Date((detail as any).data.billingDate).toISOString().split('T')[0]);    
+      
+    };
+  
+    loadData();
   }, []);
+
+  useEffect(() => {
+    if (partyListLoaded) {      
+      handlePartySelectChangeOnLoad((detail as any).data.partyId);
+      setContractDataList((detail as any).data.contracts);       
+      setNetAmount((detail as any).data.netAmount);
+      setGrandTotalAmt((detail as any).data.grandTotalAmt);
+      setBrokerageAmt((detail as any).data.brokerage);
+      setCgst((detail as any).data.cgst);
+      setSgst((detail as any).data.sgst)
+      setIgst((detail as any).data.igst)    
+    }
+  }, [partyListLoaded]);
 
   return (
     <>
@@ -523,8 +553,8 @@ export default function Index({detail}: {detail: Billing}) {
                     label="Brokerage on Qty"
                     fullWidth
                     margin="normal"
-                    value={contract.brockerageAmt}
-                    onChange={(e) => contractHandleInputChange(index, 'brockerageAmt', e.target.value)}                    
+                    value={(contract as any).brokerageQty || 0}
+                    onChange={(e) => contractHandleInputChange(index, 'brokerageQty', e.target.value)}                    
                 />
 
 
@@ -533,7 +563,7 @@ export default function Index({detail}: {detail: Billing}) {
                     type="text"
                     fullWidth
                     margin="normal"
-                    value={contract.amount || 0}                    
+                    value={(contract as any).brokerageAmt || 0}                    
                     disabled={true}   
                       />
                       
@@ -596,7 +626,9 @@ export default function Index({detail}: {detail: Billing}) {
                     <div className="net-amount-wrapper">                      
                     <div>
                       <Typography variant="h6" component="article" className="label">Grand Total Amount : </Typography>
-                        <Typography variant="body1" component="article" className="value">{grandTotalAmt} ({converter.toWords(grandTotalAmt)})</Typography>
+                        <Typography variant="body1" component="article" className="value">{grandTotalAmt} 
+                          ({converter.toWords(grandTotalAmt)})
+                          </Typography>
                     </div>
                   </div>
                   )}
@@ -631,7 +663,9 @@ export default function Index({detail}: {detail: Billing}) {
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
   const { id } = context.query;
   const detail = await getBilling(id as string);
+  console.log(detail)
   return {
     props: { detail }
   };
 };
+
