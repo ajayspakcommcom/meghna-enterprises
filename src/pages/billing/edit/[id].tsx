@@ -315,9 +315,18 @@ export default function Index({detail}: {detail: Billing}) {
   };
 
   const handleContractRemove = (index: number) => {
+    
     const updatedDataList = [...contractDataList];
     updatedDataList.splice(index, 1);
     setContractDataList(updatedDataList);
+
+    const totalAmt = updatedDataList.reduce((total: number, item: any) => total + (item.brokerageAmt || 0), 0);
+    
+    setNetAmount(totalAmt);
+    const totalTax = cgst + sgst + igst;
+    setBrokerageAmt(2)
+    setBrokerageAmt(totalAmt * (totalTax/100));
+
   };
 
   const handleBillNoChange = async (event: React.ChangeEvent<HTMLInputElement>) => {

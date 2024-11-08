@@ -255,6 +255,13 @@ export default function Index() {
     const updatedDataList = [...contractDataList];
     updatedDataList.splice(index, 1);
     setContractDataList(updatedDataList);
+    
+    const totalAmt = updatedDataList.reduce((total: number, item: any) => total + (item.amount || 0), 0);
+    
+    setNetAmount(totalAmt);
+    const totalTax = cgst + sgst + igst;
+    setBrokerageAmt(2)
+    setBrokerageAmt(totalAmt * (totalTax/100));
   };
 
   const handleBillNoChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
