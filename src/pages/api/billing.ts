@@ -249,31 +249,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                           price: "1500",
                           brokerageQty: 5,
                           brokerageAmt: 750
-                      }, 
-                      {
-                        createdDate: "2024-11-09T00:00:00Z",
-                        contractNo: "CONTRACT002",
-                        quantity: 100,
-                        price: "1500",
-                        brokerageQty: 5,
-                        brokerageAmt: 750
-                      }, 
-                      {
-                        createdDate: "2024-11-09T00:00:00Z",
-                        contractNo: "CONTRACT002",
-                        quantity: 100,
-                        price: "1500",
-                        brokerageQty: 5,
-                        brokerageAmt: 750
-                      }, 
-                      {
-                        createdDate: "2024-11-09T00:00:00Z",
-                        contractNo: "CONTRACT002",
-                        quantity: 100,
-                        price: "1500",
-                        brokerageQty: 5,
-                        brokerageAmt: 750
-                      },                      
+                      }                   
                   ],
                   sgst: 9,
                   cgst: 9,
@@ -289,12 +265,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                   state_code: "27"
               }
           };
-            const htmlContent = sentBillingHtmlTemplateOnEmail(data); 
-            console.clear();
-            console.log('Html', htmlContent);
+
+          console.clear();
+          console.log('=====================')
+          console.log('Body Data');
+          console.log(req.body);
+          console.log('Raw Data');
+          console.log(data);
+
+            const htmlContent = sentBillingHtmlTemplateOnEmail(req.body);             
             await sendHtmlContent({recipient:'ajay@spakcomm.com', subject:'Testing', htmlContent:htmlContent})       
             res.status(200).json({ message:'Bill sent...' });
-          } catch (error: any) {
+        } 
+          catch (error: any) {
             res.status(500).json({ error: 'Internal Server Error', errorDetail: error.message });
           }
           break;

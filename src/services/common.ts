@@ -564,8 +564,8 @@ export const sentBillingHtmlTemplateOnEmail = (data?: any) => {
                         `<tr>
                             <td style="padding: 10px 10px; border-right: 1px solid #ddd; border-left: 1px solid #ddd;">${customFormatDate(new Date(contract.createdDate))}</td>
                             <td style="padding: 10px 10px; border-right: 1px solid #ddd;">${contract.contractNo}</td>
-                            <td style="padding: 10px 10px; border-right: 1px solid #ddd;">${data?.partyData?.name}</td>
-                            <td style="padding: 10px 10px; border-right: 1px solid #ddd;">SOYA EXT.</td>
+                            <td style="padding: 10px 10px; border-right: 1px solid #ddd;">${contract.name}</td>
+                            <td style="padding: 10px 10px; border-right: 1px solid #ddd;">${contract.templateName}</td>
                             <td style="padding: 10px 10px; border-right: 1px solid #ddd;">${contract.quantity}</td>
                             <td style="padding: 10px 10px; border-right: 1px solid #ddd;">${contract.price}</td>
                             <td style="padding: 10px 10px; border-right: 1px solid #ddd;">${contract.brokerageQty}</td>

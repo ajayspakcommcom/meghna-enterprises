@@ -186,3 +186,13 @@ export const checkBillNo = async (billingNo: string): Promise<any> => {
         throw err;
     }
 };
+
+
+export const sendBillOnEmail = async (billData: any): Promise<any> => {    
+    try {
+        const response = await apiClient.post<Billing>('/billing', { ...billData, type: 'SEND-BILLING' });
+        return response;
+    } catch (err: unknown) {
+        throw err;
+    }
+};

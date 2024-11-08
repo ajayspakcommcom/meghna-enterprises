@@ -3,7 +3,7 @@ import {Card,CardContent,Button,Typography, TextField, Container, Autocomplete, 
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import {convertHtmlToPdf, getBilling} from "@/services/billing";
+import {convertHtmlToPdf, getBilling, sendBillOnEmail} from "@/services/billing";
 import { customFormatDate, getBillingHtmlTemplate } from "@/services/common";
 import { getBuyer } from "@/services/buyer";
 import { getSeller } from "@/services/seller";
@@ -132,6 +132,55 @@ const Index: React.FC<compProps> = ({ detail }) => {
   const onSuccessConfirmationHandler = (val: boolean) => {    
     setIsSuccessDialogOpen(val);
   };
+
+  const sendEmailHandler = async () => {
+
+    console.log('detailData', detailData);
+    console.log('userData', userData)
+
+    const updatedContracts = detailData.contracts.map((contract) => {
+      return {
+        ...contract,
+        name: userData?.name
+      }
+    });
+
+    const objData = {
+      billingData: {
+        billingNo: detailData.billingNo,
+        billingDate: detailData.billingDate,
+        contracts: [...updatedContracts],
+        sgst: detailData.sgst,
+        cgst: detailData.cgst,
+        igst:  detailData.igst,
+        netAmount: detailData.netAmount,
+        brokerage: detailData.brokerage,
+        grandTotalAmt: detailData.grandTotalAmt
+    },
+    partyData: {
+        name: userData?.name,
+        address: userData?.address,
+        gstin: userData?.gstin,
+        state_code: userData?.state_code
+    }
+    };
+
+    console.log('objData', objData);
+
+    setDetailData((prevDetailData: any) => ({
+      ...prevDetailData
+    }));
+    setIsLoader(true);
+
+    try {
+      const respData = await sendBillOnEmail(objData);            
+      setIsSuccessDialogOpen(true);
+      setIsLoader(false);
+    } catch (error: any) {      
+    }
+
+  };
+  
  
   return (
     <>
@@ -145,7 +194,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
           </div>
           <div className="btn-wrapper detail-btn-wrapper">
             <Button variant="outlined" onClick={() => previewHandler()}>Preview</Button>
-            {/* <Button variant="outlined">Send Mail</Button> */}
+            <Button variant="outlined" onClick={() => sendEmailHandler()}>Send Mail</Button>
             {/* <Button variant="outlined" onClick={downloadBillingPdf}>Download Pdf</Button> */}
             <Button variant="outlined" onClick={() => goToPage("/billing")}>Back</Button>
           </div>
@@ -411,7 +460,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
       </Container>     
       
       <BillingPreviewDialogue isOpen={isPreviewDialogOpen} heading="Contract Preview" contentData={previewContent} onClick={previewClickHandler} />
-      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Contract sent successfully" onClick={onSuccessConfirmationHandler} redirect="contract" />
+      <SuccessConfirmationDialogue isOpen={isSuccessDialogOpen} heading="Bill sent successfully" onClick={onSuccessConfirmationHandler} redirect="billing" />
       {isLoader && <CircularProgressLoader />}
 
     </>
