@@ -3,6 +3,8 @@ import {Container,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Pa
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import {getBillReport} from "@/services/billing";
+import { getCurrentFinancialYear } from "@/services/common";
+import Image from "next/image";
 
 const Header = dynamic(() => import("../../../components/header/index"));
 
@@ -87,6 +89,8 @@ export default function Index() {
     router.push(`${url}`);
   };
 
+
+
   return (
     <>
       <Header />
@@ -97,12 +101,24 @@ export default function Index() {
             <Typography variant="h5" component="article">Billing Report</Typography>
           </div>
           <div className="btn-wrapper three-btn">            
-            <Button variant="outlined" onClick={() => goToPage('/billing')}>Back</Button>
+            <Button variant="outlined" onClick={() => goToPage('/billing')}>Back</Button>            
           </div>
         </div>
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="billing table">
+        <TableHead>
+            <TableRow>
+              <TableCell align="left" colSpan={11}>
+                <div className="billing-reporting-header">
+                  <Image src={require(`../../../public/images/seedsnfeeds.png`)} alt="seedsnfeeds" className="responsive-img center" />
+                </div>
+                <div className="billing-reporting-header-year">
+                     <b>Accounting Year: {getCurrentFinancialYear(false).toString()}</b>
+                </div>
+              </TableCell>
+            </TableRow>
+          </TableHead>
           <TableHead>
             <TableRow>
               <TableCell align="left"><b>Date</b></TableCell>

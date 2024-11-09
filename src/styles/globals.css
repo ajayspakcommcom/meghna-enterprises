@@ -894,3 +894,18 @@ pre {
 .billing-preview-pop>button {
     margin-right: 15px;
 }
+
+.billing-reporting-header {
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    padding: 15px 0;
+}
+
+.billing-reporting-header-year {
+    background-color: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    padding: 15px 0;
+    font-size: 18px;
+}
