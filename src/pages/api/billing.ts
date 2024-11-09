@@ -277,9 +277,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                       gstin: partData.gstin,
                       stateCode: partData.state_code,
                       netAmount: bill.netAmount,
-                      sgst: bill.sgst,
-                      cgst: bill.cgst,
-                      igst: bill.igst,
+                      sgst: bill.netAmount * (bill.sgst/100),
+                      cgst: bill.netAmount * (bill.cgst/100),
+                      igst: bill.netAmount * (bill.igst/100),
                       round: 0.00,
                       grandTotalAmt: bill.grandTotalAmt,
                   };

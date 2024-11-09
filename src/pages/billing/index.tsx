@@ -3,7 +3,7 @@ import { Button, Typography, Container } from '@mui/material';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { deleteBilling, getAllBilling } from "@/services/billing";
+import { deleteBilling, getAllBilling, getBillReport } from "@/services/billing";
 import { customFormatDate } from "@/services/common";
 
 
@@ -125,7 +125,6 @@ export default function Index() {
     router.push(`${url}`);
   };
 
-  
 
   return (
     <>
@@ -135,8 +134,9 @@ export default function Index() {
           <div>
             <Typography variant="h5" component="article">Billing List</Typography>
           </div>
-          <div className="btn-wrapper">
+          <div className="btn-wrapper three-btn">
             <Button variant="contained" color="success" onClick={() => goToPage('/billing/create')}>Create</Button>
+            <Button variant="contained" color="success" onClick={() => goToPage('/billing/report')}>Report</Button> 
             <Button variant="outlined" onClick={() => goToPage('/dashboard')}>Back</Button>
           </div>
         </div>
