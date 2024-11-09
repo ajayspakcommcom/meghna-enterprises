@@ -196,3 +196,4 @@ export const sendBillOnEmail = async (billData: any): Promise<any> => {
         throw err;
     }
 };
+

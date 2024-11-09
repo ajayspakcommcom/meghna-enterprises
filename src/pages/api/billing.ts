@@ -11,6 +11,8 @@ import { Seller } from './models/Seller';
 import mongoose from 'mongoose';
 import {sendHtmlContent} from './libs/sendHtmlService'
 import { sentBillingHtmlTemplateOnEmail } from '@/services/common';
+import { getSeller } from '@/services/seller';
+import { getBuyer } from '@/services/buyer';
 
 
 interface ApiResponse {
@@ -245,6 +247,57 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           res.status(500).json({ error: 'Internal Server Error', errorDetail: error.message });
         }
           break;
+
+        case 'SEND-BILLING':
+          try {          
+            const htmlContent = sentBillingHtmlTemplateOnEmail(req.body);             
+            await sendHtmlContent({recipient:'ajay@spakcomm.com', subject:'Testing', htmlContent:htmlContent})       
+            res.status(200).json({ message:'Bill sent...' });
+        } 
+        catch (error: any) {
+          res.status(500).json({ error: 'Internal Server Error', errorDetail: error.message });
+        }
+          break;
+
+      case 'BILL-REPORT':
+        try {
+          // Retrieve all bills, sorted by `_id`
+          const billList = await Billing.find({ isDeleted: false }).sort({ _id: -1 }).exec();
+      
+          // Fetch party data for each bill in parallel
+          const updatedBillingList = await Promise.all(billList.map(async (bill) => {
+              try {
+                  const response = bill.partyType.toLowerCase() === 'seller' ? await getSeller(bill.partyId) : await getBuyer(bill.partyId);              
+                  const partData = (response as any).data;
+    
+                  return {
+                      billingDate: bill.billingDate,
+                      billingNo: bill.billingNo,
+                      partyName: partData.name,
+                      gstin: partData.gstin,
+                      stateCode: partData.state_code,
+                      netAmount: bill.netAmount,
+                      sgst: bill.sgst,
+                      cgst: bill.cgst,
+                      igst: bill.igst,
+                      round: 0.00,
+                      grandTotalAmt: bill.grandTotalAmt,
+                  };
+                  
+              } catch (error) {
+                  console.error('Error fetching party data:', error);
+                  return null; // Return null or a fallback value in case of an error
+              }
+          }));
+      
+          // Filter out any null values (in case of fetch errors) and send the response
+          const filteredBillingList = updatedBillingList.filter((item) => item !== null);          
+          res.status(200).json({ total: filteredBillingList.length, data: filteredBillingList });
+      } catch (error: any) {
+          res.status(500).json({ error: 'Internal Server Error', errorDetail: error.message });
+      }
+        break;
+        
     }
 
   } else {
