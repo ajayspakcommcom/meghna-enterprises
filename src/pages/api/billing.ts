@@ -236,50 +236,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         break;
 
         case 'SEND-BILLING':
-          try {
-            const data = {
-              billingData: {
-                  billingNo: "BILL123",
-                  billingDate: "2024-11-08T00:00:00Z",
-                  contracts: [
-                      {
-                          createdDate: "2024-11-08T00:00:00Z",
-                          contractNo: "CONTRACT001",
-                          quantity: 100,
-                          price: "1500",
-                          brokerageQty: 5,
-                          brokerageAmt: 750
-                      }                   
-                  ],
-                  sgst: 9,
-                  cgst: 9,
-                  igst: 18,
-                  netAmount: 15000,
-                  brokerage: 750,
-                  grandTotalAmt: 15750
-              },
-              partyData: {
-                  name: "Buyer Company",
-                  address: "123 Street, City, State, Zip",
-                  gstin: "27AABCU9603R1ZX",
-                  state_code: "27"
-              }
-          };
-
-          console.clear();
-          console.log('=====================')
-          console.log('Body Data');
-          console.log(req.body);
-          console.log('Raw Data');
-          console.log(data);
-
+          try {          
             const htmlContent = sentBillingHtmlTemplateOnEmail(req.body);             
             await sendHtmlContent({recipient:'ajay@spakcomm.com', subject:'Testing', htmlContent:htmlContent})       
             res.status(200).json({ message:'Bill sent...' });
         } 
-          catch (error: any) {
-            res.status(500).json({ error: 'Internal Server Error', errorDetail: error.message });
-          }
+        catch (error: any) {
+          res.status(500).json({ error: 'Internal Server Error', errorDetail: error.message });
+        }
           break;
     }
 
