@@ -9,10 +9,11 @@ import { Contract } from './models/Contract';
 import { Buyer } from './models/Buyer';
 import { Seller } from './models/Seller';
 import mongoose from 'mongoose';
-import {sendHtmlContent} from './libs/sendHtmlService'
+import { sendHtmlContent } from './libs/sendHtmlService'
 import { sentBillingHtmlTemplateOnEmail } from '@/services/common';
 import { getSeller } from '@/services/seller';
 import { getBuyer } from '@/services/buyer';
+import puppeteer from 'puppeteer';
 
 
 interface ApiResponse {
@@ -95,23 +96,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         break;
       case 'UPDATE':
         try {
-          const {billingId, billingDate, billingNo, sgst, cgst, igst, netAmount,brokerage,grandTotalAmt, contracts} = req.body;          
+          const { billingId, billingDate, billingNo, sgst, cgst, igst, netAmount, brokerage, grandTotalAmt, contracts } = req.body;
           if (!billingId) {
             return res.status(400).json({ error: 'billingNo is required.' });
           }
 
-          const updatedContracts = contracts.map((contract:any) => ({
-              ...contract,
-              isBillCreated: true
-            }));
-          
+          const updatedContracts = contracts.map((contract: any) => ({
+            ...contract,
+            isBillCreated: true
+          }));
+
           try {
             await Billing.updateOne(
               { _id: billingId },
-              { $set: {billingDate, billingNo, sgst, cgst, igst, netAmount,brokerage,grandTotalAmt, contracts: [...updatedContracts]} },
+              { $set: { billingDate, billingNo, sgst, cgst, igst, netAmount, brokerage, grandTotalAmt, contracts: [...updatedContracts] } },
               { runValidators: true }
             );
-          } catch(error) {
+          } catch (error) {
             res.status(500).json({ error: `Internal Server Error ${error}` });
           }
 
@@ -237,22 +238,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }
         break;
 
-        // case 'SEND-BILLING':
-        //   try {          
-        //     const htmlContent = sentBillingHtmlTemplateOnEmail(req.body);             
-        //     await sendHtmlContent({recipient:'ajay@spakcomm.com', subject:'Testing', htmlContent:htmlContent})       
-        //     res.status(200).json({ message:'Bill sent...' });
-        // } 
-        // catch (error: any) {
-        //   res.status(500).json({ error: 'Internal Server Error', errorDetail: error.message });
-        // }
-        //   break;
+      // case 'SEND-BILLING':
+      //   try {          
+      //     const htmlContent = sentBillingHtmlTemplateOnEmail(req.body);             
+      //     await sendHtmlContent({recipient:'ajay@spakcomm.com', subject:'Testing', htmlContent:htmlContent})       
+      //     res.status(200).json({ message:'Bill sent...' });
+      // } 
+      // catch (error: any) {
+      //   res.status(500).json({ error: 'Internal Server Error', errorDetail: error.message });
+      // }
+      //   break;
 
-        case 'SEND-BILLING':
-          try {          
-            const billNo =  req.body.billingData.billingNo; 
-            const htmlContent = sentBillingHtmlTemplateOnEmail(req.body);            
-            const finalHtmlContent = `
+      case 'SEND-BILLING':
+        try {
+          const billNo = req.body.billingData.billingNo;
+          const htmlContent = sentBillingHtmlTemplateOnEmail(req.body);
+          const finalHtmlContent = `
                 <div id=":28o" class="a3s aiL">
                     <div>
                         <div class="adM"></div>
@@ -273,67 +274,275 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                       ${htmlContent}
                 </div>
             `;
-            console.log('Body', req.body);
-            const emailList =  req.body.partyData.email.split(',').map((email: any) => email.trim().toLowerCase()); //['ajay@spakcomm.com', 'shiv@spakcomm.com', 'sunil@spakcomm.com'];
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          console.log('Body', req.body);
+          const emailList = req.body.partyData.email.split(',').map((email: any) => email.trim().toLowerCase()); //['ajay@spakcomm.com', 'shiv@spakcomm.com', 'sunil@spakcomm.com'];
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-            if (Array.isArray(emailList) && emailList.length > 0) {
-              for (const email of emailList) {
-                if (email && emailRegex.test(email)) {                  
-                  await sendHtmlContent({recipient:`${email}`, subject:`Billing No (${billNo})`, htmlContent:finalHtmlContent});
-                } else {
-                  console.error("Email is invalid:", email);
-                }
+          if (Array.isArray(emailList) && emailList.length > 0) {
+            for (const email of emailList) {
+              if (email && emailRegex.test(email)) {
+                await sendHtmlContent({ recipient: `${email}`, subject: `Billing No (${billNo})`, htmlContent: finalHtmlContent });
+              } else {
+                console.error("Email is invalid:", email);
               }
             }
+          }
 
-            //await sendHtmlContent({recipient:'ajay@spakcomm.com', subject:`Billing No (${billNo})`, htmlContent:finalHtmlContent});       
-            res.status(200).json({ message:'Bill sent...' });
-        } 
+          //await sendHtmlContent({recipient:'ajay@spakcomm.com', subject:`Billing No (${billNo})`, htmlContent:finalHtmlContent});       
+          res.status(200).json({ message: 'Bill sent...' });
+        }
         catch (error: any) {
           res.status(500).json({ error: 'Internal Server Error', errorDetail: error.message });
         }
-          break;
+        break;
 
       case 'BILL-REPORT':
         try {
           // Retrieve all bills, sorted by `_id`
           const billList = await Billing.find({ isDeleted: false }).sort({ _id: -1 }).exec();
-      
+
           // Fetch party data for each bill in parallel
           const updatedBillingList = await Promise.all(billList.map(async (bill) => {
-              try {
-                  const response = bill.partyType.toLowerCase() === 'seller' ? await getSeller(bill.partyId) : await getBuyer(bill.partyId);              
-                  const partData = (response as any).data;
-    
-                  return {
-                      billingDate: bill.billingDate,
-                      billingNo: bill.billingNo,
-                      partyName: partData.name,
-                      gstin: partData.gstin,
-                      stateCode: partData.state_code,
-                      netAmount: bill.netAmount,
-                      sgst: bill.netAmount * (bill.sgst/100),
-                      cgst: bill.netAmount * (bill.cgst/100),
-                      igst: bill.netAmount * (bill.igst/100),
-                      round: 0.00,
-                      grandTotalAmt: bill.grandTotalAmt,
-                  };
-                  
-              } catch (error) {
-                  console.error('Error fetching party data:', error);
-                  return null; // Return null or a fallback value in case of an error
-              }
+            try {
+              const response = bill.partyType.toLowerCase() === 'seller' ? await getSeller(bill.partyId) : await getBuyer(bill.partyId);
+              const partData = (response as any).data;
+
+              return {
+                billingDate: bill.billingDate,
+                billingNo: bill.billingNo,
+                partyName: partData.name,
+                gstin: partData.gstin,
+                stateCode: partData.state_code,
+                netAmount: bill.netAmount,
+                sgst: bill.netAmount * (bill.sgst / 100),
+                cgst: bill.netAmount * (bill.cgst / 100),
+                igst: bill.netAmount * (bill.igst / 100),
+                round: 0.00,
+                grandTotalAmt: bill.grandTotalAmt,
+              };
+
+            } catch (error) {
+              console.error('Error fetching party data:', error);
+              return null; // Return null or a fallback value in case of an error
+            }
           }));
-      
+
           // Filter out any null values (in case of fetch errors) and send the response
-          const filteredBillingList = updatedBillingList.filter((item) => item !== null);          
+          const filteredBillingList = updatedBillingList.filter((item) => item !== null);
           res.status(200).json({ total: filteredBillingList.length, data: filteredBillingList });
-      } catch (error: any) {
+        } catch (error: any) {
           res.status(500).json({ error: 'Internal Server Error', errorDetail: error.message });
-      }
+        }
         break;
-        
+
+      case 'DOWNLOAD-BILL-REPORT':
+        try {
+
+          const {data} = req.body;
+
+          console.clear();
+          console.log('data...', data);
+
+          (async function(){
+            const browser = await puppeteer.launch();
+            const page = await browser.newPage();
+          
+            // Sample data: Generate enough transactions to span multiple pages
+            // const transactions:any = [];
+            
+            // for (let i = 1; i <= data.length; i++) {
+            //   transactions.push({
+            //     date: `12-11-2024`,
+            //     billNo: `0001-2024-2025`,
+            //     partyName: `Manish`,
+            //     gstin: `123456`,
+            //     stateCode: `Maharashtra`,
+            //     amount: 5000,
+            //     sgst: 9,
+            //     cgst: 9,
+            //     igst: 18,
+            //     round: 0.00,
+            //     total: 5036
+            //   });
+            // }
+
+            const transactions = data.map((item:any, index:number) => ({
+              date: new Date(item.billingDate).toLocaleDateString() || '',
+              billNo: item.billingNo,
+              partyName: item.partyName || ``, // or use a default if not provided
+              gstin: item.gstin || ``,
+              stateCode: item.stateCode || ``,
+              amount: item.netAmount || 0,
+              sgst: item.sgst || 9,
+              cgst: item.cgst || 9,
+              igst: item.igst || 18,
+              round: item.round || 0.00,
+              total: item.grandTotalAmt || 0,
+          }));
+
+
+            // Calculate totals
+            const totalAmount = transactions.reduce((sum:any, tx:any) => sum + (parseFloat(tx.amount) || 0), 0).toFixed(2);
+            const totalCgst = transactions.reduce((sum:any, tx:any) => sum + (parseFloat(tx.cgst) || 0), 0).toFixed(2);
+            const totalSgst = transactions.reduce((sum:any, tx:any) => sum + (parseFloat(tx.sgst) || 0), 0).toFixed(2);
+            const totalIgst = transactions.reduce((sum:any, tx:any) => sum + (parseFloat(tx.igst) || 0), 0).toFixed(2);
+            const totalRound = transactions.reduce((sum:any, tx:any) => sum + (parseFloat(tx.round) || 0), 0).toFixed(2);
+            const totalGrandTotal = transactions.reduce((sum:any, tx:any) => sum + (parseFloat(tx.total) || 0), 0).toFixed(2);
+            const finalBalance = transactions[transactions.length - 1].balance;
+          
+            // Generate HTML table rows
+            let tableRows = `
+              <tr>
+                <th>Date</th>
+                <th>Bill No</th>
+                <th>Party Name</th>
+                <th>GSTIN</th>
+                <th>State Code</th>
+                <th>Amount</th>
+                <th>SGST@9%</th>
+                <th>CGST@9%</th>
+                <th>IGST18%</th>
+                <th>Round</th>
+                <th>Total</th>
+              </tr>
+            `;
+          
+            transactions.forEach((tx:any) => {
+              tableRows += `
+                <tr>
+                  <td>${tx.date}</td>
+                  <td>${tx.billNo}</td>
+                  <td>${tx.partyName}</td>
+                  <td>${tx.gstin}</td>
+                  <td>${tx.stateCode}</td>
+                  <td>${tx.amount}</td>
+                  <td>${tx.sgst}</td>
+                  <td>${tx.cgst}</td>
+                  <td>${tx.igst}</td>
+                  <td>${tx.round}</td>
+                  <td>${tx.total}</td>
+                </tr>
+              `;
+            });
+          
+
+            // Add totals row
+            tableRows += `
+              <tr class="totals">
+                <td colspan="5" style="text-align:right; padding-right:20px;"><strong>Totals</strong></td>
+                <td><strong>${totalAmount}</strong></td>
+                <td><strong>${totalCgst}</strong></td>
+                <td><strong>${totalSgst}</strong></td>
+                <td><strong>${totalIgst}</strong></td>
+                <td><strong>${totalRound}</strong></td>
+                <td><strong>${totalGrandTotal}</strong></td>
+              </tr>
+            `;
+          
+            // Define HTML content with CSS for multi-page
+            const content = `
+              <html>
+                <head>
+                  <style>
+                    @page {
+                      margin: 15px 10px;
+                    }
+                    body {
+                      font-family: Arial, sans-serif;
+                      font-size: 12px;
+                    }                    
+                    .heading {
+                      color:red;
+                    }
+
+                    .billing-reporting-header {
+                        background-color: #000;
+                        display: flex;
+                        justify-content: center;
+                        padding: 15px 0;
+                    }
+
+                    .billing-reporting-header-year {
+                      background-color: #f2f2f2;
+                      display: flex;
+                      justify-content: center;
+                      padding: 15px 0;
+                      font-size: 14px;
+                      margin-bottom:15px;
+                  }
+
+                    table {
+                      width: 100%;
+                      border-collapse: collapse;
+                      page-break-inside: auto;
+                    }
+                    th, td {
+                        text-align:left;
+                        font-size:10px;
+                      }
+                      td {
+                      padding: 5px 0;
+                      }
+                    th {
+                     padding-bottom:5px;
+                    }
+
+                    .totals td {
+                     padding-top:15px;
+                    }
+
+                  </style>
+                </head>
+                <body>
+                
+                <div class="billing-reporting-header">
+                  <img src="http://13.235.48.111/images/billing-logo.jpg" alt="Signature" style="width: 100%; height: auto; display: block; margin: 0 0 0 0;" />
+                </div>
+
+                <div class="billing-reporting-header-year"><b>Accounting Year: 01/04/2024 - 03/31/2025</b></div>
+                
+                  <table>
+                    <thead>
+                      ${tableRows.split('</tr>')[0]}</tr>
+                    </thead>
+                    <tbody>
+                      ${tableRows.split('</tr>').slice(1, -1).join('</tr>')}
+                    </tbody>
+                    <!--<tfoot>
+                      ${tableRows.split('</tr>').slice(-1)[0]}
+                    </tfoot>-->
+                  </table>
+                </body>
+              </html>
+            `;
+          
+            await page.setContent(content, { waitUntil: 'networkidle0' });
+          
+            await page.pdf({
+              path: 'billing_statement.pdf',
+              format: 'A4',
+              printBackground: true,
+              landscape: true,
+              margin: {
+                top: '50px',
+                bottom: '50px',
+                left: '50px',
+                right: '50px'
+              },
+              displayHeaderFooter: true,
+              preferCSSPageSize: true,
+            });
+          
+            await browser.close();
+            console.log("PDF created as bank_statement.pdf");
+          })();
+
+          res.status(200).json({ message: 'DOWNLOAD-BILL-REPORT' });
+        } catch (error: any) {
+          res.status(500).json({ error: 'Internal Server Error', errorDetail: error.message });
+        }
+        break;
+
     }
 
   } else {

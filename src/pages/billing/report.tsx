@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {Container,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper, Button, Typography,} from "@mui/material";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
-import {getBillReport} from "@/services/billing";
+import {downBillReport, getBillReport} from "@/services/billing";
 import { getCurrentFinancialYear } from "@/services/common";
 import Image from "next/image";
 
@@ -42,8 +42,6 @@ export default function Index() {
     try {
       const data = (await getBillReport()).data.data;
       
-      console.log('data', data);
-
       const totalCgst = data.reduce((accumulator:number, currentValue:BillingData) => {
         return accumulator + currentValue.cgst;
       }, 0);
@@ -89,7 +87,9 @@ export default function Index() {
     router.push(`${url}`);
   };
 
-
+  const donwloadPdfHandler = async () => {      
+      const resp = await downBillReport(rows);      
+  };
 
   return (
     <>
@@ -100,7 +100,8 @@ export default function Index() {
           <div>
             <Typography variant="h5" component="article">Billing Report</Typography>
           </div>
-          <div className="btn-wrapper three-btn">            
+          <div className="btn-wrapper report">            
+            <Button variant="outlined" onClick={() => donwloadPdfHandler()}>PDF Download</Button>            
             <Button variant="outlined" onClick={() => goToPage('/billing')}>Back</Button>            
           </div>
         </div>

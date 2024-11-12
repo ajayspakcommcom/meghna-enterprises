@@ -207,3 +207,12 @@ export const getBillReport = async (): Promise<any> => {
     }
 };
 
+export const downBillReport = async (billData:any): Promise<any> => {    
+    try {
+        const response = await apiClient.post<Billing>('/billing', {data: billData, type: 'DOWNLOAD-BILL-REPORT' });
+        return response;
+    } catch (err: unknown) {
+        throw err;
+    }
+};
+

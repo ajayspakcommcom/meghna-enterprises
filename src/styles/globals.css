@@ -184,6 +184,10 @@ header .css-2uchni {
     border: 1px solid #000;
 }
 
+.header-content .btn-wrapper.report button {
+    width: 160px;
+}
+
 
 
 .header-content .btn-wrapper button:first-child, .header-content .btn-wrapper.three-btn button:nth-child(2) {

@@ -32,7 +32,7 @@
     "nodemailer": "^6.9.13",
     "number-to-words": "^1.2.4",
     "pdfkit": "^0.15.0",
-    "puppeteer": "^23.6.1",
+    "puppeteer": "^23.7.1",
     "react": "^18",
     "react-dom": "^18",
     "react-redux": "^9.1.0",
