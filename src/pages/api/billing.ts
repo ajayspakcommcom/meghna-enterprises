@@ -251,22 +251,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         case 'SEND-BILLING':
           try {          
             const billNo =  req.body.billingData.billingNo; 
-            const htmlContent = sentBillingHtmlTemplateOnEmail(req.body);
-            // const address = `<div id=":28o" class="a3s aiL "><div><div class="adM">
-            //                                 </div><b>Dear Dear Sir / Madam,</b>
-            //                                 <div style="margin-bottom:30px"></div>
-
-            //                                 <span>Best regards,</span>
-            //                                 <div></div>
-            //                                 <span>Team Seeds &amp; Feeds India.</span>
-            //                                 <p style="margin-top:1px">
-            //                                    B-3 GIRIRAJ CO OP H S LTD, 6 MAMLATDAR WADI RAOD NO. 6, MALAD (WEST), MUMBAI - 400 064.
-            //                                     <br>
-            //                                    PHONE NO: 022 2880 2452 | MOBILE NO: +91 99200 10200 / 99200 90200
-            //                                 </p><div class="yj6qo"></div><div class="adL">
-            //                             </div></div><div class="adL">
-            //                         </div></div>`;
-
+            const htmlContent = sentBillingHtmlTemplateOnEmail(req.body);            
             const finalHtmlContent = `
                 <div id=":28o" class="a3s aiL">
                     <div>
@@ -288,8 +273,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                       ${htmlContent}
                 </div>
             `;
-            
-            await sendHtmlContent({recipient:'ajay@spakcomm.com', subject:`Billing No (${billNo})`, htmlContent:finalHtmlContent})       
+            console.log('Body', req.body);
+            const emailList =  req.body.partyData.email.split(',').map((email: any) => email.trim().toLowerCase()); //['ajay@spakcomm.com', 'shiv@spakcomm.com', 'sunil@spakcomm.com'];
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (Array.isArray(emailList) && emailList.length > 0) {
+              for (const email of emailList) {
+                if (email && emailRegex.test(email)) {                  
+                  await sendHtmlContent({recipient:`${email}`, subject:`Billing No (${billNo})`, htmlContent:finalHtmlContent});
+                } else {
+                  console.error("Email is invalid:", email);
+                }
+              }
+            }
+
+
+            //await sendHtmlContent({recipient:'ajay@spakcomm.com', subject:`Billing No (${billNo})`, htmlContent:finalHtmlContent});       
             res.status(200).json({ message:'Bill sent...' });
         } 
         catch (error: any) {

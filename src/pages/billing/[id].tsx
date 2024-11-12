@@ -136,7 +136,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
   const sendEmailHandler = async () => {
 
     console.log('detailData', detailData);
-    console.log('userData', userData)
+    console.log('userData', userData);
 
     const updatedContracts = detailData.contracts.map((contract) => {
       return {
@@ -152,20 +152,19 @@ const Index: React.FC<compProps> = ({ detail }) => {
         contracts: [...updatedContracts],
         sgst: detailData.sgst,
         cgst: detailData.cgst,
-        igst:  detailData.igst,
+        igst: detailData.igst,
         netAmount: detailData.netAmount,
         brokerage: detailData.brokerage,
-        grandTotalAmt: detailData.grandTotalAmt
-    },
-    partyData: {
+        grandTotalAmt: detailData.grandTotalAmt,
+      },
+      partyData: {
         name: userData?.name,
         address: userData?.address,
         gstin: userData?.gstin,
-        state_code: userData?.state_code
-    }
+        state_code: userData?.state_code,
+        email: userData?.email
+      },
     };
-
-    console.log('objData', objData);
 
     setDetailData((prevDetailData: any) => ({
       ...prevDetailData
@@ -173,10 +172,11 @@ const Index: React.FC<compProps> = ({ detail }) => {
     setIsLoader(true);
 
     try {
-      const respData = await sendBillOnEmail(objData);            
+      const respData = await sendBillOnEmail(objData);
       setIsSuccessDialogOpen(true);
       setIsLoader(false);
-    } catch (error: any) {      
+    } catch (error: any) {
+      console.log(`Error : ${error}`);
     }
 
   };
