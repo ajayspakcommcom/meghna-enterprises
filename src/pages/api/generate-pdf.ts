@@ -183,7 +183,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                     await sendEmail({ recipient: 'ajay@spakcomm.com', subject: `Contract Copy (${req.body.contract_no})`, text: htmlContent });
 
-
                     // const sellerEmails = req.body.seller_id.email.split(',').map((email: any) => email.trim());
                     // const buyerEmails = req.body.buyer_id.email.split(',').map((email: any) => email.trim());
                     // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
