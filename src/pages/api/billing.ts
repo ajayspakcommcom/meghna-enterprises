@@ -340,36 +340,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
           const {data} = req.body;
 
-          console.clear();
-          console.log('data...', data);
-
           (async function(){
             const browser = await puppeteer.launch();
             const page = await browser.newPage();
           
-            // Sample data: Generate enough transactions to span multiple pages
-            // const transactions:any = [];
-            
-            // for (let i = 1; i <= data.length; i++) {
-            //   transactions.push({
-            //     date: `12-11-2024`,
-            //     billNo: `0001-2024-2025`,
-            //     partyName: `Manish`,
-            //     gstin: `123456`,
-            //     stateCode: `Maharashtra`,
-            //     amount: 5000,
-            //     sgst: 9,
-            //     cgst: 9,
-            //     igst: 18,
-            //     round: 0.00,
-            //     total: 5036
-            //   });
-            // }
-
             const transactions = data.map((item:any, index:number) => ({
               date: new Date(item.billingDate).toLocaleDateString() || '',
               billNo: item.billingNo,
-              partyName: item.partyName || ``, // or use a default if not provided
+              partyName: item.partyName || ``, 
               gstin: item.gstin || ``,
               stateCode: item.stateCode || ``,
               amount: item.netAmount || 0,
@@ -380,7 +358,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
               total: item.grandTotalAmt || 0,
           }));
 
-
             // Calculate totals
             const totalAmount = transactions.reduce((sum:any, tx:any) => sum + (parseFloat(tx.amount) || 0), 0).toFixed(2);
             const totalCgst = transactions.reduce((sum:any, tx:any) => sum + (parseFloat(tx.cgst) || 0), 0).toFixed(2);
@@ -388,7 +365,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             const totalIgst = transactions.reduce((sum:any, tx:any) => sum + (parseFloat(tx.igst) || 0), 0).toFixed(2);
             const totalRound = transactions.reduce((sum:any, tx:any) => sum + (parseFloat(tx.round) || 0), 0).toFixed(2);
             const totalGrandTotal = transactions.reduce((sum:any, tx:any) => sum + (parseFloat(tx.total) || 0), 0).toFixed(2);
-            const finalBalance = transactions[transactions.length - 1].balance;
+            //const finalBalance = transactions[transactions.length - 1].balance;
           
             // Generate HTML table rows
             let tableRows = `
@@ -455,8 +432,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                       color:red;
                     }
 
-                    .billing-reporting-header {
-                        background-color: #000;
+                    .billing-reporting-header {                        
                         display: flex;
                         justify-content: center;
                         padding: 15px 0;
@@ -471,24 +447,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                       margin-bottom:15px;
                   }
 
-                    table {
+                    .table {
                       width: 100%;
                       border-collapse: collapse;
                       page-break-inside: auto;
                     }
-                    th, td {
+                    .table th, .table td {
                         text-align:left;
                         font-size:10px;
                       }
-                      td {
+                      .table td {
                       padding: 5px 0;
                       }
-                    th {
+                    .table th {
                      padding-bottom:5px;
                     }
 
+                    
+
                     .totals td {
                      padding-top:15px;
+                    }
+
+
+
+                    .totals {
+                     border-top:1px solid #000;
                     }
 
                   </style>
@@ -501,16 +485,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
                 <div class="billing-reporting-header-year"><b>Accounting Year: 01/04/2024 - 03/31/2025</b></div>
                 
-                  <table>
+                  <table class="table">
                     <thead>
                       ${tableRows.split('</tr>')[0]}</tr>
                     </thead>
                     <tbody>
                       ${tableRows.split('</tr>').slice(1, -1).join('</tr>')}
                     </tbody>
-                    <!--<tfoot>
+                    <tfoot>
                       ${tableRows.split('</tr>').slice(-1)[0]}
-                    </tfoot>-->
+                    </tfoot>
                   </table>
                 </body>
               </html>
@@ -533,8 +517,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
               preferCSSPageSize: true,
             });
           
-            await browser.close();
-            console.log("PDF created as bank_statement.pdf");
+            await browser.close();            
           })();
 
           res.status(200).json({ message: 'DOWNLOAD-BILL-REPORT' });
