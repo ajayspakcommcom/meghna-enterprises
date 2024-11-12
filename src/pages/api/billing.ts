@@ -237,21 +237,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }
         break;
 
-        case 'SEND-BILLING':
-          try {          
-            const htmlContent = sentBillingHtmlTemplateOnEmail(req.body);             
-            await sendHtmlContent({recipient:'ajay@spakcomm.com', subject:'Testing', htmlContent:htmlContent})       
-            res.status(200).json({ message:'Bill sent...' });
-        } 
-        catch (error: any) {
-          res.status(500).json({ error: 'Internal Server Error', errorDetail: error.message });
-        }
-          break;
+        // case 'SEND-BILLING':
+        //   try {          
+        //     const htmlContent = sentBillingHtmlTemplateOnEmail(req.body);             
+        //     await sendHtmlContent({recipient:'ajay@spakcomm.com', subject:'Testing', htmlContent:htmlContent})       
+        //     res.status(200).json({ message:'Bill sent...' });
+        // } 
+        // catch (error: any) {
+        //   res.status(500).json({ error: 'Internal Server Error', errorDetail: error.message });
+        // }
+        //   break;
 
         case 'SEND-BILLING':
           try {          
-            const htmlContent = sentBillingHtmlTemplateOnEmail(req.body);             
-            await sendHtmlContent({recipient:'ajay@spakcomm.com', subject:'Testing', htmlContent:htmlContent})       
+            const htmlContent = sentBillingHtmlTemplateOnEmail(req.body);
+            const billNo =  req.body.billingData.billingNo;            
+            await sendHtmlContent({recipient:'ajay@spakcomm.com', subject:`Bill No : ${billNo}`, htmlContent:htmlContent})       
             res.status(200).json({ message:'Bill sent...' });
         } 
         catch (error: any) {

@@ -12,13 +12,15 @@ const sendEmail = async ({ recipient, subject, text }: EmailData): Promise<boole
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'seedsfeedsindia@gmail.com',
-            pass: 'jsmjhxlchodmzlar'
+            // user: 'seedsfeedsindia@gmail.com',
+            // pass: 'jsmjhxlchodmzlar'
+            user: 'kashyap.seedsnfeeds@gmail.com',
+            pass: 'fshwybohgyfaumts'
         },
     });
 
     const mailOptions = {
-        from: 'seedsfeedsindia@gmail.com',
+        from: 'kashyap.seedsnfeeds@gmail.com',
         to: recipient,
         subject: subject,
         html: `${text}`,
