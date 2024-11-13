@@ -504,7 +504,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             await page.setContent(content, { waitUntil: 'networkidle0' });
           
             await page.pdf({
-              path: path.join(process.cwd(), 'public', 'pdf', 'billing_statement.pdf'),  //'billing_statement.pdf',
+              path: path.join(process.cwd(), 'public', 'pdf', 'billing.pdf'),  //'billing_statement.pdf',
               format: 'A4',
               printBackground: true,
               landscape: true,
