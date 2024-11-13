@@ -124,7 +124,7 @@ export default function Index() {
             <Typography variant="h5" component="article">Billing Report</Typography>
           </div>
           <div className="btn-wrapper report">            
-            <Button variant="outlined" onClick={() => donwloadPdfHandler()}>Download PDF</Button>            
+            {/* <Button variant="outlined" onClick={() => donwloadPdfHandler()}>Download PDF</Button>             */}
             <Button variant="outlined" onClick={() => goToPage('/billing')}>Back</Button>            
           </div>
         </div>
