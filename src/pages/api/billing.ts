@@ -342,7 +342,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           const {data} = req.body;
 
           (async function(){
-            const browser = await puppeteer.launch();
+            const browser = await puppeteer.launch({
+              headless: true,
+              args: ['--no-sandbox', '--disable-setuid-sandbox']
+            });
             const page = await browser.newPage();
           
             const transactions = data.map((item:any, index:number) => ({
