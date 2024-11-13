@@ -14,6 +14,7 @@ import { sentBillingHtmlTemplateOnEmail } from '@/services/common';
 import { getSeller } from '@/services/seller';
 import { getBuyer } from '@/services/buyer';
 import puppeteer from 'puppeteer';
+import path from 'path';
 
 
 interface ApiResponse {
@@ -503,7 +504,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             await page.setContent(content, { waitUntil: 'networkidle0' });
           
             await page.pdf({
-              path: 'billing_statement.pdf',
+              path: path.join(process.cwd(), 'public', 'pdf', 'billing_statement.pdf'),  //'billing_statement.pdf',
               format: 'A4',
               printBackground: true,
               landscape: true,

@@ -103,8 +103,7 @@ const Index: React.FC<compProps> = ({ detail }) => {
   // };
 
   const generatePdfHandler = async () => {
-    console.clear();
-
+    
     try {
       const response = await generatePdf(detailData);      
 

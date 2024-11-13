@@ -88,7 +88,30 @@ export default function Index() {
   };
 
   const donwloadPdfHandler = async () => {      
-      const resp = await downBillReport(rows);      
+      
+      try {
+        const response = await downBillReport(rows);
+        
+        if (response.data.message) {          
+          const blob = new Blob([response], { type: "application/pdf" });
+          const blobUrl = URL.createObjectURL(blob);
+
+          const tempLink = document.createElement("a");
+          tempLink.href = "/pdf/billing_statement.pdf";
+          tempLink.target = "_blank";
+          tempLink.rel = "noopener noreferrer";
+          tempLink.download = "/pdf/billing_statement.pdf";
+
+          document.body.appendChild(tempLink);
+          tempLink.click();
+          document.body.removeChild(tempLink);
+
+          setTimeout(() => {
+            URL.revokeObjectURL(blobUrl);
+          }, 1000);
+        }
+      } catch (error: any) {}
+      
   };
 
   return (
@@ -101,7 +124,7 @@ export default function Index() {
             <Typography variant="h5" component="article">Billing Report</Typography>
           </div>
           <div className="btn-wrapper report">            
-            <Button variant="outlined" onClick={() => donwloadPdfHandler()}>PDF Download</Button>            
+            <Button variant="outlined" onClick={() => donwloadPdfHandler()}>Download PDF</Button>            
             <Button variant="outlined" onClick={() => goToPage('/billing')}>Back</Button>            
           </div>
         </div>
