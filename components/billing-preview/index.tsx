@@ -107,7 +107,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                         <div className="address">
                             <Typography variant="body2">504, SYNERGY, KACH PADA RD NO. 2, NEAR MALAD IND. ESTATE, RAMCHANDRA LANE EXTENTION, MALAD (W), MUMBAI - 400 064.</Typography>
                             <Typography variant="body2">Tel. : 022 2880 2452-Fax : 022 2881 5002</Typography>
-                            <Typography variant="body2">Email : meghnaagencies@gmail.com</Typography>
+                            <Typography variant="body2">Email : kashyap.seedsnfeeds@gmail.com</Typography>
                             <Typography variant="body2"><b>TAX-INVOICE</b></Typography>
                         </div>
                             

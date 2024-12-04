@@ -76,7 +76,7 @@ export default function Index() {
           Tel. : 022 2880 2452-Fax : 022 2881 5002
         </p>
         <p style={{ textAlign: 'center', fontSize: '12px', margin: '0', lineHeight: '20px', fontWeight: '300' }}>
-          Email : meghnaagencies@gmail.com
+          Email : kashyap.seedsnfeeds@gmail.com
         </p>
       </div>
 

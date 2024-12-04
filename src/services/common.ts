@@ -252,7 +252,7 @@ export const getBillingHtmlTemplate = (data?: any) => {
             </p>
 
             <p style="text-align: center; font-size: 12px; margin: 0 0 0 0; line-height: 20px; font-weight: 300;">
-                Email : meghnaagencies@gmail.com
+                Email : kashyap.seedsnfeeds@gmail.com
             </p>
 
         </div>
@@ -478,7 +478,7 @@ export const sentBillingHtmlTemplateOnEmail = (data?: any) => {
             </p>
 
             <p style="text-align: center; font-size: 12px; margin: 0 0 0 0; line-height: 20px; font-weight: 300;">
-                Email : meghnaagencies@gmail.com
+                Email : kashyap.seedsnfeeds@gmail.com                 
             </p>
 
         </div>

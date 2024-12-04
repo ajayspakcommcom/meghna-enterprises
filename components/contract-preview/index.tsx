@@ -102,7 +102,7 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
                                 <div className="address">
                                     <Typography variant="body2">504, SYNERGY, KACH PADA RD NO. 2, NEAR MALAD IND. ESTATE, RAMCHANDRA LANE EXTENTION, MALAD (W), MUMBAI - 400 064.</Typography>
                                     <Typography variant="body2">Tel. : 022 2880 2683 / 2880 3920 | Cell : +91 98200 10200 / 93200 10200</Typography>
-                                    <Typography variant="body2">Email : meghnaagencies@gmail.com | PAN No. : AAAPC7200L</Typography>
+                                    <Typography variant="body2">Email : kashyap.seedsnfeeds@gmail.com | PAN No. : AAAPC7200L</Typography>
                                     <Typography variant="body2">GSTIN : 27AAAPC7200L1Z2</Typography>
                                 </div>
                             }
@@ -111,7 +111,7 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
                                 <div className="address">
                                     <Typography variant="body2">504, SYNERGY, KACH PADA RD NO. 2, NEAR MALAD IND. ESTATE, RAMCHANDRA LANE EXTENTION, MALAD (W), MUMBAI - 400 064.</Typography>
                                     <Typography variant="body2">Tel. : 022 2880 2452-Fax : 022 2881 5002</Typography>
-                                    <Typography variant="body2">Email : meghnaagencies@gmail.com | PAN No. : AFRPC6408E</Typography>
+                                    <Typography variant="body2">Email : kashyap.seedsnfeeds@gmail.com | PAN No. : AFRPC6408E</Typography>
                                     <Typography variant="body2">GSTIN : 27AFRPC6408E1ZI</Typography>
                                 </div>
                             }
