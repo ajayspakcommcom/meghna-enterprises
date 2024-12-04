@@ -6,10 +6,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Image from "next/image";
 import { Typography } from "@mui/material";
-import { customDateFormatter, customFormatDate, getLocalStorage } from "@/services/common";
+import { customDateFormatter, customFormatDate, getLocalStorage, numberToIndianWords } from "@/services/common";
 import { getBuyer } from "@/services/buyer";
 import { getSeller } from "@/services/seller";
-const converter = require('number-to-words');
+//const converter = require('number-to-words');
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -194,7 +194,7 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                     <tr>
                                     <td colSpan={3} className="amount-in-words-td">
                                         <span className="amount-in-words">AMOUNT IN WORD(S)</span>                                        
-                                        <p>{converter.toWords(contentData?.grandTotalAmt)}</p>
+                                        <p>Rupees {numberToIndianWords(contentData?.grandTotalAmt)}</p>
                                     </td>
                                     <td colSpan={4} className="totals">
                                         <table>
