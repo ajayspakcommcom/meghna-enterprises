@@ -172,22 +172,36 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }
         break;
 
+      // case 'DELETE':
+      //   try {
+
+      //     const contractId = req.body.id;
+      //     const deletedContract = await Contract.findByIdAndUpdate(contractId,{ $set: { isDeleted: true, deletedDate: Date.now() } },{ new: true });
+
+      //     if (!deletedContract) {
+      //       return res.status(404).json({ error: 'Contract not found' });
+      //     }
+
+      //     res.status(200).json({ message: 'Contract deleted successfully', data: deletedContract });
+
+      //   } catch (error) {
+      //     res.status(500).json({ error: 'Internal Server Error' });
+      //   }
+      //   break;
+
+
       case 'DELETE':
         try {
-
           const contractId = req.body.id;
-          const deletedContract = await Contract.findByIdAndUpdate(
-            contractId,
-            { $set: { isDeleted: true, deletedDate: Date.now() } },
-            { new: true }
-          );
-
+        
+          // Perform a hard delete
+          const deletedContract = await Contract.findByIdAndDelete(contractId);
+        
           if (!deletedContract) {
             return res.status(404).json({ error: 'Contract not found' });
           }
-
+        
           res.status(200).json({ message: 'Contract deleted successfully', data: deletedContract });
-
         } catch (error) {
           res.status(500).json({ error: 'Internal Server Error' });
         }

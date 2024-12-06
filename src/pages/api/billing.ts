@@ -134,26 +134,46 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           res.status(500).json({ error: 'Internal Server Error' });
         }
         break;
+
+      // case 'DELETE':
+      //   try {
+
+      //     const buyerId = req.body.id;
+      //     const deletedBuyer = await Billing.findByIdAndUpdate(
+      //       buyerId,
+      //       { $set: { isDeleted: true, deletedDate: Date.now() } },
+      //       { new: true }
+      //     );
+
+      //     if (!deletedBuyer) {
+      //       return res.status(404).json({ error: 'Billing not found' });
+      //     }
+
+      //     res.status(200).json({ message: 'Billing deleted successfully', data: deletedBuyer });
+
+      //   } catch (error) {
+      //     res.status(500).json({ error: 'Internal Server Error' });
+      //   }
+      //   break;
+
+
       case 'DELETE':
         try {
-
           const buyerId = req.body.id;
-          const deletedBuyer = await Billing.findByIdAndUpdate(
-            buyerId,
-            { $set: { isDeleted: true, deletedDate: Date.now() } },
-            { new: true }
-          );
+
+          // Perform a hard delete
+          const deletedBuyer = await Billing.findByIdAndDelete(buyerId);
 
           if (!deletedBuyer) {
             return res.status(404).json({ error: 'Billing not found' });
           }
 
           res.status(200).json({ message: 'Billing deleted successfully', data: deletedBuyer });
-
         } catch (error) {
           res.status(500).json({ error: 'Internal Server Error' });
         }
         break;
+
       case 'ID-NAME':
         try {
           const dataList = await Billing.find({ isDeleted: false }).select('_id name').exec();
