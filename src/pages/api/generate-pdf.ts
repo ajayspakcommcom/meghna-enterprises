@@ -41,7 +41,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     const heightIncrease = 8;
 
                     if (req.body.logo === 'logo') {
-                        const firstAddText = `B-3 GIRIRAJ CO OP H S LTD, 6 MAMLATDAR WADI RAOD NO. 6 MALAD (WEST), MUMBAI - 400 064.`;
+                        //const firstAddText = `B-3 GIRIRAJ CO OP H S LTD, 6 MAMLATDAR WADI RAOD NO. 6 MALAD (WEST), MUMBAI - 400 064.`;
+                        const firstAddText = `504, SYNERGY, KACH PADA RD NO. 2, NEAR MALAD IND. ESTATE, RAMCHANDRA LANE EXTENTION, MALAD (W), MUMBAI - 400 064.`;
                         doc.fontSize(8).fillColor('#000').text(firstAddText, 120, y);
                         y += doc.heightOfString(firstAddText.replace(/\n\n/g, ' '), { width: pageWidth, align: 'left' }) + heightIncrease;
 
@@ -49,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         doc.fontSize(8).fillColor('#000').text(secondAddText, 170, y);
                         y += doc.heightOfString(secondAddText.replace(/\n\n/g, ' '), { width: pageWidth, align: 'left' }) + heightIncrease;
 
-                        const thirdAddText = `Email: | Pan No. AFRPC6408E`;
+                        const thirdAddText = `Email: kashyap.seedsnfeeds@gmail.com | Pan No. AFRPC6408E`;
                         doc.fontSize(8).fillColor('#000').text(thirdAddText, 250, y);
                         y += doc.heightOfString(thirdAddText.replace(/\n\n/g, ' '), { width: pageWidth, align: 'left' }) + heightIncrease;
 

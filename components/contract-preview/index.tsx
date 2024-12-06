@@ -81,9 +81,10 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
 
                             {logo === 'logo' &&
                                 <div className="address">
-                                    <Typography variant="body2">B-3 GIRIRAJ CO OP H S LTD, 6 MAMLATDAR WADI RAOD NO. 6 MALAD (WEST), MUMBAI - 400 064.</Typography>
+                                    {/* <Typography variant="body2">B-3 GIRIRAJ CO OP H S LTD, 6 MAMLATDAR WADI RAOD NO. 6 MALAD (WEST), MUMBAI - 400 064.</Typography> */}
+                                    <Typography variant="body2">504, SYNERGY, KACH PADA RD NO. 2, NEAR MALAD IND. ESTATE, RAMCHANDRA LANE EXTENTION, MALAD (W), MUMBAI - 400 064.</Typography>
                                     <Typography variant="body2">PHONE NO: 022 2880 2452 | MOBILE NO: +91 99200 10200 / 99200 90200</Typography>
-                                    <Typography variant="body2">Email: | Pan No. AFRPC6408E </Typography>
+                                    <Typography variant="body2">Email: kashyap.seedsnfeeds@gmail.com | Pan No. AFRPC6408E </Typography>
                                     <Typography variant="body2"><b>GSTIN: 27AFRPC6408E1ZI</b></Typography>
                                 </div>
                             }

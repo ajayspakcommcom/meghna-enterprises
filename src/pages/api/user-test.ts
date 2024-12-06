@@ -39,9 +39,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         doc.image(imagePath, 135, 5, { width: 335, height: 85 });
 
 
-        doc.fontSize(8).fillColor('#000').text('B-3 GIRIRAJ CO OP H S LTD, 6 MAMLATDAR WADI RAOD NO. 6 MALAD (WEST), MUMBAI - 400 064.', 120, 100);
+        // doc.fontSize(8).fillColor('#000').text('B-3 GIRIRAJ CO OP H S LTD, 6 MAMLATDAR WADI RAOD NO. 6 MALAD (WEST), MUMBAI - 400 064.', 120, 100);
+        doc.fontSize(8).fillColor('#000').text('504, SYNERGY, KACH PADA RD NO. 2, NEAR MALAD IND. ESTATE, RAMCHANDRA LANE EXTENTION, MALAD (W), MUMBAI - 400 064.', 120, 100);
         doc.fontSize(8).fillColor('#000').text('PHONE NO: 022 2880 2452 | MOBILE NO: +91 99200 10200 / 99200 90200', 170, 115);
-        doc.fontSize(8).fillColor('#000').text('Email: | Pan No. AFRPC6408E', 250, 130);
+        doc.fontSize(8).fillColor('#000').text('Email: kashyap.seedsnfeeds@gmail.com | Pan No. AFRPC6408E', 250, 130);
         doc.fontSize(8).fillColor('#000').text('GSTIN: 27AFRPC6408E1ZI', 252, 145);
 
         doc.rect(doc.page.margins.left, 160, pageWidth, 30).fill('#d9d9d9');
