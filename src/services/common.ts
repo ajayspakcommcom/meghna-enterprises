@@ -432,7 +432,7 @@ export const getBillingHtmlTemplate = (data?: any) => {
                     </td>
                     <td colspan="5"
                         style="border-right: 1px solid #ddd; border-left: 1px solid #ddd; text-align: right; vertical-align: top; padding: 10px 10px;">
-                        <b style="font-size: 16px;">for MEGHNA ENTERPRISE</b>
+                        <b style="font-size: 16px;">for Seeds & Feeds Vyanah</b>
                         <br />
                         <img src="http://13.235.48.111/images/signature.jpg" alt="Signature" style="width: 106px; height: 30px; display: inline-block; margin: 20px 15px;" />
                         <br />
@@ -669,7 +669,7 @@ export const sentBillingHtmlTemplateOnEmail = (data?: any) => {
                     </td>
                     <td colspan="5"
                         style="border-right: 1px solid #ddd; border-left: 1px solid #ddd; text-align: right; vertical-align: top; padding: 10px 10px;">
-                        <b style="font-size: 16px;">for MEGHNA ENTERPRISE</b>
+                        <b style="font-size: 16px;">for Seeds & Feeds Vyanah</b>
                         <br />
                         <img src="http://13.235.48.111/images/signature.jpg" alt="Signature" style="width: 106px; height: 30px; display: inline-block; margin: 20px 15px;" />
                         <br />

@@ -145,7 +145,7 @@ export default function Index() {
       </table>
 
       <div style={{ marginTop: '100px', textAlign: 'right' }}>
-        <b style={{ fontSize: '16px' }}>for MEGHNA ENTERPRISE</b>
+        <b style={{ fontSize: '16px' }}>for Seeds & Feeds Vyanah</b>
         <br />
         <img src="http://localhost:3000/images/signature.jpg" alt="Signature" style={{ width: '100px', height: '31px' }} />
         <br />
