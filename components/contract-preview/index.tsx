@@ -124,8 +124,8 @@ const Index: React.FC<ContractPreviewProps> = ({ isOpen, heading, contentData, o
                                     </Typography>
                                 </div>
                                 <div>
-                                    <Typography variant="body2">
-                                        <b>DATE : </b> <b>{customFormatDate(contentData.createdDate ? new Date(contentData.createdDate) : new Date())}</b>
+                                    <Typography variant="body2">                                        
+                                        <b>DATE : </b> <b>{customFormatDate(contentData.formikValues.createdDate ? new Date(contentData.formikValues.createdDate) : new Date())}</b>
                                     </Typography>
                                 </div>
                             </div>

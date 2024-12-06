@@ -268,6 +268,8 @@ export default function Index() {
       formikValues: formik.values
     };
 
+    console.log('previewData', previewData);
+
     setPreviewContent(previewData);
   };
 
