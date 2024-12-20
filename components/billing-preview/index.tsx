@@ -202,9 +202,9 @@ const Index: React.FC<BillingPreviewProps> = ({ isOpen, heading, contentData, on
                                                 <tr><td>Total</td></tr>
                                                 <tr>
                                                     <td>
-                                                        ${contentData?.cgst > 0 && `CGST @${contentData.cgst}%,`}
-                                                        ${contentData?.sgst > 0 && `SGST @${contentData.sgst}%,`}
-                                                        ${contentData?.igst > 0 && `IGST @${contentData.igst}%`}
+                                                        {contentData?.cgst > 0 && `CGST @${contentData.cgst}%,`}
+                                                        {contentData?.sgst > 0 && `SGST @${contentData.sgst}% ${contentData.igst > 0 ? ',' : ''} `}
+                                                        {contentData?.igst > 0 && `IGST @${contentData.igst}%`}                                                        
                                                     </td>
                                                 </tr>
                                                 <tr><td></td></tr>
